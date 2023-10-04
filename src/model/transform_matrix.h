@@ -8,7 +8,7 @@
 
 class TransformMatrix {
 public:
-    static const n_dimensional = 3;
+    static const int n_dimensional = 3;
 
     TransformMatrix();
     TransformMatrix operator*(TransformMatrix m);
