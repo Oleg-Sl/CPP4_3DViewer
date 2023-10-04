@@ -1,0 +1,4 @@
+#ifndef _3DVIEWER_MODEL_SCENE_H_
+#define _3DVIEWER_MODEL_SCENE_H_
+
+#endif  // _3DVIEWER_MODEL_SCENE_H_
