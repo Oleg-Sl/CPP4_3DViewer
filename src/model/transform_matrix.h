@@ -1,5 +1,7 @@
-#include "data.h"
+#ifndef _3DVIEWER_MODEL_TRANSFORM_MATRIX_H_
+#define _3DVIEWER_MODEL_TRANSFORM_MATRIX_H_
 
+#include "point_3d.h"
 
 #include <stdexcept>
 
@@ -18,3 +20,4 @@ private:
 
 };
 
+#endif  // _3DVIEWER_MODEL_TRANSFORM_MATRIX_H_
