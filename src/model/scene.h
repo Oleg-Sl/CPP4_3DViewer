@@ -5,12 +5,20 @@
 #include "transform_matrix.h"
 
 #include <vector>
+#include <initializer_list>
 
 
 class Scene {
 public:
     std::vector<Figure>& GetFigures();
     void TransformFigures(const TransformMatrix&);
+    // template<typename... Args>
+    // void AddFigure(Args&&... points) {
+    //     (figures.push_back(std::forward<Args>(points)), ...);
+    // }
+    void AddFigure(Figure figure) {
+        figures.push_back(figure);
+    }
 
 private:
     std::vector<Figure> figures;

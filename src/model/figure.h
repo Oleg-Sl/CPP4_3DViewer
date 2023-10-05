@@ -11,6 +11,15 @@
 
 class Figure : public SceneObject{
 public:
+    // template<typename... Args>
+    // void Figure(Args&&... points) {
+    //     (figures.push_back(std::forward<Args>(points)), ...);
+    // }
+    Figure(std::initializer_list<Point3D> points) {
+        for (auto point : points) {
+            vertices.push_back(point);
+        }
+    }
     std::vector<Vertex>& GetVertices();
     std::vector<Edge>& GetEdges();
     void Transform(const TransformMatrix&);
