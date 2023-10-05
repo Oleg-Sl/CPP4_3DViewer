@@ -5,7 +5,7 @@
 
 
 class SceneObject {
-    virtual void Transform(TransformMatrix) = 0;
+    virtual void Transform(const TransformMatrix&) = 0;
 };
 
 #endif  // _3DVIEWER_MODEL_SCENE_OBJECT_H_

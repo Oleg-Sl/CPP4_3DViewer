@@ -8,16 +8,15 @@
 
 class TransformMatrix {
 public:
-    static const int n_dimensional = 3;
-
     TransformMatrix();
-    TransformMatrix operator*(TransformMatrix m);
     float& operator()(int row, int col);
-    Point3D TransformPoint(Point3D p);
+    float operator()(int row, int col) const;
+    TransformMatrix operator*(const TransformMatrix& rhs_matrix) const;
+    Point3D TransformPoint(const Point3D& point) const;
 
 private:
-    float matrix[n_dimensional + 1][n_dimensional + 1];
-
+    static const int matrix_size = 3;
+    float matrix[matrix_size + 1][matrix_size + 1];
 };
 
 #endif  // _3DVIEWER_MODEL_TRANSFORM_MATRIX_H_

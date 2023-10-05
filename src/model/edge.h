@@ -6,6 +6,7 @@
 
 class Edge {
 public:
+    Edge(Vertex& begin_vetex, Vertex& end_vertex);
     Vertex& GetBegin() const;
     Vertex& GetEnd() const;
 

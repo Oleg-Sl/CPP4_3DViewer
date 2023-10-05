@@ -18,6 +18,7 @@ TransformMatrix TransformMatrixBuilder::CreateRotationMatrix(float x, float y, f
     matrix(2, 0) = -cos_x * sin_y * cos_z + sin_x * sin_z;
     matrix(2, 1) = cos_x * sin_y * sin_z + sin_x * cos_z;
     matrix(2, 2) = cos_x * cos_y;
+    return matrix;
 }
 
 TransformMatrix TransformMatrixBuilder::CreateMoveMatrix(float x, float y, float z) {
@@ -25,6 +26,7 @@ TransformMatrix TransformMatrixBuilder::CreateMoveMatrix(float x, float y, float
     matrix(0, 3) = x;
     matrix(1, 3) = y;
     matrix(2, 3) = z;
+    return matrix;
 }
 
 TransformMatrix TransformMatrixBuilder::CreateScaleMatrix(float x, float y, float z) {
@@ -32,4 +34,5 @@ TransformMatrix TransformMatrixBuilder::CreateScaleMatrix(float x, float y, floa
     matrix(0, 0) = x;
     matrix(1, 1) = y;
     matrix(2, 2) = z;
+    return matrix;
 }

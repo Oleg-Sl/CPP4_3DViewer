@@ -5,7 +5,7 @@ std::vector<Vertex>& Figure::GetVertices() {
     return vertices;
 }
 
-std::vector<Vertex>& Figure::GetEdges() {
+std::vector<Edge>& Figure::GetEdges() {
     return edges;
 }
 
