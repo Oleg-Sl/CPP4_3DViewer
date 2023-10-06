@@ -1,5 +1,6 @@
 #include "include/filereader.h"
 
+#include <execution>
 #include <fstream>
 
 namespace s21 {
@@ -21,6 +22,9 @@ void OBJReader::FaceHandler(std::stringstream &tokens,
       vertex_index = vertices.size() + vertex_index;
     } else {
       vertex_index -= 1;
+    }
+    if (vertex_index < 0 || vertex_index > (int)vertices.size() - 1) {
+      throw std::invalid_argument("Face index out of range");
     }
     vertex_indices.push_back(vertex_index);
   }
