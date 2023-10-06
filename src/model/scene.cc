@@ -1,4 +1,4 @@
-#include "scene.h"
+#include "include/scene.h"
 
 namespace s21 {
 
