@@ -36,7 +36,12 @@ Scene OBJReader::ReadScene(std::string path) {
         std::vector<int> vertex_indices;
         int vertex_index;
         while (ss >> vertex_index) {
-          vertex_indices.push_back(vertex_index - 1);
+          if (vertex_index < 0) {
+            vertex_index = vertices.size() + vertex_index;
+          } else {
+            vertex_index -= 1;
+          }
+          vertex_indices.push_back(vertex_index);
         }
 
         for (size_t i = 0; i < vertex_indices.size(); ++i) {

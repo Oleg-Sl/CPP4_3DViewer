@@ -7,13 +7,13 @@ namespace s21 {
 
 class Edge {
  public:
-  Edge(Vertex& begin_vetex, Vertex& end_vertex);
-  Vertex& GetBegin() const;
-  Vertex& GetEnd() const;
+  Edge(Vertex &begin_vetex, Vertex &end_vertex);
+  Vertex GetBegin() const;
+  Vertex GetEnd() const;
 
  private:
-  Vertex& begin;
-  Vertex& end;
+  Vertex begin;
+  Vertex end;
 };
 
 }  // namespace s21
