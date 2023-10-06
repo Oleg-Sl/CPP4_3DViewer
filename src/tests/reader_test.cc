@@ -6,7 +6,7 @@
 
 namespace s21 {
 
-TEST(OBJReader, CorrectObjFile) {
+TEST(OBJFileReader, CorrectObjFile) {
   std::vector<Vertex> cube_vectrices = {
       Vertex({0.5, 0.5, 0.5}),   Vertex({-0.5, 0.5, 0.5}),
       Vertex({-0.5, 0.5, 0.5}),  Vertex({-0.5, -0.5, 0.5}),
@@ -22,6 +22,27 @@ TEST(OBJReader, CorrectObjFile) {
       figure.GetVertices().at(i) == cube_vectrices.at(i);
     }
   }
+}
+
+TEST(OBJFileReader, IncorrectFilePath) {
+  OBJReader reader;
+  Scene scene = reader.ReadScene("obj_examples/incorrect.obj");
+
+  ASSERT_EQ(scene.GetFigures().empty(), true);
+}
+
+TEST(OBJFileReader, FileWithoutFaces) {
+  OBJReader reader;
+  Scene scene = reader.ReadScene("obj_examples/without_faces.obj");
+
+  ASSERT_EQ(scene.GetFigures().empty(), true);
+}
+
+TEST(OBJFileReaderThrow, IncorrectFaceIndex) {
+  OBJReader reader;
+
+  ASSERT_THROW(reader.ReadScene("obj_examples/incorrect_face_index.obj"),
+               std::invalid_argument);
 }
 
 }  // namespace s21
