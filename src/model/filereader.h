@@ -1,6 +1,7 @@
 #ifndef _3DVIEWER_MODEL_FILEREADER_H_
 #define _3DVIEWER_MODEL_FILEREADER_H_
 
+#include <list>
 #include <string>
 
 #include "scene.h"
@@ -17,7 +18,13 @@ class OBJReader : BaseFileReader {
   const std::string kVertexToken = "v";
   const std::string kFaceToken = "f";
 
+ public:
   Scene ReadScene(std::string path) override;
+
+ private:
+  void VertexHandler(std::stringstream &tokens, std::vector<Vertex> &vertices);
+  void FaceHandler(std::stringstream &tokens,
+                   const std::vector<Vertex> &vertices, Scene &scene);
 };
 
 }  // namespace s21

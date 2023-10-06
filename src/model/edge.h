@@ -7,7 +7,7 @@ namespace s21 {
 
 class Edge {
  public:
-  Edge(Vertex &begin_vetex, Vertex &end_vertex);
+  Edge(const Vertex &begin_vetex, const Vertex &end_vertex);
   Vertex GetBegin() const;
   Vertex GetEnd() const;
 
