@@ -1,16 +1,26 @@
 #include <gtest/gtest.h>
 
+#include <vector>
+
 #include "../model/filereader.h"
+
 namespace s21 {
 
 TEST(OBJReader, CorrectObjFile) {
+  std::vector<Vertex> cube_vectrices = {
+      Vertex({0.5, 0.5, 0.5}),   Vertex({-0.5, 0.5, 0.5}),
+      Vertex({-0.5, 0.5, 0.5}),  Vertex({-0.5, -0.5, 0.5}),
+      Vertex({0.5, -0.5, 0.5}),  Vertex({0.5, 0.5, -0.5}),
+      Vertex({-0.5, 0.5, -0.5}), Vertex({-0.5, -0.5, -0.5}),
+      Vertex({0.5, -0.5, -0.5})};
+
   OBJReader reader;
-  Scene scene = reader.ReadScene(
-      "/home/alexander/Desktop/school/CPP4_3DViewer_v2.0-1/src/obj_examples/"
-      "cube.obj");
-  std::cout << std::endl;
-  for (auto i : scene.GetFigures()) {
-    i.PrintEdges();
+  Scene scene = reader.ReadScene("obj_examples/cube.obj");
+
+  for (Figure figure : scene.GetFigures()) {
+    for (size_t i = 0; i < figure.GetVertices().size(); ++i) {
+      figure.GetVertices().at(i) == cube_vectrices.at(i);
+    }
   }
 }
 
