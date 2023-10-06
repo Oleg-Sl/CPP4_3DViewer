@@ -12,8 +12,8 @@ class Edge {
   Vertex GetEnd() const;
 
  private:
-  Vertex begin;
-  Vertex end;
+  Vertex begin_;
+  Vertex end_;
 };
 
 }  // namespace s21

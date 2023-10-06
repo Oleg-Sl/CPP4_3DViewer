@@ -1,8 +1,9 @@
 #ifndef _3DVIEWER_MODEL_FILEREADER_H_
 #define _3DVIEWER_MODEL_FILEREADER_H_
 
-#include <list>
+#include <sstream>
 #include <string>
+#include <vector>
 
 #include "scene.h"
 

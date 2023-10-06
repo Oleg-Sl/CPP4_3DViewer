@@ -16,8 +16,8 @@ class TransformMatrix {
   Point3D TransformPoint(const Point3D& point) const;
 
  private:
-  static const int matrix_size = 3;
-  float matrix[matrix_size + 1][matrix_size + 1];
+  static const int matrix_size_ = 3;
+  float matrix_[matrix_size_ + 1][matrix_size_ + 1];
 };
 
 }  // namespace s21

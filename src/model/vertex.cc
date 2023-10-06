@@ -10,4 +10,10 @@ void Vertex::Transform(const TransformMatrix& matrix) {
   position = matrix.TransformPoint(position);
 }
 
+bool Vertex::operator==(const Vertex& other) {
+  return GetPosition().x == other.GetPosition().x &&
+         GetPosition().y == other.GetPosition().y &&
+         GetPosition().z == other.GetPosition().z;
+}
+
 }  // namespace s21

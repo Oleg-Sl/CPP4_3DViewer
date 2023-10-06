@@ -12,6 +12,7 @@ class Vertex : public SceneObject {
   Vertex(Point3D point);
   const Point3D& GetPosition() const;
   void Transform(const TransformMatrix&);
+	bool operator==(const Vertex &other);
 
  private:
   Point3D position;
