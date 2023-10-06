@@ -26,3 +26,5 @@ reader: $(OBJECTS)
 %.o: %.cc
 	$(CC) -c $(CFLAGS) $<
 
+autoformat:
+	find . -type f -name "*.cc" -o -name "*.h" | xargs clang-format -style=Google -i
