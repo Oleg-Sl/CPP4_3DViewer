@@ -20,7 +20,7 @@ clean:
 	rm -fr *.o
 
 reader: $(OBJECTS)
-	cd tests && $(CC) $(CFLAGS) -o ./reader ../*.o reader_test.cc
+	cd tests && $(CC) $(CFLAGS) -o ./reader ../*.o reader_test.cc -lgtest
 	tests/reader
 
 %.o: %.cc

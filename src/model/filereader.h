@@ -1,22 +1,25 @@
 #ifndef _3DVIEWER_MODEL_FILEREADER_H_
 #define _3DVIEWER_MODEL_FILEREADER_H_
 
-#include "scene.h"
-
 #include <string>
+
+#include "scene.h"
 
 namespace s21 {
 
 class BaseFileReader {
-public:
+ public:
   virtual Scene ReadScene(std::string path) = 0;
 };
 
 class OBJReader : BaseFileReader {
-public:
+ public:
+  const std::string kVertexToken = "v";
+  const std::string kFaceToken = "f";
+
   Scene ReadScene(std::string path) override;
 };
 
-} // namespace s21
+}  // namespace s21
 
-#endif // _3DVIEWER_MODEL_FILEREADER_H_
+#endif  // _3DVIEWER_MODEL_FILEREADER_H_

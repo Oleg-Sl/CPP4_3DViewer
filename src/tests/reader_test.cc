@@ -1,10 +1,23 @@
-#include "../model/filereader.h"
-#include <fstream>
-#include <iostream>
-#include <sstream>
+#include <gtest/gtest.h>
 
-int main() {
-  s21::OBJReader reader;
-  reader.ReadScene("/Users/varlybot/Desktop/CPP4_3DViewer_v2.0-1/src/model_examples/cube.obj");
-  return 0;
+#include "../model/filereader.h"
+namespace s21 {
+
+TEST(OBJReader, CorrectObjFile) {
+  OBJReader reader;
+  Scene scene = reader.ReadScene(
+      "/home/alexander/Desktop/school/CPP4_3DViewer_v2.0-1/src/obj_examples/"
+      "cube.obj");
+  std::cout << std::endl;
+  for (auto i : scene.GetFigures()) {
+    i.PrintEdges();
+  }
+}
+
+}  // namespace s21
+
+int main(int argc, char **argv) {
+  testing::InitGoogleTest(&argc, argv);
+
+  return RUN_ALL_TESTS();
 }
