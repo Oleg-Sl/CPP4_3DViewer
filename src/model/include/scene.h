@@ -9,15 +9,15 @@
 namespace s21 {
 
 class Scene {
- public:
+public:
   std::vector<Figure> &GetFigures();
   void TransformFigures(const TransformMatrix &);
-  void AddFigure(const Figure &figure);
+  void AddFigure(Figure &&figure);
 
- private:
+private:
   std::vector<Figure> figures_;
 };
 
-}  // namespace s21
+} // namespace s21
 
-#endif  // _3DVIEWER_MODEL_SCENE_H_
+#endif // _3DVIEWER_MODEL_SCENE_H_

@@ -17,7 +17,8 @@ public:
   std::vector<Vertex> &GetVertices();
   std::vector<Edge> &GetEdges();
   void Transform(const TransformMatrix &);
-  void AddEdge(const Edge &edge);
+  void AddEdge(Edge edge);
+  void AddVertex(Vertex vertex);
   void PrintEdges() const;
 
 private:

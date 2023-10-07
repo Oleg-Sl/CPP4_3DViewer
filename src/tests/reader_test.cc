@@ -45,7 +45,7 @@ TEST(OBJFileReaderThrow, IncorrectFaceIndex) {
                std::invalid_argument);
 }
 
-}  // namespace s21
+} // namespace s21
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);

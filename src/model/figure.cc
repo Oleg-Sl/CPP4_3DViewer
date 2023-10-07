@@ -22,8 +22,6 @@ void Figure::Transform(const TransformMatrix &matrix) {
   }
 }
 
-void Figure::AddEdge(const Edge &edge) { edges_.push_back(edge); }
-
 void Figure::PrintEdges() const {
   for (const Edge &edge : edges_) {
     std::cout << "A: " << edge.GetBegin().GetPosition().x << " "
@@ -35,5 +33,8 @@ void Figure::PrintEdges() const {
               << edge.GetEnd().GetPosition().z << std::endl;
   }
 }
+
+void Figure::AddVertex(Vertex vertex) { vertices_.push_back(vertex); }
+void Figure::AddEdge(Edge edge) { edges_.push_back(edge); }
 
 } // namespace s21

@@ -15,9 +15,11 @@ void OBJReader::VertexHandler(std::stringstream &tokens,
 void OBJReader::FaceHandler(std::stringstream &tokens,
                             const std::vector<Vertex> &vertices, Scene &scene) {
   Figure figure;
-  std::vector<int> vertex_indices;
   int vertex_index;
+  int vertex_counter = 0;
   while (tokens >> vertex_index) {
+    vertex_counter++;
+
     if (vertex_index < 0) {
       vertex_index = vertices.size() + vertex_index;
     } else {
@@ -26,16 +28,19 @@ void OBJReader::FaceHandler(std::stringstream &tokens,
     if (vertex_index < 0 || vertex_index > (int)vertices.size() - 1) {
       throw std::invalid_argument("Face index out of range");
     }
-    vertex_indices.push_back(vertex_index);
+
+    figure.AddVertex(vertices[vertex_index]);
   }
 
-  for (size_t i = 0; i < vertex_indices.size(); ++i) {
-    int start_index = vertex_indices[i];
-    int end_index = vertex_indices[(i + 1) % vertex_indices.size()];
-    figure.AddEdge(Edge(vertices[start_index], vertices[end_index]));
+  for (int i = 0; i < vertex_counter; ++i) {
+    int start_index = i;
+    int end_index = (i + 1) % vertex_counter;
+
+    figure.AddEdge({figure.GetVertices().at(start_index),
+                    figure.GetVertices().at(end_index)});
   }
 
-  scene.AddFigure(figure);
+  scene.AddFigure(std::move(figure));
 }
 
 Scene OBJReader::ReadScene(std::string path) {
@@ -67,4 +72,4 @@ Scene OBJReader::ReadScene(std::string path) {
   return scene;
 }
 
-}  // namespace s21
+} // namespace s21

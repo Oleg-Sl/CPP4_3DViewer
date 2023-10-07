@@ -44,7 +44,7 @@ void SceneDrawer::paintGL() {
 
   for (auto figure : scene.GetFigures()) {
     glBegin(GL_LINE_LOOP);
-    std::cout << figure.GetVertices().size();
+    // std::cout << figure.GetVertices().size()
     for (auto vertex : figure.GetVertices()) {
       qDebug() << vertex.GetPosition().x << " - " << vertex.GetPosition().y
                << " - " << vertex.GetPosition().z;
