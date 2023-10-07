@@ -8,6 +8,10 @@ TARGET			= 3d_viewer
 
 
 
+build:
+	cd view && make clean && make && open 3d_viewer
+# .app
+
 run: $(OBJECTS)
 	$(CC) $(CFLAGS) -o ./$(TARGET) *.o main.cc
 	./$(TARGET)
@@ -18,6 +22,7 @@ run: $(OBJECTS)
 clean:
 	rm -rf model/*.gch
 	rm -fr *.o
+	cd view && make clean
 
 reader: $(OBJECTS)
 	cd tests && $(CC) $(CFLAGS) -o ./reader ../*.o reader_test.cc -lgtest

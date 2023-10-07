@@ -45,6 +45,7 @@
          <widget class="QLabel" name="label">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -88,6 +89,7 @@
          <widget class="QLabel" name="label_15">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -119,6 +121,7 @@
          <widget class="QLabel" name="label_11">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -231,6 +234,7 @@
          <widget class="QLabel" name="label_13">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -257,6 +261,7 @@
          <widget class="QLabel" name="label_10">
           <property name="font">
            <font>
+            <weight>50</weight>
             <bold>false</bold>
            </font>
           </property>
@@ -471,6 +476,7 @@
          <widget class="QLabel" name="label_9">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -570,6 +576,7 @@
          <widget class="QLabel" name="label_8">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -703,7 +710,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QWidget" name="widget" native="true">
+       <widget class="SceneDrawer" name="widgetOpenGL" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -724,6 +731,14 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SceneDrawer</class>
+   <extends>QWidget</extends>
+   <header>include/scenedrawer.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

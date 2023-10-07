@@ -1,21 +1,29 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "scenedrawer.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui {
+class MainWindow;
+}
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
+namespace s21 {
+
+class MainWindow : public QMainWindow {
+  Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+  MainWindow(QWidget *parent = nullptr);
+  ~MainWindow();
+  SceneDrawer *GetOpenglWidget();
 
 private:
-    Ui::MainWindow *ui;
+  Ui::MainWindow *ui;
 };
+
+} // namespace s21
+
 #endif // MAINWINDOW_H
