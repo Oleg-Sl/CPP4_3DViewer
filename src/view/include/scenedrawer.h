@@ -1,7 +1,7 @@
 #ifndef _3DVIEWER_VIEW_INCLUDE_SCENE_DRAWER_H_
 #define _3DVIEWER_VIEW_INCLUDE_SCENE_DRAWER_H_
 
-#include "../model/scene.h"
+#include "../model/include/scene.h"
 #include "../include/scenedrawerbase.h"
 
 
@@ -11,6 +11,9 @@
 #include <QColor>
 #include <GL/gl.h>
 
+
+
+namespace s21 {
 
 class SceneDrawer : public QOpenGLWidget, protected QOpenGLFunctions, public SceneDrawerBase {
   Q_OBJECT
@@ -31,6 +34,6 @@ private:
 };
 
 
-
+}
 
 #endif  // _3DVIEWER_VIEW_INCLUDE_SCENE_BASE_H_

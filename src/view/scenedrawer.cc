@@ -3,6 +3,8 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 
+namespace s21 {
+
 SceneDrawer::SceneDrawer(QWidget* parent) : QOpenGLWidget{parent}, scene() {
 
             // Setup scene and render it
@@ -22,6 +24,7 @@ SceneDrawer::SceneDrawer(QWidget* parent) : QOpenGLWidget{parent}, scene() {
 }
 
 void SceneDrawer::DrawScene(Scene& new_scene) {
+     qDebug() << "SceneDrawer";
     std::swap(scene, new_scene);
 //    scene = new_scene;
     update();
@@ -42,6 +45,7 @@ void SceneDrawer::initializeGL() {
  void SceneDrawer::paintGL() {
      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      glColor3f(0, 1, 1);
+     qDebug() << "paintGL = " << scene.GetFigures().size();
 
      for (auto figure : scene.GetFigures()) {
          glBegin(GL_LINE_LOOP);
@@ -95,3 +99,4 @@ void SceneDrawer::initializeGL() {
  //     glVertex2i(0, -1);
  //     glPointSize(1011);
 
+}

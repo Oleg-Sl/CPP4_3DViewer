@@ -21,7 +21,7 @@ HEADERS += \
     include/mainwindow.h \
     include/scenedrawer.h \
     include/scenedrawerbase.h \
-    ../model/*.h
+    ../model/include/*.h
 
 FORMS += \
     ui/mainwindow.ui
