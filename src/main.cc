@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
     SceneDrawer* widgetOpenGL = w.GetOpenglWidget();
     widgetOpenGL->DrawScene(scene);
 
-
     w.show();
     return a.exec();
 }
