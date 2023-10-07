@@ -9,7 +9,8 @@ TARGET			= 3d_viewer
 
 
 build:
-	cd view && make clean && make && open 3d_viewer.app
+	cd view && make clean && make && open 3d_viewer
+# .app
 
 run: $(OBJECTS)
 	$(CC) $(CFLAGS) -o ./$(TARGET) *.o main.cc

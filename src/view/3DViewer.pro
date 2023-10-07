@@ -1,10 +1,9 @@
 QT       += core gui opengl
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 greaterThan(QT_MAJOR_VERSION, 5): QT += openglwidgets
+#QT += widgets
 
-
-CONFIG += c++17
+#CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -16,14 +15,13 @@ SOURCES += \
     ../main.cc \
     mainwindow.cc \
     scenedrawer.cc \
-    ../model/*.cc \
+    ../model/*.cc
 
 HEADERS += \
     include/mainwindow.h \
     include/scenedrawer.h \
     include/scenedrawerbase.h \
     ../model/*.h
-
 
 FORMS += \
     ui/mainwindow.ui

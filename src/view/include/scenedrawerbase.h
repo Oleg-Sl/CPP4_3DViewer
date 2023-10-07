@@ -6,7 +6,7 @@
 
 class SceneDrawerBase {
 public:
-    virtual void DrawScene(Scene) = 0;
+    virtual void DrawScene(Scene&) = 0;
 };
 
 

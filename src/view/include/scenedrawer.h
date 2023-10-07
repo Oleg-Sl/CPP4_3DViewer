@@ -4,25 +4,29 @@
 #include "../model/scene.h"
 #include "../include/scenedrawerbase.h"
 
-#include <QOpenGLBuffer>
-#include <QOpenGLFunctions>
+
 #include <QOpenGLWidget>
+#include <QOpenGLFunctions>
+#include <QOpenGLBuffer>
+#include <QColor>
+#include <GL/gl.h>
 
 
-class SceneDrawer : public QOpenGLWidget, protected QOpenGLFunctions {
+class SceneDrawer : public QOpenGLWidget, protected QOpenGLFunctions, public SceneDrawerBase {
   Q_OBJECT
 
 public:
     SceneDrawer(QWidget* parent = nullptr);
-    void DrawScene(Scene);
+    void DrawScene(Scene&);
 
 
-// protected:
-   void initializeGL();
-   // void paintGL();
-   // void resizeGL(int w, int h);
+protected:
+    void initializeGL();
+    void paintGL();
+    void resizeGL(int w, int h);
 
 private:
+    Scene scene;
 
 };
 
