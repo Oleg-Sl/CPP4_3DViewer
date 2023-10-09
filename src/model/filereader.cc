@@ -2,6 +2,7 @@
 
 #include <execution>
 #include <fstream>
+#include <iostream>
 
 namespace s21 {
 
@@ -10,6 +11,7 @@ void OBJReader::VertexHandler(std::stringstream &tokens,
   float x, y, z;
   tokens >> x >> y >> z;
   vertices.push_back(Vertex({x, y, z}));
+  // std::cout << x << " " << y << " " << z << std::endl;
 }
 
 void OBJReader::FaceHandler(std::stringstream &tokens,
@@ -17,8 +19,21 @@ void OBJReader::FaceHandler(std::stringstream &tokens,
   Figure figure;
   int vertex_index;
   int vertex_counter = 0;
-  while (tokens >> vertex_index) {
+  std::string line;
+
+  while (tokens >> line) {
     vertex_counter++;
+    std::string token;
+
+    size_t slash_pos = line.find('/');
+
+    if (slash_pos != std::string::npos) {
+      token = line.substr(0, slash_pos);
+    } else {
+      token = line;
+    }
+
+    vertex_index = std::stoi(token);
 
     if (vertex_index < 0) {
       vertex_index = vertices.size() + vertex_index;
@@ -72,4 +87,4 @@ Scene OBJReader::ReadScene(std::string path) {
   return scene;
 }
 
-} // namespace s21
+}  // namespace s21
