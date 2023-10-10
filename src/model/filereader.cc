@@ -11,18 +11,15 @@ void OBJReader::VertexHandler(std::stringstream &tokens,
   float x, y, z;
   tokens >> x >> y >> z;
   vertices.push_back(Vertex({x, y, z}));
-  // std::cout << x << " " << y << " " << z << std::endl;
 }
 
 void OBJReader::FaceHandler(std::stringstream &tokens,
                             const std::vector<Vertex> &vertices, Scene &scene) {
   Figure figure;
   int vertex_index;
-  int vertex_counter = 0;
   std::string line;
 
   while (tokens >> line) {
-    vertex_counter++;
     std::string token;
 
     size_t slash_pos = line.find('/');
@@ -47,12 +44,9 @@ void OBJReader::FaceHandler(std::stringstream &tokens,
     figure.AddVertex(vertices[vertex_index]);
   }
 
-  for (int i = 0; i < vertex_counter; ++i) {
-    int start_index = i;
-    int end_index = (i + 1) % vertex_counter;
-
-    figure.AddEdge({figure.GetVertices().at(start_index),
-                    figure.GetVertices().at(end_index)});
+  for (auto cur_vertex = figure.GetVertices().begin();
+       cur_vertex != figure.GetVertices().end(); ++cur_vertex) {
+    figure.AddEdge({*cur_vertex, *(cur_vertex + 1)});
   }
 
   scene.AddFigure(std::move(figure));
