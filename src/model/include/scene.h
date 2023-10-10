@@ -1,12 +1,13 @@
-#ifndef _3DVIEWER_MODEL_SCENE_H_
-#define _3DVIEWER_MODEL_SCENE_H_
+ #ifndef _3DVIEWER_MODEL_SCENE_H_
+ #define _3DVIEWER_MODEL_SCENE_H_
 
-#include <vector>
+ #include <vector>
 
-#include "figure.h"
-#include "transform_matrix.h"
+ #include "figure.h"
+ #include "transform_matrix.h"
 
 namespace s21 {
+
 
 class Scene {
 public:

@@ -17,11 +17,15 @@ SOURCES += \
     scenedrawer.cc \
     ../model/*.cc
 
+
 HEADERS += \
+    ../model/include/*.h \
     include/mainwindow.h \
     include/scenedrawer.h \
     include/scenedrawerbase.h \
-    ../model/include/*.h
+    include/managersceneobserverbase.h \
+    include/managerscenesubjectbase.h \
+    include/sceneparameters.h
 
 FORMS += \
     ui/mainwindow.ui

@@ -14,4 +14,4 @@ void Scene::AddFigure(Figure &&figure) {
   figures_.push_back(std::move(figure));
 }
 
-} // namespace s21
+}  // namespace s21

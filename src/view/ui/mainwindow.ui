@@ -710,7 +710,7 @@
        </layout>
       </item>
       <item>
-       <widget class="SceneDrawer" name="widgetOpenGL" native="true">
+       <widget class="QWidget" name="widgetOpenGL" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -723,6 +723,9 @@
           <height>0</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(38, 162, 105)</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -731,14 +734,6 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>SceneDrawer</class>
-   <extends>QWidget</extends>
-   <header>include/scenedrawer.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
