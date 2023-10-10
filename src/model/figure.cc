@@ -4,20 +4,26 @@
 
 namespace s21 {
 
-std::vector<Vertex>& Figure::GetVertices() { return vertices_; }
+Figure::Figure() {}
 
-std::vector<Edge>& Figure::GetEdges() { return edges_; }
+Figure::Figure(std::initializer_list<Point3D> points) {
+  for (auto point : points) {
+    vertices_.push_back(point);
+  }
+}
 
-void Figure::Transform(const TransformMatrix& matrix) {
-  for (auto& vertex : vertices_) {
+std::vector<Vertex> &Figure::GetVertices() { return vertices_; }
+
+std::vector<Edge> &Figure::GetEdges() { return edges_; }
+
+void Figure::Transform(const TransformMatrix &matrix) {
+  for (auto &vertex : vertices_) {
     vertex.Transform(matrix);
   }
 }
 
-void Figure::AddEdge(const Edge& edge) { edges_.push_back(edge); }
-
 void Figure::PrintEdges() const {
-  for (const Edge& edge : edges_) {
+  for (const Edge &edge : edges_) {
     std::cout << "A: " << edge.GetBegin().GetPosition().x << " "
               << edge.GetBegin().GetPosition().y << " "
               << edge.GetBegin().GetPosition().z << std::endl;
@@ -28,4 +34,7 @@ void Figure::PrintEdges() const {
   }
 }
 
-}  // namespace s21
+void Figure::AddVertex(Vertex vertex) { vertices_.push_back(vertex); }
+void Figure::AddEdge(Edge edge) { edges_.push_back(edge); }
+
+} // namespace s21

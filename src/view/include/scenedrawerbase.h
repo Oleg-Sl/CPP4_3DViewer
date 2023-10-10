@@ -3,12 +3,13 @@
 
 #include "../model/include/scene.h"
 
+// using namespace s21;
 
 namespace s21 {
 
 class SceneDrawerBase {
 public:
-    virtual void DrawScene(Scene&) = 0;
+  virtual void DrawScene(Scene &) = 0;
 };
 
 }
