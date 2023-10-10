@@ -30,9 +30,9 @@ TEST(OBJFileReader, CorrectObjFile) {
 
 TEST(OBJFileReader, IncorrectFilePath) {
   OBJReader reader;
-  Scene scene = reader.ReadScene("obj_examples/incorrect.obj");
 
-  ASSERT_EQ(scene.GetFigures().empty(), true);
+  ASSERT_THROW(reader.ReadScene("obj_examples/incorrect.obj"),
+               std::runtime_error);
 }
 
 TEST(OBJFileReader, FileWithoutFaces) {

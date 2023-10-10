@@ -1,20 +1,19 @@
 #include "include/filereader.h"
 
-#include <execution>
 #include <fstream>
 #include <iostream>
 
 namespace s21 {
 
-void OBJReader::VertexHandler(std::stringstream &tokens,
-                              std::vector<Vertex> &vertices) {
+void OBJReader::ReadVertex(std::stringstream& tokens,
+                           std::vector<Vertex>& vertices) {
   float x, y, z;
   tokens >> x >> y >> z;
   vertices.push_back(Vertex({x, y, z}));
 }
 
-void OBJReader::FaceHandler(std::stringstream &tokens,
-                            const std::vector<Vertex> &vertices, Scene &scene) {
+void OBJReader::ReadFace(std::stringstream& tokens,
+                         const std::vector<Vertex>& vertices, Scene& scene) {
   Figure figure;
   int vertex_index;
   std::string line;
@@ -22,7 +21,7 @@ void OBJReader::FaceHandler(std::stringstream &tokens,
   while (tokens >> line) {
     std::string token;
 
-    size_t slash_pos = line.find('/');
+    size_t slash_pos = line.find("//");
 
     if (slash_pos != std::string::npos) {
       token = line.substr(0, slash_pos);
@@ -37,45 +36,45 @@ void OBJReader::FaceHandler(std::stringstream &tokens,
     } else {
       vertex_index -= 1;
     }
-    if (vertex_index < 0 || vertex_index > (int)vertices.size() - 1) {
-      throw std::invalid_argument("Face index out of range");
+    if (vertex_index < 0 || vertex_index >= static_cast<int>(vertices.size())) {
+      throw std::invalid_argument("Invalid face index: " +
+                                  std::to_string(vertex_index));
     }
 
     figure.AddVertex(vertices[vertex_index]);
   }
 
-  for (auto cur_vertex = figure.GetVertices().begin();
-       cur_vertex != figure.GetVertices().end(); ++cur_vertex) {
-    figure.AddEdge({*cur_vertex, *(cur_vertex + 1)});
+  for (size_t i = 0; i < figure.GetVertices().size(); ++i) {
+    size_t end = i + 1 == figure.GetVertices().size() ? 0 : i + 1;
+    figure.AddEdge(i, end);
   }
 
   scene.AddFigure(std::move(figure));
 }
 
-Scene OBJReader::ReadScene(std::string path) {
+Scene OBJReader::ReadScene(const std::string& path) {
   Scene scene;
   std::vector<Vertex> vertices;
-  std::ifstream obj_file;
-
-  obj_file.open(path);
+  std::ifstream obj_file(path);
 
   if (obj_file.is_open()) {
-    std::string curr_str;
+    std::string curr_line;
 
-    while (std::getline(obj_file, curr_str)) {
-      std::stringstream tokens(curr_str);
+    while (std::getline(obj_file, curr_line)) {
+      std::stringstream tokens(curr_line);
+      std::string curr_token;
+      tokens >> curr_token;
 
-      std::string curr_lexem;
-      tokens >> curr_lexem;
-
-      if (curr_lexem == kVertexToken) {
-        VertexHandler(tokens, vertices);
-      } else if (curr_lexem == kFaceToken) {
-        FaceHandler(tokens, vertices, scene);
+      if (curr_token == kVertexToken) {
+        ReadVertex(tokens, vertices);
+      } else if (curr_token == kFaceToken) {
+        ReadFace(tokens, vertices, scene);
       }
     }
 
     obj_file.close();
+  } else {
+    throw std::runtime_error("Failed to open file: " + path);
   }
 
   return scene;

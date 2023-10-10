@@ -20,7 +20,6 @@ run: $(OBJECTS)
 # ./a.out
 
 clean:
-	cd view && make clean
 	rm -rf model/*.gch
 	rm -fr *.o
 	cd view && make clean

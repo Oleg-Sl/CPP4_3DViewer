@@ -11,7 +11,7 @@ namespace s21 {
 
 class BaseFileReader {
  public:
-  virtual Scene ReadScene(std::string path) = 0;
+  virtual Scene ReadScene(const std::string &path) = 0;
 };
 
 class OBJReader : BaseFileReader {
@@ -20,12 +20,12 @@ class OBJReader : BaseFileReader {
   const std::string kFaceToken = "f";
 
  public:
-  Scene ReadScene(std::string path) override;
+  Scene ReadScene(const std::string &path) override;
 
  private:
-  void VertexHandler(std::stringstream &tokens, std::vector<Vertex> &vertices);
-  void FaceHandler(std::stringstream &tokens,
-                   const std::vector<Vertex> &vertices, Scene &scene);
+  void ReadVertex(std::stringstream &tokens, std::vector<Vertex> &vertices);
+  void ReadFace(std::stringstream &tokens, const std::vector<Vertex> &vertices,
+                Scene &scene);
 };
 
 }  // namespace s21
