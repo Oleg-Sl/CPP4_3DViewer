@@ -7,19 +7,23 @@
 namespace s21 {
 
 TEST(OBJFileReader, CorrectObjFile) {
-  std::vector<Vertex> cube_vectrices = {
-      Vertex({0.5, 0.5, 0.5}),   Vertex({-0.5, 0.5, 0.5}),
-      Vertex({-0.5, 0.5, 0.5}),  Vertex({-0.5, -0.5, 0.5}),
-      Vertex({0.5, -0.5, 0.5}),  Vertex({0.5, 0.5, -0.5}),
-      Vertex({-0.5, 0.5, -0.5}), Vertex({-0.5, -0.5, -0.5}),
-      Vertex({0.5, -0.5, -0.5})};
+  std::vector<Vertex> vectrices = {Vertex({0.5, 0.5, 0.5}),
+                                   Vertex({-0.5, 0.5, 0.5}),
+                                   Vertex({-0.5, -0.5, 0.5})};
+
+  std::vector<std::vector<Vertex>> figures = {
+      {vectrices.at(0), vectrices.at(1), vectrices.at(2)},
+      {vectrices.at(1), vectrices.at(0), vectrices.at(2)},
+      {vectrices.at(2), vectrices.at(0), vectrices.at(1)}};
 
   OBJReader reader;
-  Scene scene = reader.ReadScene("obj_examples/cube.obj");
+  Scene scene = reader.ReadScene("obj_examples/correct_test.obj");
+  std::vector<Figure> scene_figures = scene.GetFigures();
 
-  for (Figure figure : scene.GetFigures()) {
-    for (size_t i = 0; i < figure.GetVertices().size(); ++i) {
-      figure.GetVertices().at(i) == cube_vectrices.at(i);
+  for (size_t i = 0; i < scene_figures.size(); ++i) {
+    Figure curr_figure = scene_figures[i];
+    for (size_t j = 0; j < curr_figure.GetVertices().size(); ++j) {
+      ASSERT_EQ(curr_figure.GetVertices().at(j) == figures.at(i).at(j), true);
     }
   }
 }
@@ -45,7 +49,7 @@ TEST(OBJFileReaderThrow, IncorrectFaceIndex) {
                std::invalid_argument);
 }
 
-} // namespace s21
+}  // namespace s21
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
