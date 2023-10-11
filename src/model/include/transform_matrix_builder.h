@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include "point_3d.h"
+#include "point3d.h"
 #include "transform_matrix.h"
 
 namespace s21 {

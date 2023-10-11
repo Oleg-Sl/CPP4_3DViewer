@@ -1,15 +1,14 @@
- #ifndef _3DVIEWER_MODEL_FIGURE_H_
- #define _3DVIEWER_MODEL_FIGURE_H_
+#ifndef _3DVIEWER_MODEL_FIGURE_H_
+#define _3DVIEWER_MODEL_FIGURE_H_
 
- #include <vector>
+#include <vector>
 
- #include "edge.h"
- #include "scene_object.h"
- #include "transform_matrix.h"
- #include "vertex.h"
+#include "edge.h"
+#include "sceneobject.h"
+#include "transform_matrix.h"
+#include "vertex.h"
 
-
- namespace s21 {
+namespace s21 {
 
 class Figure : public SceneObject {
  public:

@@ -2,12 +2,13 @@
 
 namespace s21 {
 
-Vertex::Vertex(Point3D point) : position(point) {}
+Vertex::Vertex(Point3D point) : position_(point) {}
 
-const Point3D& Vertex::GetPosition() const { return position; }
+const Point3D& Vertex::GetPosition() const { return position_; }
+void Vertex::SetPosition(Point3D new_position) { position_ = new_position; }
 
 void Vertex::Transform(const TransformMatrix& matrix) {
-  position = matrix.TransformPoint(position);
+  position_ = matrix.TransformPoint(position_);
 }
 
 bool Vertex::operator==(const Vertex& other) {

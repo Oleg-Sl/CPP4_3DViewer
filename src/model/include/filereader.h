@@ -5,14 +5,11 @@
 #include <string>
 #include <vector>
 
+#include "basefilereader.h"
+#include "normalization_parameters.h"
 #include "scene.h"
 
 namespace s21 {
-
-class BaseFileReader {
- public:
-  virtual Scene ReadScene(const std::string &path) = 0;
-};
 
 class OBJReader : BaseFileReader {
  public:
@@ -20,12 +17,16 @@ class OBJReader : BaseFileReader {
   const std::string kFaceToken = "f";
 
  public:
-  Scene ReadScene(const std::string &path) override;
+  Scene ReadScene(
+      const std::string &path,
+      const NormalizationParameters &normalization_parameters) override;
 
  private:
-  void ReadVertex(std::stringstream &tokens, std::vector<Vertex> &vertices);
-  void ReadFace(std::stringstream &tokens, const std::vector<Vertex> &vertices,
-                Scene &scene);
+  Vertex ReadVertex(std::stringstream &tokens);
+  Figure ReadFace(std::stringstream &tokens,
+                  const std::vector<Vertex> &vertices);
+  void NormalizationScene(Scene &scene, const NormalizationParameters &params);
+  void CalculateSceneBounds(Scene &scene, const Vertex &vertex);
 };
 
 }  // namespace s21

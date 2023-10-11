@@ -5,15 +5,14 @@
 
 namespace s21 {
 
-void OBJReader::ReadVertex(std::stringstream& tokens,
-                           std::vector<Vertex>& vertices) {
+Vertex OBJReader::ReadVertex(std::stringstream& tokens) {
   float x, y, z;
   tokens >> x >> y >> z;
-  vertices.push_back(Vertex({x, y, z}));
+  return Vertex({x, y, z});
 }
 
-void OBJReader::ReadFace(std::stringstream& tokens,
-                         const std::vector<Vertex>& vertices, Scene& scene) {
+Figure OBJReader::ReadFace(std::stringstream& tokens,
+                           const std::vector<Vertex>& vertices) {
   Figure figure;
   int vertex_index;
   std::string line;
@@ -49,10 +48,71 @@ void OBJReader::ReadFace(std::stringstream& tokens,
     figure.AddEdge(i, end);
   }
 
-  scene.AddFigure(std::move(figure));
+  return figure;
 }
 
-Scene OBJReader::ReadScene(const std::string& path) {
+void OBJReader::NormalizationScene(Scene& scene,
+                                   const NormalizationParameters& params) {
+  Bounds scene_bounds = scene.GetBounds();
+
+  if (scene_bounds.max_vertex_x_value - scene_bounds.min_vertex_x_value != 0 &&
+      scene_bounds.max_vertex_y_value - scene_bounds.min_vertex_y_value != 0 &&
+      scene_bounds.max_vertex_z_value - scene_bounds.min_vertex_z_value != 0) {
+    float scale_x =
+        (params.max - params.min) /
+        (scene_bounds.max_vertex_x_value - scene_bounds.min_vertex_x_value);
+    float scale_y =
+        (params.max - params.min) /
+        (scene_bounds.max_vertex_y_value - scene_bounds.min_vertex_y_value);
+    float scale_z =
+        (params.max - params.min) /
+        (scene_bounds.max_vertex_z_value - scene_bounds.min_vertex_z_value);
+
+    for (Figure& figure : scene.GetFigures()) {
+      for (Vertex& vertex : figure.GetVertices()) {
+        float new_x_position =
+            (vertex.GetPosition().x - scene_bounds.min_vertex_x_value) *
+                scale_x +
+            params.min;
+
+        float new_y_position =
+            (vertex.GetPosition().y - scene_bounds.min_vertex_y_value) *
+                scale_y +
+            params.min;
+
+        float new_z_position =
+            (vertex.GetPosition().z - scene_bounds.min_vertex_z_value) *
+                scale_z +
+            params.min;
+
+        vertex.SetPosition({new_x_position, new_y_position, new_z_position});
+      }
+    }
+  }
+}
+
+void OBJReader::CalculateSceneBounds(Scene& scene, const Vertex& vertex) {
+  Bounds scene_bounds = scene.GetBounds();
+
+  scene_bounds.min_vertex_x_value =
+      std::min(vertex.GetPosition().x, scene_bounds.min_vertex_x_value);
+  scene_bounds.min_vertex_y_value =
+      std::min(vertex.GetPosition().y, scene_bounds.min_vertex_y_value);
+  scene_bounds.min_vertex_z_value =
+      std::min(vertex.GetPosition().z, scene_bounds.min_vertex_z_value);
+
+  scene_bounds.max_vertex_x_value =
+      std::max(vertex.GetPosition().x, scene_bounds.max_vertex_x_value);
+  scene_bounds.max_vertex_y_value =
+      std::max(vertex.GetPosition().y, scene_bounds.max_vertex_y_value);
+  scene_bounds.max_vertex_z_value =
+      std::max(vertex.GetPosition().z, scene_bounds.max_vertex_z_value);
+
+  scene.SetBounds(scene_bounds);
+}
+
+Scene OBJReader::ReadScene(const std::string& path,
+                           const NormalizationParameters& params) {
   Scene scene;
   std::vector<Vertex> vertices;
   std::ifstream obj_file(path);
@@ -66,9 +126,12 @@ Scene OBJReader::ReadScene(const std::string& path) {
       tokens >> curr_token;
 
       if (curr_token == kVertexToken) {
-        ReadVertex(tokens, vertices);
+        Vertex vertex = ReadVertex(tokens);
+        vertices.push_back(vertex);
+        CalculateSceneBounds(scene, vertex);
       } else if (curr_token == kFaceToken) {
-        ReadFace(tokens, vertices, scene);
+        Figure figure = ReadFace(tokens, vertices);
+        scene.AddFigure(std::move(figure));
       }
     }
 
@@ -76,6 +139,8 @@ Scene OBJReader::ReadScene(const std::string& path) {
   } else {
     throw std::runtime_error("Failed to open file: " + path);
   }
+
+  NormalizationScene(scene, params);
 
   return scene;
 }

@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-#include "point_3d.h"
+#include "point3d.h"
 
 namespace s21 {
 
