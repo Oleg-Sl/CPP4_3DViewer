@@ -55,36 +55,30 @@ void OBJReader::NormalizationScene(Scene& scene,
                                    const NormalizationParameters& params) {
   Bounds scene_bounds = scene.GetBounds();
 
-  if (scene_bounds.max_vertex_x_value - scene_bounds.min_vertex_x_value != 0 &&
-      scene_bounds.max_vertex_y_value - scene_bounds.min_vertex_y_value != 0 &&
-      scene_bounds.max_vertex_z_value - scene_bounds.min_vertex_z_value != 0) {
-    float scale_x =
-        (params.max - params.min) /
-        (scene_bounds.max_vertex_x_value - scene_bounds.min_vertex_x_value);
-    float scale_y =
-        (params.max - params.min) /
-        (scene_bounds.max_vertex_y_value - scene_bounds.min_vertex_y_value);
-    float scale_z =
-        (params.max - params.min) /
-        (scene_bounds.max_vertex_z_value - scene_bounds.min_vertex_z_value);
+  float overall_diff_x =
+      scene_bounds.max_vertex_x_value - scene_bounds.min_vertex_x_value;
+  float overall_diff_y =
+      scene_bounds.max_vertex_y_value - scene_bounds.min_vertex_y_value;
+  float overall_diff_z =
+      scene_bounds.max_vertex_z_value - scene_bounds.min_vertex_z_value;
+
+  float overall_diff =
+      std::max(overall_diff_x, std::max(overall_diff_y, overall_diff_z));
+
+  if (overall_diff != 0) {
+    float scale = (params.max - params.min) / overall_diff;
 
     for (Figure& figure : scene.GetFigures()) {
       for (Vertex& vertex : figure.GetVertices()) {
         float new_x_position =
-            (vertex.GetPosition().x - scene_bounds.min_vertex_x_value) *
-                scale_x +
+            (vertex.GetPosition().x - scene_bounds.min_vertex_x_value) * scale +
             params.min;
-
         float new_y_position =
-            (vertex.GetPosition().y - scene_bounds.min_vertex_y_value) *
-                scale_y +
+            (vertex.GetPosition().y - scene_bounds.min_vertex_y_value) * scale +
             params.min;
-
         float new_z_position =
-            (vertex.GetPosition().z - scene_bounds.min_vertex_z_value) *
-                scale_z +
+            (vertex.GetPosition().z - scene_bounds.min_vertex_z_value) * scale +
             params.min;
-
         vertex.SetPosition({new_x_position, new_y_position, new_z_position});
       }
     }

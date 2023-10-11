@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "../model/include/filereader.h"
+#include "../model/include/objreader.h"
 
 namespace s21 {
 
