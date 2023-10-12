@@ -11,14 +11,18 @@ void Scene::TransformFigures(const TransformMatrix &matrix) {
 }
 
 void Scene::AddFigure(Figure &&figure) {
-  edges_count += figure.GetEdges().size();
-  verticies_count += figure.GetVertices().size();
+  edges_count_ += figure.GetEdges().size();
+  verticies_count_ += figure.GetVertices().size();
 
   figures_.push_back(std::move(figure));
 }
 
-void Scene::SetBounds(Bounds bounds) { bounds_ = bounds; }
+NormalizationParameters Scene::GetNormalizationParams() {
+  return normalization_params_;
+}
 
-const Bounds &Scene::GetBounds() { return bounds_; }
+void Scene::SetNormalizationParams(NormalizationParameters params) {
+  normalization_params_ = params;
+}
 
-}  // namespace s21
+} // namespace s21

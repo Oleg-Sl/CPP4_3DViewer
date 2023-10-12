@@ -1,13 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "scenedrawer.h"
 #include "managerscenesubjectbase.h"
+#include "scenedrawer.h"
 #include "sceneparameters.h"
 
-#include <QMainWindow>
 #include <QColorDialog>
-
+#include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,34 +28,26 @@ public:
   void Unsubscribe(ManagerSceneObservertBase *observer) override;
   void Notify() override;
 
-  enum TypeProjection { kCentral, kParallel};
+  enum TypeProjection { kCentral, kParallel };
   enum TypeEdges { kSolid, kDotted };
   enum TypeVertex { kAbsent, kCircle, kSquare };
 
 private slots:
-    void SlotChangeTypeProjection(int);
-    void SlotChangeBackground();
-    void SlotChangeEdgeType(int);
-    void SlotChangeEdgeColor();
-    void SlotChangeEdgeWidth(int);
-    void SlotChangeVertexType(int);
-    void SlotChangeVertexSize(int);
-    void SlotChangeVertexColor();
+  void SlotChangeTypeProjection(int);
+  void SlotChangeBackground();
+  void SlotChangeEdgeType(int);
+  void SlotChangeEdgeColor();
+  void SlotChangeEdgeWidth(int);
+  void SlotChangeVertexType(int);
+  void SlotChangeVertexSize(int);
+  void SlotChangeVertexColor();
+  void SlotOpenFile();
 
 private:
-    Ui::MainWindow *ui;
-    std::list<ManagerSceneObservertBase *> list_observer_;
-    SceneParameters scene_params{};
-
-//    TypeProjection type_projection{};
-//    QColor background_color{};
-//    TypeEdges edge_type{};
-//    int edge_width{};
-//    QColor edge_color{};
-//    TypeVertex vertex_type{};
-//    int vertex_size{};
-//    QColor vertex_color{};
-
+  Ui::MainWindow *ui;
+  std::list<ManagerSceneObservertBase *> list_observer_;
+  SceneParameters scene_params{};
+  QString file_name;
 };
 
 } // namespace s21

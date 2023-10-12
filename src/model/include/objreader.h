@@ -1,5 +1,5 @@
-#ifndef _3DVIEWER_MODEL_FILEREADER_H_
-#define _3DVIEWER_MODEL_FILEREADER_H_
+#ifndef _3DVIEWER_MODEL_OBJREADER_H_
+#define _3DVIEWER_MODEL_OBJREADER_H_
 
 #include <sstream>
 #include <string>
@@ -12,23 +12,20 @@
 namespace s21 {
 
 class OBJReader : BaseFileReader {
- public:
+public:
   const std::string kVertexToken = "v";
   const std::string kFaceToken = "f";
 
- public:
-  Scene ReadScene(
-      const std::string &path,
-      const NormalizationParameters &normalization_parameters) override;
+public:
+  Scene ReadScene(const std::string &path) override;
 
- private:
+private:
   Vertex ReadVertex(std::stringstream &tokens);
   Figure ReadFace(std::stringstream &tokens,
                   const std::vector<Vertex> &vertices);
-  void NormalizationScene(Scene &scene, const NormalizationParameters &params);
-  void CalculateSceneBounds(Scene &scene, const Vertex &vertex);
+  void CalculateNormalizationParams(const Vertex &vertex, Scene &scene);
 };
 
-}  // namespace s21
+} // namespace s21
 
-#endif  // _3DVIEWER_MODEL_FILEREADER_H_
+#endif // _3DVIEWER_MODEL_OBJREADER_H_

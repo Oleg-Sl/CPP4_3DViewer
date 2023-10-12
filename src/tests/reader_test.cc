@@ -17,7 +17,7 @@ TEST(OBJFileReader, CorrectObjFile) {
       {vectrices.at(2), vectrices.at(0), vectrices.at(1)}};
 
   OBJReader reader;
-  Scene scene = reader.ReadScene("obj_examples/correct_test.obj", {-0.5, 0.5, 0, 0});
+  Scene scene = reader.ReadScene("obj_examples/correct_test.obj");
   std::vector<Figure> scene_figures = scene.GetFigures();
 
   for (size_t i = 0; i < scene_figures.size(); ++i) {
@@ -31,13 +31,13 @@ TEST(OBJFileReader, CorrectObjFile) {
 TEST(OBJFileReader, IncorrectFilePath) {
   OBJReader reader;
 
-  ASSERT_THROW(reader.ReadScene("obj_examples/incorrect.obj", {}),
+  ASSERT_THROW(reader.ReadScene("obj_examples/incorrect.obj"),
                std::runtime_error);
 }
 
 TEST(OBJFileReader, FileWithoutFaces) {
   OBJReader reader;
-  Scene scene = reader.ReadScene("obj_examples/without_faces.obj", {});
+  Scene scene = reader.ReadScene("obj_examples/without_faces.obj");
 
   ASSERT_EQ(scene.GetFigures().empty(), true);
 }
@@ -45,11 +45,11 @@ TEST(OBJFileReader, FileWithoutFaces) {
 TEST(OBJFileReaderThrow, IncorrectFaceIndex) {
   OBJReader reader;
 
-  ASSERT_THROW(reader.ReadScene("obj_examples/incorrect_face_index.obj", {}),
+  ASSERT_THROW(reader.ReadScene("obj_examples/incorrect_face_index.obj"),
                std::invalid_argument);
 }
 
-}  // namespace s21
+} // namespace s21
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);

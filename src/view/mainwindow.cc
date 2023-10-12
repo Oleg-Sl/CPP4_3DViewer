@@ -1,6 +1,7 @@
 #include "include/mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QFileDialog>
 
 namespace s21 {
 
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->vertexType,      SIGNAL(activated(int)),    this, SLOT(SlotChangeVertexType(int)));
     connect(ui->vertexSize,      SIGNAL(valueChanged(int)), this, SLOT(SlotChangeVertexSize(int)));
     connect(ui->vertexColor,     SIGNAL(clicked()),         this, SLOT(SlotChangeVertexColor()));
+    connect(ui->buttonSelectFile,     SIGNAL(clicked()),         this, SLOT(SlotOpenFile()));
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -90,4 +92,10 @@ void MainWindow::SlotChangeVertexColor() {
     }
 }
 
+void MainWindow::SlotOpenFile(){
+    QFileDialog::getOpenFileName(this, tr("Open File"),
+                                                  ".",
+                                                  tr("OBJ (*.obj)"));
+
+}
 } // namespace s21
