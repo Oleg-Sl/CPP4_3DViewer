@@ -6,18 +6,25 @@
 namespace s21 {
 
 
-SceneDrawer::SceneDrawer(QWidget *parent, ManagerSceneSubjectBase& manager_scene) : QOpenGLWidget{parent}, scene(), scene_subject(manager_scene) {
+SceneDrawer::SceneDrawer(QWidget *parent_) : QOpenGLWidget{parent_}, parent(parent_) {
+    // QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // sizePolicy2.setHorizontalStretch(0);
+    // sizePolicy2.setVerticalStretch(0);
+    // sizePolicy2.setHeightForWidth(sizePolicy().hasHeightForWidth());
+    // setSizePolicy(sizePolicy2);
+    // setMinimumSize(QSize(600, 0));
+
+    connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
+    timer.start(100);
+}
+
+void SceneDrawer::SetParentOpenGL(QWidget *parent) {
+    setParent(parent);
     QVBoxLayout* layout = new QVBoxLayout(parent);
     layout->addWidget(this);
-    layout->setMargin(0);
-    manager_scene.Subscribe(this);
-
-//    connect(ui->vertexColor,     SIGNAL(clicked()),         this, SLOT(SlotChangeVertexColor()));
-    connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
-//    connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    timer.start(50);
-
+    layout->setContentsMargins(0, 0, 0, 0);
 }
+
 
 void SceneDrawer::DrawScene(Scene& new_scene) {
   qDebug() << "SceneDrawer";

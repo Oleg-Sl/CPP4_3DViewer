@@ -15,11 +15,13 @@ SOURCES += \
     ../main.cc \
     mainwindow.cc \
     scenedrawer.cc \
-    ../model/*.cc
+    ../model/*.cc \
+    ../controller/*.cc
 
 
 HEADERS += \
     ../model/include/*.h \
+    ../controller/include/*.h \
     include/mainwindow.h \
     include/scenedrawer.h \
     include/scenedrawerbase.h \

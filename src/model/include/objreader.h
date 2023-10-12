@@ -11,7 +11,7 @@
 
 namespace s21 {
 
-class OBJReader : BaseFileReader {
+class OBJReader : public BaseFileReader {
  public:
   const std::string kVertexToken = "v";
   const std::string kFaceToken = "f";

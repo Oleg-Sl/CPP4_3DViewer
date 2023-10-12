@@ -6,33 +6,25 @@
 #include "model/include/scene.h"
 #include "view/include/mainwindow.h"
 #include "view/include/scenedrawer.h"
-// namespace s21 {
+
+#include "controller/include/facade.h"
+
 
 int main(int argc, char* argv[]) {
-  QApplication a(argc, argv);
-  s21::MainWindow w;
+    QApplication app(argc, argv);
 
-  s21::OBJReader reader;
-  s21::Scene scene = reader.ReadScene(
-      "/home/alexander/Desktop/school/CPP4_3DViewer_v2.0-1/src/obj_examples/"
-      "man.obj",
-      {-0.5, 0.5});
-  Figure figure;
-  figure.AddVertex(Vertex({-0.5, 0.5, 0.5}));
-  figure.AddVertex(Vertex({0.5, 0.5, 0.5}));
-  figure.AddVertex(Vertex({0.5, -0.5, 0.5}));
-  figure.AddVertex(Vertex({-0.5, -0.5, 0.5}));
-  figure.AddEdge(0, 1);
-  figure.AddEdge(1, 2);
-  figure.AddEdge(2, 3);
-  figure.AddEdge(3, 0);
-  scene.AddFigure(std::move(figure));
-  // s21::Scene scene =
-  // reader.ReadScene("/home/oleg/school21/CPP4_3DViewer_v2.0-1/src/obj_examples/skull.obj");
-  s21::SceneDrawer* widgetOpenGL = new SceneDrawer(w.GetOpenglWidget(), w);
+    s21::SceneDrawer scene_drawer;
+    s21::OBJReader reader;
+    s21::Facade controller(reader, scene_drawer);
 
-  widgetOpenGL->DrawScene(scene);
+    s21::MainWindow window(controller);
 
-  w.show();
-  return a.exec();
+    // scene_drawer.SetParentOpenGL(window.GetOpenglWidget());
+    // scene_drawer.SetParentOpenGL(nullptr);
+
+    // s21::SceneDrawer scene_drawer(window.GetOpenglWidget(), window);
+    // Facade controller(reader, scene_drawer);
+
+    window.show();
+    return app.exec();
 }

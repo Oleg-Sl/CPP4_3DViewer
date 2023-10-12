@@ -19,13 +19,24 @@ using namespace s21;
 
 namespace s21 {
 
-class SceneDrawer : public QOpenGLWidget, protected QOpenGLFunctions, public SceneDrawerBase, public ManagerSceneObservertBase {
+class SceneDrawer : 
+  public QOpenGLWidget,
+  protected QOpenGLFunctions,
+  public SceneDrawerBase,
+  public ManagerSceneObservertBase {
   Q_OBJECT
 
 public:
-  SceneDrawer(QWidget *parent, ManagerSceneSubjectBase& manager_scene);
+  SceneDrawer(QWidget *parent = nullptr);
+  ~SceneDrawer() {
+    if (parent != nullptr) {
+      delete parent;
+    }
+  }
+
   void DrawScene(Scene &);
   void Update(SceneParameters &);
+  void SetParentOpenGL(QWidget *);
 
 protected:
   void initializeGL();
@@ -46,12 +57,48 @@ protected:
   void RenderVertices();
 
 private:
-  Scene scene;
-  ManagerSceneSubjectBase& scene_subject;
+  QWidget *parent;
+  Scene scene{};
+  // ManagerSceneSubjectBase& scene_subject;
   SceneParameters scene_params{};
   QTimer timer{};
 
 };
+
+
+// class SceneDrawer : public QOpenGLWidget, protected QOpenGLFunctions, public SceneDrawerBase, public ManagerSceneObservertBase {
+//   Q_OBJECT
+
+// public:
+//   SceneDrawer(QWidget *parent, ManagerSceneSubjectBase& manager_scene);
+//   void DrawScene(Scene &);
+//   void Update(SceneParameters &);
+
+// protected:
+//   void initializeGL();
+//   void paintGL();
+//   void resizeGL(int w, int h);
+
+//   void SetTypeProjection();
+//   void SetBackgroundScene();
+
+//   void SetEdgesType();
+//   void SetEdgesColor();
+//   void SetEdgesWidth();
+//   void RenderEdges();
+
+//   void SetVerticesType();
+//   void SetVerticesColor();
+//   void SetVerticesSize();
+//   void RenderVertices();
+
+// private:
+//   Scene scene;
+//   ManagerSceneSubjectBase& scene_subject;
+//   SceneParameters scene_params{};
+//   QTimer timer{};
+
+// };
 
 }
 
