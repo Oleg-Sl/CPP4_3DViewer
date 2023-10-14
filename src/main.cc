@@ -19,11 +19,13 @@ int main(int argc, char* argv[]) {
 
     s21::MainWindow window(controller);
 
-    // scene_drawer.SetParentOpenGL(window.GetOpenglWidget());
-    // scene_drawer.SetParentOpenGL(nullptr);
-
-    // s21::SceneDrawer scene_drawer(window.GetOpenglWidget(), window);
-    // Facade controller(reader, scene_drawer);
+    // s21::SceneDrawer* scene_drawer = new s21::SceneDrawer();
+    // s21::OBJReader* reader = new s21::OBJReader();
+    // s21::Facade* controller = new s21::Facade(*reader, *scene_drawer);
+    // s21::MainWindow window(*controller);
+    // delete controller;
+    // delete reader;
+    // delete scene_drawer;
 
     window.show();
     return app.exec();

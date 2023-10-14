@@ -5,7 +5,7 @@ namespace s21 {
 std::vector<Figure> &Scene::GetFigures() { return figures_; }
 
 void Scene::TransformFigures(const TransformMatrix &matrix) {
-  for (auto figure : figures_) {
+  for (auto& figure : figures_) {
     figure.Transform(matrix);
   }
 }

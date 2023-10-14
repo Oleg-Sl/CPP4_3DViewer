@@ -105,8 +105,7 @@ void OBJReader::CalculateSceneBounds(Scene& scene, const Vertex& vertex) {
   scene.SetBounds(scene_bounds);
 }
 
-Scene OBJReader::ReadScene(const std::string& path,
-                           const NormalizationParameters& params) {
+Scene OBJReader::ReadScene(const std::string& path, const NormalizationParameters& params) {
   Scene scene;
   std::vector<Vertex> vertices;
   std::ifstream obj_file(path);
@@ -122,7 +121,7 @@ Scene OBJReader::ReadScene(const std::string& path,
       if (curr_token == kVertexToken) {
         Vertex vertex = ReadVertex(tokens);
         vertices.push_back(vertex);
-        CalculateSceneBounds(scene, vertex);
+        // CalculateSceneBounds(scene, vertex);
       } else if (curr_token == kFaceToken) {
         Figure figure = ReadFace(tokens, vertices);
         scene.AddFigure(std::move(figure));

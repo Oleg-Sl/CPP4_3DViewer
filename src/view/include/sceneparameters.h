@@ -3,9 +3,8 @@
 
 #include <QColor>
 
+
 namespace s21 {
-
-
 
 struct SceneParameters {
     enum TypeProjection { kCentral, kParallel};

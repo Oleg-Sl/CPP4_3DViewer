@@ -5,10 +5,12 @@
 
 namespace s21 {
 
-MainWindow::MainWindow(Facade& controller_, QWidget *parent) : QMainWindow(parent), controller(controller_), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(Facade& ctrl, QWidget *parent) : QMainWindow(parent), controller(ctrl), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
     controller.SetParentForSceneDraw(ui->widgetOpenGL);
+    controller.LoadScene("/home/oleg/school21/CPP4_3DViewer_v2.0-1/src/obj_examples/Fantasy Dragon.obj");
+//    controller.LoadScene("/Users/julissam/projects/CPP4_3DViewer_v2.0-1/src/obj_examples/cube.obj");
 
     connect(ui->typeProjection,  SIGNAL(activated(int)),    this, SLOT(SlotChangeTypeProjection(int)));
     connect(ui->backgroundColor, SIGNAL(clicked()),         this, SLOT(SlotChangeBackground()));
@@ -43,73 +45,77 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-// void SetParentWidgetForOpenGL(QWidget *) {
-//     controller.
-// }
-
-//QWidget *MainWindow::GetOpenglWidget() {
-//  return ui->widgetOpenGL;
-//}
-
-void MainWindow::Subscribe(ManagerSceneObservertBase *observer) {
-  list_observer_.push_back(observer);
-}
-
-void MainWindow::Unsubscribe(ManagerSceneObservertBase *observer) {
-  list_observer_.remove(observer);
-}
-
 void MainWindow::Notify() {
-  for (auto observer : list_observer_) {
-    observer->Update(scene_params);
-  }
+    controller.DrawScene(&scene_params);
 }
 
 void MainWindow::SlotMoveObjectX(int offset) {
-//    MoveScene(offset - previous_offsets.x, previous_offsets.y, previous_offsets.z);
+    if (offset == previous_offsets.x) {
+        return;
+    }
+    controller.MoveScene(offset - previous_offsets.x, 0, 0);
     previous_offsets.x = offset;
     ui->sliderMoveX->setSliderPosition(offset);
     ui->moveX->setValue(offset);
 }
 
 void MainWindow::SlotMoveObjectY(int offset) {
-//    MoveScene(previous_offsets.x, offset - previous_offsets.y, previous_offsets.z);
+    if (offset == previous_offsets.y) {
+        return;
+    }
+    controller.MoveScene(0, offset - previous_offsets.y, 0);
     previous_offsets.y = offset;
     ui->sliderMoveY->setSliderPosition(offset);
     ui->moveY->setValue(offset);
 }
 
 void MainWindow::SlotMoveObjectZ(int offset) {
-//    MoveScene(previous_offsets.x, previous_offsets.y, offset - previous_offsets.z);
+    if (offset == previous_offsets.z) {
+        return;
+    }
+    controller.MoveScene(0, 0, offset - previous_offsets.z);
     previous_offsets.z = offset;
     ui->sliderMoveZ->setSliderPosition(offset);
     ui->moveZ->setValue(offset);
 }
 
 void MainWindow::SlotRotateObjectX(int angle_deg) {
-//    RotateScene(angle_deg * M_PI / 180 - previous_rotation.x, previous_rotation.y, previous_rotation.z);
+    if (angle_deg == previous_rotation.x) {
+        return;
+    }
+    controller.RotateScene(angle_deg * M_PI / 180 - previous_rotation.x, 0, 0);
     previous_rotation.x = angle_deg * M_PI / 180;
     ui->sliderRotateX->setSliderPosition(angle_deg);
     ui->rotateX->setValue(angle_deg);
 }
 
 void MainWindow::SlotRotateObjectY(int angle_deg) {
-//    RotateScene(previous_rotation.x, angle_deg * M_PI / 180 - previous_rotation.y, previous_rotation.z);
+    if (angle_deg == previous_rotation.y) {
+        return;
+    }
+    controller.RotateScene(0, angle_deg * M_PI / 180 - previous_rotation.y, 0);
     previous_rotation.y = angle_deg * M_PI / 180;
     ui->sliderRotateY->setSliderPosition(angle_deg);
     ui->rotateY->setValue(angle_deg);
 }
 
 void MainWindow::SlotRotateObjectZ(int angle_deg) {
-//    RotateScene(previous_rotation.x, previous_rotation.y, angle_deg * M_PI / 180 - previous_rotation.z);
+    if (angle_deg == previous_rotation.z) {
+        return;
+    }
+    controller.RotateScene(0, 0, angle_deg * M_PI / 180 - previous_rotation.z);
     previous_rotation.z = angle_deg * M_PI / 180;
     ui->sliderRotateZ->setSliderPosition(angle_deg);
     ui->rotateZ->setValue(angle_deg);
 }
 
 void MainWindow::SlotScaleObjectXYZ(int scale) {
-//    MoveScene(scale - previous_scales.x, scale - previous_scales.y, scale - previous_scales.z);
+
+    controller.ScaleScene(scale / previous_scales.x, scale / previous_scales.y, scale / previous_scales.z);
+
     previous_scales.x = scale;
+    previous_scales.y = scale;
+    previous_scales.z = scale;
     ui->sliderScale->setSliderPosition(scale);
     ui->scale->setValue(scale);
 }

@@ -23,8 +23,7 @@ class OBJReader : public BaseFileReader {
 
  private:
   Vertex ReadVertex(std::stringstream &tokens);
-  Figure ReadFace(std::stringstream &tokens,
-                  const std::vector<Vertex> &vertices);
+  Figure ReadFace(std::stringstream &tokens, const std::vector<Vertex> &vertices);
   void NormalizationScene(Scene &scene, const NormalizationParameters &params);
   void CalculateSceneBounds(Scene &scene, const Vertex &vertex);
 };

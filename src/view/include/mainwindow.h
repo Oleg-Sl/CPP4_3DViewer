@@ -4,7 +4,6 @@
 #include "scenedrawer.h"
 #include "managerscenesubjectbase.h"
 #include "sceneparameters.h"
-#include "scenedrawer.h"
 #include "../../controller/include/facade.h"
 #include "cmath"
 
@@ -18,28 +17,22 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+
 namespace s21 {
 
-class MainWindow : public QMainWindow, public ManagerSceneSubjectBase {
+class MainWindow : public QMainWindow {
   Q_OBJECT
 
 public:
   MainWindow(Facade& cotroller, QWidget *parent = nullptr);
   ~MainWindow();
 
-  QWidget *GetOpenglWidget();
-  void Subscribe(ManagerSceneObservertBase *observer) override;
-  void Unsubscribe(ManagerSceneObservertBase *observer) override;
-  void Notify() override;
-  // void SetParentWidgetForOpenGL(QWidget *);
+  void Notify();
 
-  enum TypeProjection { kCentral, kParallel};
-  enum TypeEdges { kSolid, kDotted };
-  enum TypeVertex { kAbsent, kCircle, kSquare };
   struct VectorCoordinates {
-      float x{};
-      float y{};
-      float z{};
+    float x{};
+    float y{};
+    float z{};
   };
 
 private slots:
@@ -62,21 +55,11 @@ private slots:
 private:
     Facade& controller;
     Ui::MainWindow *ui;
-    std::list<ManagerSceneObservertBase *> list_observer_;
     SceneParameters scene_params{};
 
     VectorCoordinates previous_offsets{};
     VectorCoordinates previous_rotation{};
-    VectorCoordinates previous_scales{};
-
-//    TypeProjection type_projection{};
-//    QColor background_color{};
-//    TypeEdges edge_type{};
-//    int edge_width{};
-//    QColor edge_color{};
-//    TypeVertex vertex_type{};
-//    int vertex_size{};
-//    QColor vertex_color{};
+    VectorCoordinates previous_scales{100, 100, 100};
 
 };
 

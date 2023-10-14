@@ -10,6 +10,7 @@
 #include <QColor>
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
+#include <QOpenGLContext>
 #include <QOpenGLWidget>
 #include <cmath>
 #include <QTimer>
@@ -19,23 +20,16 @@ using namespace s21;
 
 namespace s21 {
 
-class SceneDrawer : 
-  public QOpenGLWidget,
-  protected QOpenGLFunctions,
-  public SceneDrawerBase,
-  public ManagerSceneObservertBase {
+class SceneDrawer : public QOpenGLWidget, protected QOpenGLFunctions, public SceneDrawerBase {
   Q_OBJECT
 
 public:
   SceneDrawer(QWidget *parent = nullptr);
-  ~SceneDrawer() {
-    if (parent != nullptr) {
-      delete parent;
-    }
-  }
+  ~SceneDrawer() {}
 
-  void DrawScene(Scene &);
-  void Update(SceneParameters &);
+  // void DrawScene(Scene*, SceneParameters*);
+  void DrawScene(Scene*);
+  void SetParamsScene(SceneParameters*);
   void SetParentOpenGL(QWidget *);
 
 protected:
@@ -45,12 +39,10 @@ protected:
 
   void SetTypeProjection();
   void SetBackgroundScene();
-
   void SetEdgesType();
   void SetEdgesColor();
   void SetEdgesWidth();
   void RenderEdges();
-
   void SetVerticesType();
   void SetVerticesColor();
   void SetVerticesSize();
@@ -58,47 +50,11 @@ protected:
 
 private:
   QWidget *parent;
-  Scene scene{};
-  // ManagerSceneSubjectBase& scene_subject;
-  SceneParameters scene_params{};
   QTimer timer{};
+  Scene *scene = nullptr;
+  SceneParameters *scene_params = nullptr;
 
 };
-
-
-// class SceneDrawer : public QOpenGLWidget, protected QOpenGLFunctions, public SceneDrawerBase, public ManagerSceneObservertBase {
-//   Q_OBJECT
-
-// public:
-//   SceneDrawer(QWidget *parent, ManagerSceneSubjectBase& manager_scene);
-//   void DrawScene(Scene &);
-//   void Update(SceneParameters &);
-
-// protected:
-//   void initializeGL();
-//   void paintGL();
-//   void resizeGL(int w, int h);
-
-//   void SetTypeProjection();
-//   void SetBackgroundScene();
-
-//   void SetEdgesType();
-//   void SetEdgesColor();
-//   void SetEdgesWidth();
-//   void RenderEdges();
-
-//   void SetVerticesType();
-//   void SetVerticesColor();
-//   void SetVerticesSize();
-//   void RenderVertices();
-
-// private:
-//   Scene scene;
-//   ManagerSceneSubjectBase& scene_subject;
-//   SceneParameters scene_params{};
-//   QTimer timer{};
-
-// };
 
 }
 

@@ -4,6 +4,9 @@
 #include "../../model/include/scene.h"
 #include "../../model/include/objreader.h"
 #include "../../view/include/scenedrawer.h"
+#include "../../model/include/transform_matrix_builder.h"
+
+#include <QDebug>
 
 
 namespace s21 {
@@ -11,37 +14,25 @@ namespace s21 {
 class Facade {
 
 public:
-  Facade(BaseFileReader& file_reader, SceneDrawer& scene_drawer) : file_reader(file_reader), scene_drawer(scene_drawer) {
-  }
+  Facade(BaseFileReader& file_reader, SceneDrawerBase& scene_drawer);
 
-  void DrawScene(Scene scene) {
-    scene_drawer.DrawScene(scene);
-  }
+  void DrawScene(SceneParameters *scene_params);
 
-  void SetParentForSceneDraw(QWidget *parent) {
-    scene_drawer.SetParentOpenGL(parent);
-  }
+  void LoadScene(const std::string& path);
 
-  void LoadScene(const std::string& path, const NormalizationParameters& params) {
-  // scene = reader.ReadScene(
-  //       "/Users/julissam/projects/CPP4_3DViewer_v2.0-1/src/obj_examples/cube.obj",
-  //       {-0.5, 0.5});
-  }
+  void SetParentForSceneDraw(QWidget *parent);
 
-  // void MoveScene(float x, float y, float z) {
-  // }
+  void MoveScene(float x, float y, float z);
 
-  // void RotateScene(float x, float y, float z) {
-  // }
+  void RotateScene(float x, float y, float z);
 
-  // void ScaleScene(float x, float y, float z) {
-  // }
+  void ScaleScene(float x, float y, float z);
 
 private:
   BaseFileReader& file_reader;
-  SceneDrawer& scene_drawer;
-  // Scene& scene;
-
+  SceneDrawerBase& scene_drawer;
+  Scene scene{};
+  const NormalizationParameters params{0.5, 0.5, 0, 0};
 };
 
 } // namespace s21

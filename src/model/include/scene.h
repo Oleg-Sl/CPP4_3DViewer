@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <QDebug>
+
 #include "bounds.h"
 #include "figure.h"
 #include "transform_matrix.h"
