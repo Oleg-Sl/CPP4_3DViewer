@@ -25,13 +25,23 @@
         <property name="sizeConstraint">
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
-        <item row="11" column="1" colspan="3">
-         <widget class="QSlider" name="sliderRotateZ">
+        <item row="0" column="0" colspan="3">
+         <widget class="QPushButton" name="buttonSelectFile">
+          <property name="text">
+           <string>Выбор файла</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1" colspan="3">
+         <widget class="QSlider" name="sliderMoveY">
           <property name="minimum">
-           <number>-180</number>
+           <number>-100</number>
           </property>
           <property name="maximum">
-           <number>180</number>
+           <number>100</number>
+          </property>
+          <property name="pageStep">
+           <number>10</number>
           </property>
           <property name="value">
            <number>0</number>
@@ -41,33 +51,27 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0" colspan="5">
-         <widget class="QLabel" name="label">
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Перемещение</string>
-          </property>
+        <item row="17" column="3" colspan="2">
+         <widget class="QComboBox" name="lineType">
+          <item>
+           <property name="text">
+            <string extracomment="solid">__________</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="dotted">- - - - - - - - - -</string>
+           </property>
+          </item>
          </widget>
         </item>
-        <item row="3" column="4">
-         <widget class="QLabel" name="countEdges">
-          <property name="text">
-           <string>-</string>
+        <item row="11" column="4">
+         <widget class="QSpinBox" name="rotateZ">
+          <property name="minimum">
+           <number>-180</number>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="3">
-         <widget class="QPushButton" name="buttonSelectFile">
-          <property name="text">
-           <string>Выбор файла</string>
+          <property name="maximum">
+           <number>180</number>
           </property>
          </widget>
         </item>
@@ -78,23 +82,155 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="3" colspan="2">
-         <widget class="QPushButton" name="buttonRenderObj">
+        <item row="9" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
           <property name="text">
-           <string>Отобразить</string>
+           <string>X</string>
           </property>
          </widget>
         </item>
-        <item row="28" column="0" colspan="5">
-         <widget class="QLabel" name="label_15">
+        <item row="30" column="0" colspan="5">
+         <widget class="QPushButton" name="buttonCreateGif">
+          <property name="text">
+           <string>GIF</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="4">
+         <widget class="QSpinBox" name="rotateX">
+          <property name="minimum">
+           <number>-180</number>
+          </property>
+          <property name="maximum">
+           <number>180</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="5">
+         <widget class="QLabel" name="fileName">
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="26" column="0" colspan="2">
+         <widget class="QLabel" name="label_18">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QLabel {
+    color: rgb(94, 92, 100);
+};</string>
+          </property>
+          <property name="text">
+           <string>путь:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="15" column="0" colspan="5">
+         <widget class="QLabel" name="label_11">
           <property name="font">
            <font>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
           <property name="text">
-           <string>Запись GIF</string>
+           <string>Настройки</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="4">
+         <widget class="QSpinBox" name="moveY">
+          <property name="minimum">
+           <number>-100</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Z</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="4">
+         <widget class="QSpinBox" name="rotateY">
+          <property name="minimum">
+           <number>-180</number>
+          </property>
+          <property name="maximum">
+           <number>180</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="21" column="3" colspan="2">
+         <widget class="QPushButton" name="vertexColor">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="18" column="3" colspan="2">
+         <widget class="QPushButton" name="lineColor">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="24" column="0" colspan="5">
+         <widget class="QLabel" name="label_13">
+          <property name="font">
+           <font>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Снимок экрана</string>
+          </property>
+         </widget>
+        </item>
+        <item row="21" column="0" colspan="3">
+         <widget class="QLabel" name="label_16">
+          <property name="text">
+           <string>Цвет вершины</string>
+          </property>
+         </widget>
+        </item>
+        <item row="22" column="3" colspan="2">
+         <widget class="QSpinBox" name="vertexSize">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>20</number>
+          </property>
+          <property name="singleStep">
+           <number>1</number>
           </property>
          </widget>
         </item>
@@ -117,63 +253,8 @@
           </property>
          </widget>
         </item>
-        <item row="15" column="0" colspan="5">
-         <widget class="QLabel" name="label_11">
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Настройки</string>
-          </property>
-         </widget>
-        </item>
-        <item row="30" column="0" colspan="5">
-         <widget class="QPushButton" name="buttonCreateGif">
-          <property name="text">
-           <string>GIF</string>
-          </property>
-         </widget>
-        </item>
-        <item row="20" column="3" colspan="2">
-         <widget class="QComboBox" name="vertexType">
-          <item>
-           <property name="text">
-            <string>отстуствует</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>круг</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>квадрат</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="9" column="0">
-         <widget class="QLabel" name="label_5">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="text">
-           <string>X</string>
-          </property>
-         </widget>
-        </item>
-        <item row="11" column="0">
-         <widget class="QLabel" name="label_7">
+        <item row="7" column="0">
+         <widget class="QLabel" name="label_3">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -185,13 +266,16 @@
           </property>
          </widget>
         </item>
-        <item row="9" column="4">
-         <widget class="QSpinBox" name="rotateX">
-          <property name="minimum">
-           <number>-180</number>
+        <item row="19" column="0" colspan="3">
+         <widget class="QLabel" name="label_21">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="maximum">
-           <number>180</number>
+          <property name="text">
+           <string>Толшина линии</string>
           </property>
          </widget>
         </item>
@@ -217,8 +301,59 @@
           </property>
          </widget>
         </item>
-        <item row="10" column="0">
-         <widget class="QLabel" name="label_6">
+        <item row="20" column="3" colspan="2">
+         <widget class="QComboBox" name="vertexType">
+          <item>
+           <property name="text">
+            <string>отстуствует</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>круг</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>квадрат</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="19" column="3" colspan="2">
+         <widget class="QSpinBox" name="lineWidth">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>10</number>
+          </property>
+         </widget>
+        </item>
+        <item row="28" column="0" colspan="5">
+         <widget class="QLabel" name="label_15">
+          <property name="font">
+           <font>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Запись GIF</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="4">
+         <widget class="QSpinBox" name="moveX">
+          <property name="minimum">
+           <number>-100</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+         </widget>
+        </item>
+        <item row="18" column="0" colspan="3">
+         <widget class="QLabel" name="label_20">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -226,34 +361,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Y</string>
-          </property>
-         </widget>
-        </item>
-        <item row="24" column="0" colspan="5">
-         <widget class="QLabel" name="label_13">
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Снимок экрана</string>
-          </property>
-         </widget>
-        </item>
-        <item row="18" column="3" colspan="2">
-         <widget class="QPushButton" name="lineColor">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" colspan="4">
-         <widget class="QLabel" name="label_17">
-          <property name="text">
-           <string>Количество ребер:</string>
+           <string>Цвет линии</string>
           </property>
          </widget>
         </item>
@@ -261,7 +369,6 @@
          <widget class="QLabel" name="label_10">
           <property name="font">
            <font>
-            <weight>50</weight>
             <bold>false</bold>
            </font>
           </property>
@@ -270,21 +377,107 @@
           </property>
          </widget>
         </item>
-        <item row="26" column="0" colspan="2">
-         <widget class="QLabel" name="label_18">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+        <item row="20" column="0" colspan="3">
+         <widget class="QLabel" name="label_22">
+          <property name="text">
+           <string>Тип вершины</string>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QLabel {
-    color: rgb(94, 92, 100);
-};</string>
+         </widget>
+        </item>
+        <item row="12" column="0" colspan="5">
+         <widget class="QLabel" name="label_9">
+          <property name="font">
+           <font>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="text">
-           <string>путь:</string>
+           <string>Масштабирование</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="1" colspan="3">
+         <widget class="QSlider" name="sliderRotateY">
+          <property name="minimum">
+           <number>-180</number>
+          </property>
+          <property name="maximum">
+           <number>180</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="1" colspan="3">
+         <widget class="QSlider" name="sliderRotateZ">
+          <property name="minimum">
+           <number>-180</number>
+          </property>
+          <property name="maximum">
+           <number>180</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="1" colspan="3">
+         <widget class="QSlider" name="sliderScale">
+          <property name="minimum">
+           <number>10</number>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="value">
+           <number>100</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="22" column="0" colspan="3">
+         <widget class="QLabel" name="label_23">
+          <property name="text">
+           <string>Размер вершины</string>
+          </property>
+         </widget>
+        </item>
+        <item row="27" column="3" colspan="2">
+         <widget class="QPushButton" name="buttonPreentScreenJpeg">
+          <property name="text">
+           <string>Снимок (.jpeg)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="29" column="2" colspan="3">
+         <widget class="QPushButton" name="gifPath">
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>./</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="4">
+         <widget class="QSpinBox" name="moveZ">
+          <property name="minimum">
+           <number>-100</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
           </property>
          </widget>
         </item>
@@ -304,8 +497,28 @@
           </property>
          </widget>
         </item>
-        <item row="17" column="0" colspan="3">
-         <widget class="QLabel" name="label_12">
+        <item row="16" column="3" colspan="2">
+         <widget class="QComboBox" name="typeProjection">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <item>
+           <property name="text">
+            <string>параллельная</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>центральная</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="10" column="0">
+         <widget class="QLabel" name="label_6">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -313,14 +526,90 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Тип линии</string>
+           <string>Y</string>
           </property>
          </widget>
         </item>
-        <item row="21" column="0" colspan="3">
-         <widget class="QLabel" name="label_16">
+        <item row="23" column="3" colspan="2">
+         <widget class="QPushButton" name="backgroundColor">
           <property name="text">
-           <string>Цвет вершины</string>
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4">
+         <widget class="QLabel" name="countVertexes">
+          <property name="text">
+           <string>-</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Y</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="4">
+         <widget class="QLabel" name="label_17">
+          <property name="text">
+           <string>Количество ребер:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="27" column="0" colspan="3">
+         <widget class="QPushButton" name="buttonPreentScreenBmp">
+          <property name="text">
+           <string>Снимок (.bmp)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3" colspan="2">
+         <widget class="QPushButton" name="buttonRenderObj">
+          <property name="text">
+           <string>Отобразить</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="4">
+         <widget class="QLabel" name="label_14">
+          <property name="text">
+           <string>Количество вершин:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>X</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0" colspan="5">
+         <widget class="QLabel" name="label">
+          <property name="font">
+           <font>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Перемещение</string>
           </property>
          </widget>
         </item>
@@ -347,262 +636,8 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>X</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="4">
-         <widget class="QSpinBox" name="moveZ">
-          <property name="minimum">
-           <number>-100</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="1" colspan="3">
-         <widget class="QSlider" name="sliderMoveY">
-          <property name="minimum">
-           <number>-100</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-          <property name="pageStep">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Y</string>
-          </property>
-         </widget>
-        </item>
-        <item row="13" column="1" colspan="3">
-         <widget class="QSlider" name="sliderScale">
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>1000</number>
-          </property>
-          <property name="value">
-           <number>100</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="23" column="3" colspan="2">
-         <widget class="QPushButton" name="backgroundColor">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="27" column="0" colspan="3">
-         <widget class="QPushButton" name="buttonPreentScreenBmp">
-          <property name="text">
-           <string>Снимок (.bmp)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="5">
-         <widget class="QLabel" name="fileName">
-          <property name="text">
-           <string>-</string>
-          </property>
-         </widget>
-        </item>
-        <item row="10" column="4">
-         <widget class="QSpinBox" name="rotateY">
-          <property name="minimum">
-           <number>-180</number>
-          </property>
-          <property name="maximum">
-           <number>180</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="16" column="3" colspan="2">
-         <widget class="QComboBox" name="typeProjection">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <item>
-           <property name="text">
-            <string>параллельная</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>центральная</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="12" column="0" colspan="5">
-         <widget class="QLabel" name="label_9">
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Масштабирование</string>
-          </property>
-         </widget>
-        </item>
-        <item row="22" column="3" colspan="2">
-         <widget class="QSpinBox" name="vertexSize">
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>20</number>
-          </property>
-          <property name="singleStep">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="4">
-         <widget class="QSpinBox" name="moveX">
-          <property name="minimum">
-           <number>-100</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-         </widget>
-        </item>
-        <item row="22" column="0" colspan="3">
-         <widget class="QLabel" name="label_23">
-          <property name="text">
-           <string>Размер вершины</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="4">
-         <widget class="QSpinBox" name="moveY">
-          <property name="minimum">
-           <number>-100</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-         </widget>
-        </item>
-        <item row="13" column="4">
-         <widget class="QSpinBox" name="scale">
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>1000</number>
-          </property>
-          <property name="value">
-           <number>100</number>
-          </property>
-         </widget>
-        </item>
-        <item row="21" column="3" colspan="2">
-         <widget class="QPushButton" name="vertexColor">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0" colspan="4">
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>Количество вершин:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="20" column="0" colspan="3">
-         <widget class="QLabel" name="label_22">
-          <property name="text">
-           <string>Тип вершины</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0">
-         <widget class="QLabel" name="label_3">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Z</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0" colspan="5">
-         <widget class="QLabel" name="label_8">
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Поворот</string>
-          </property>
-         </widget>
-        </item>
-        <item row="18" column="0" colspan="3">
-         <widget class="QLabel" name="label_20">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Цвет линии</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="4">
-         <widget class="QLabel" name="countVertexes">
+        <item row="3" column="4">
+         <widget class="QLabel" name="countEdges">
           <property name="text">
            <string>-</string>
           </property>
@@ -611,73 +646,18 @@
           </property>
          </widget>
         </item>
-        <item row="17" column="3" colspan="2">
-         <widget class="QComboBox" name="lineType">
-          <item>
-           <property name="text">
-            <string extracomment="solid">__________</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="dotted">- - - - - - - - - -</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="10" column="1" colspan="3">
-         <widget class="QSlider" name="sliderRotateY">
-          <property name="minimum">
-           <number>-180</number>
+        <item row="8" column="0" colspan="5">
+         <widget class="QLabel" name="label_8">
+          <property name="font">
+           <font>
+            <bold>true</bold>
+           </font>
           </property>
-          <property name="maximum">
-           <number>180</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="27" column="3" colspan="2">
-         <widget class="QPushButton" name="buttonPreentScreenJpeg">
-          <property name="text">
-           <string>Снимок (.jpeg)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="11" column="4">
-         <widget class="QSpinBox" name="rotateZ">
-          <property name="minimum">
-           <number>-180</number>
-          </property>
-          <property name="maximum">
-           <number>180</number>
-          </property>
-         </widget>
-        </item>
-        <item row="19" column="3" colspan="2">
-         <widget class="QSpinBox" name="lineWidth">
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-        <item row="19" column="0" colspan="3">
-         <widget class="QLabel" name="label_21">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+          <property name="styleSheet">
+           <string notr="true"/>
           </property>
           <property name="text">
-           <string>Толшина линии</string>
+           <string>Поворот</string>
           </property>
          </widget>
         </item>
@@ -694,16 +674,29 @@
           </property>
          </widget>
         </item>
-        <item row="29" column="2" colspan="3">
-         <widget class="QPushButton" name="gifPath">
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
+        <item row="17" column="0" colspan="3">
+         <widget class="QLabel" name="label_12">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
           <property name="text">
-           <string>./</string>
+           <string>Тип линии</string>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="4">
+         <widget class="QSpinBox" name="scale">
+          <property name="minimum">
+           <number>10</number>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="value">
+           <number>100</number>
           </property>
          </widget>
         </item>

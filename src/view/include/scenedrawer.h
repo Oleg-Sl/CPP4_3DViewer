@@ -10,6 +10,7 @@
 #include <QColor>
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
+#include <QOpenGLContext>
 #include <QOpenGLWidget>
 #include <cmath>
 #include <QTimer>
@@ -19,13 +20,17 @@ using namespace s21;
 
 namespace s21 {
 
-class SceneDrawer : public QOpenGLWidget, protected QOpenGLFunctions, public SceneDrawerBase, public ManagerSceneObservertBase {
+class SceneDrawer : public QOpenGLWidget, protected QOpenGLFunctions, public SceneDrawerBase {
   Q_OBJECT
 
 public:
-  SceneDrawer(QWidget *parent, ManagerSceneSubjectBase& manager_scene);
-  void DrawScene(Scene &);
-  void Update(SceneParameters &);
+  SceneDrawer(QWidget *parent = nullptr);
+  ~SceneDrawer() {}
+
+  void SetScene(Scene*);
+  void UpdateScene();
+  void SetParamsScene(SceneParameters*);
+  void SetParentOpenGL(QWidget *);
 
 protected:
   void initializeGL();
@@ -34,22 +39,20 @@ protected:
 
   void SetTypeProjection();
   void SetBackgroundScene();
-
   void SetEdgesType();
   void SetEdgesColor();
   void SetEdgesWidth();
   void RenderEdges();
-
   void SetVerticesType();
   void SetVerticesColor();
   void SetVerticesSize();
   void RenderVertices();
 
 private:
-  Scene scene;
-  ManagerSceneSubjectBase& scene_subject;
-  SceneParameters scene_params{};
+  QWidget *parent;
   QTimer timer{};
+  Scene *scene = nullptr;
+  SceneParameters *scene_params = nullptr;
 
 };
 

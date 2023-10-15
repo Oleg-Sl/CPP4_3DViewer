@@ -14,7 +14,6 @@ public:
     virtual void Subscribe(ManagerSceneObservertBase *observer) = 0;
     virtual void Unsubscribe(ManagerSceneObservertBase *observer) = 0;
     virtual void Notify() = 0;
-
 };
 
 } // namespace s21

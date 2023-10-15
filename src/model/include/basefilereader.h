@@ -7,9 +7,10 @@
 namespace s21 {
 
 class BaseFileReader {
-public:
+ public:
   virtual Scene ReadScene(const std::string &path) = 0;
 };
-} // namespace s21
 
-#endif // _3DVIEWER_MODEL_BASEFILEREADER_H_
+}  // namespace s21
+
+#endif  // _3DVIEWER_MODEL_BASEFILEREADER_H_

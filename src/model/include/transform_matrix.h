@@ -2,6 +2,7 @@
 #define _3DVIEWER_MODEL_TRANSFORM_MATRIX_H_
 
 #include <stdexcept>
+#include <iostream>
 
 #include "point3d.h"
 
@@ -13,11 +14,12 @@ class TransformMatrix {
   float& operator()(int row, int col);
   float operator()(int row, int col) const;
   TransformMatrix operator*(const TransformMatrix& rhs_matrix) const;
-  Point3D TransformPoint(const Point3D& point) const;
+  void TransformPoint(Point3D& point) const;
 
  private:
+  float** matrix_ = nullptr;
   static const int matrix_size_ = 3;
-  float matrix_[matrix_size_ + 1][matrix_size_ + 1];
+//   float matrix_[matrix_size_ + 1][matrix_size_ + 1];
 };
 
 }  // namespace s21
