@@ -15,6 +15,7 @@ public:
     virtual void SetScene(Scene*) = 0;
     virtual void SetParamsScene(SceneParameters*) = 0;
     virtual void SetParentOpenGL(QWidget *) = 0;
+    virtual QImage GetFrameBuffer() = 0;
 };
 
 }

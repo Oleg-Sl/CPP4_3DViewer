@@ -1,5 +1,6 @@
 #include "include/mainwindow.h"
 
+
 #include "ui_mainwindow.h"
 
 
@@ -11,6 +12,10 @@ MainWindow::MainWindow(Facade& ctrl, QWidget *parent) : QMainWindow(parent), con
     InitSettings();
     controller.SetParentForSceneDraw(ui->widgetOpenGL);
     controller.SetParamsScene(&scene_params);
+    ui->screenPath->setText(screen_dir);
+    ui->screenPath->setToolTip(screen_dir);
+    ui->gifPath->setText(gif_dir);
+    ui->gifPath->setToolTip(gif_dir);
 
     connect(ui->buttonSelectFile, SIGNAL(clicked()), this, SLOT(SlotSelectFile()));
     connect(ui->buttonRenderObj,  SIGNAL(clicked()), this, SLOT(SlotRenderScene()));
@@ -41,6 +46,12 @@ MainWindow::MainWindow(Facade& ctrl, QWidget *parent) : QMainWindow(parent), con
     connect(ui->scale,          SIGNAL(valueChanged(int)), this, SLOT(SlotScaleObjectXYZ(int)));
     connect(ui->sliderScale,    SIGNAL(valueChanged(int)), this, SLOT(SlotScaleObjectXYZ(int)));
 
+    connect(ui->screenPath,             SIGNAL(clicked()), this, SLOT(SlotSelectScreenPath()));
+    connect(ui->buttonPreentScreenBmp,  SIGNAL(clicked()), this, SLOT(SlotPrintScreenBMP()));
+    connect(ui->buttonPreentScreenJpeg, SIGNAL(clicked()), this, SLOT(SlotPrintScreenJPEG()));
+
+    connect(ui->gifPath,         SIGNAL(clicked()), this, SLOT(SlotSelectGifPath()));
+    connect(ui->buttonCreateGif, SIGNAL(clicked()), this, SLOT(SlotMakeGif()));
 }
 
 MainWindow::~MainWindow() {
@@ -200,21 +211,63 @@ void MainWindow::SlotChangeVertexColor() {
     }
 }
 
-//bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
-//    qDebug() << "eventFilter";
-////   if (watched != ui->widgetOpenGL)
-////       return false;
+void MainWindow::SlotSelectGifPath() {
+    QString new_dir = QFileDialog::getExistingDirectory(0, "Выбор директории записи gif", "./");
+    if (!new_dir.isEmpty()) {
+        gif_dir = new_dir;
+        ui->gifPath->setText(gif_dir);
+        ui->gifPath->setToolTip(gif_dir);
+    }
 
-////    if (event->type() == QEvent::Wheel)  {
-////        qDebug() << "eventFilter";
-//////        QMessageBox::information(this, "", "");
-//////        histogramChart->setTitle(QString::number(sum++));
-//////        return true;
-////    }
+}
 
-//    return false;
-//}
+void MainWindow::SlotSelectScreenPath() {
+    QString new_dir = QFileDialog::getExistingDirectory(0, "Выбор директории записи скринов", "./");
+    if (!new_dir.isEmpty()) {
+        screen_dir = new_dir;
+        ui->screenPath->setText(screen_dir);
+        ui->screenPath->setToolTip(screen_dir);
+    }
+}
 
+void MainWindow::SlotMakeGif() {
+    // 640x480, 10fps, 5s
+    count_frames = 0;
+    int delay = 100;
+    int width = 640;
+    int height = 480;
+    QString uniq_name = QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
+    QString f_name = QString("%1/video_%2.gif").arg(gif_dir).arg(uniq_name);
+    GifBegin(&g, f_name.toStdString().c_str(), width, height, delay);
+    CreateFrameToGif();
+}
+
+void MainWindow::CreateFrameToGif() {
+    if (count_frames > 50) {
+        GifEnd(&g);
+        return;
+    }
+    int delay = 100;
+    int width = 640;
+    int height = 480;
+    GifWriteFrame(&g, controller.GetFrameBuffer().scaled(width, height).bits(), width, height, 10);
+    QTimer::singleShot(delay, this, SLOT(CreateFrameToGif()));
+    ++count_frames;
+}
+
+void MainWindow::SlotPrintScreenBMP() {
+    MakeScreenshot("bmp");
+}
+
+void MainWindow::SlotPrintScreenJPEG() {
+    MakeScreenshot("jpeg");
+}
+
+void MainWindow::MakeScreenshot(QString extension) {
+    QImage img = controller.GetFrameBuffer();
+    QString uniq_name = QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
+    img.save(QString("%1/image_%2.%3").arg(screen_dir).arg(uniq_name).arg(extension));
+}
 
 void MainWindow::wheelEvent(QWheelEvent *event) {
     if(event-> delta() > 0){
@@ -224,31 +277,29 @@ void MainWindow::wheelEvent(QWheelEvent *event) {
     }
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *event) {
-    if (event->button() == Qt::LeftButton) {
-        mouse_event_x = event->pos().x();
-        mouse_event_y = event->pos().y();
-    }
-}
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event) {
-    if(event->buttons() == Qt::LeftButton) {
-        int delta_deg_y = (event->pos().x() - mouse_event_x) * 0.01;
-        int delta_deg_x = (event->pos().y() - mouse_event_y) * 0.01;
-        int angle_deg_y = previous_rotation.y - delta_deg_y;
-        int angle_deg_x = previous_rotation.x - delta_deg_x;
-        controller.RotateScene(delta_deg_x * M_PI / 180, delta_deg_y * M_PI / 180, 0);
-        previous_rotation.x = angle_deg_x;
-        previous_rotation.y = angle_deg_y;
 
+//void MainWindow::mousePressEvent(QMouseEvent *event) {
+//    if (event->button() == Qt::LeftButton) {
 //        mouse_event_x = event->pos().x();
 //        mouse_event_y = event->pos().y();
+//    }
+//}
 
-        ui->sliderRotateY->setSliderPosition((angle_deg_y  > 180) ? -180 + angle_deg_y % 180 : ((angle_deg_y < -180) ? 180 - angle_deg_y % 180 : angle_deg_y));
-        ui->sliderRotateX->setSliderPosition((angle_deg_x  > 180) ? -180 + angle_deg_x % 180 : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 : angle_deg_x));
-        ui->rotateY->setValue((angle_deg_y  > 180) ? -180 + angle_deg_y % 180 : ((angle_deg_y < -180) ? 180 - angle_deg_y % 180 : angle_deg_y));
-        ui->rotateX->setValue((angle_deg_x  > 180) ? -180 + angle_deg_x % 180 : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 : angle_deg_x));
-    }
-}
+//void MainWindow::mouseMoveEvent(QMouseEvent *event) {
+//    if(event->buttons() == Qt::LeftButton) {
+//        int delta_deg_y = (event->pos().x() - mouse_event_x) * 0.01;
+//        int delta_deg_x = (event->pos().y() - mouse_event_y) * 0.01;
+//        int angle_deg_y = previous_rotation.y - delta_deg_y;
+//        int angle_deg_x = previous_rotation.x - delta_deg_x;
+//        controller.RotateScene(delta_deg_x * M_PI / 180, delta_deg_y * M_PI / 180, 0);
+//        previous_rotation.x = angle_deg_x;
+//        previous_rotation.y = angle_deg_y;
+//        ui->sliderRotateY->setSliderPosition((angle_deg_y  > 180) ? -180 + angle_deg_y % 180 : ((angle_deg_y < -180) ? 180 - angle_deg_y % 180 : angle_deg_y));
+//        ui->sliderRotateX->setSliderPosition((angle_deg_x  > 180) ? -180 + angle_deg_x % 180 : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 : angle_deg_x));
+//        ui->rotateY->setValue((angle_deg_y  > 180) ? -180 + angle_deg_y % 180 : ((angle_deg_y < -180) ? 180 - angle_deg_y % 180 : angle_deg_y));
+//        ui->rotateX->setValue((angle_deg_x  > 180) ? -180 + angle_deg_x % 180 : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 : angle_deg_x));
+//    }
+//}
 
 } // namespace s21

@@ -16,7 +16,8 @@ SOURCES += \
     mainwindow.cc \
     scenedrawer.cc \
     ../model/*.cc \
-    ../controller/*.cc
+    ../controller/*.cc \
+    ../lib/gif.cc
 
 
 HEADERS += \
@@ -27,7 +28,8 @@ HEADERS += \
     include/scenedrawerbase.h \
     include/managersceneobserverbase.h \
     include/managerscenesubjectbase.h \
-    include/sceneparameters.h
+    include/sceneparameters.h \
+    ../lib/gif.h
 
 FORMS += \
     ui/mainwindow.ui

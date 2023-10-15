@@ -31,6 +31,10 @@ void SceneDrawer::SetParentOpenGL(QWidget *parent) {
     layout->setContentsMargins(0, 0, 0, 0);
 }
 
+QImage SceneDrawer::GetFrameBuffer() {
+    return grabFramebuffer();
+}
+
 // https://runebook.dev/ru/docs/qt/qopenglwidget
 void SceneDrawer::initializeGL() {
   QOpenGLWidget::initializeGL();
@@ -58,6 +62,9 @@ void SceneDrawer::paintGL() {
         auto end_time = std::chrono::steady_clock::now();
         auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         std::cout << "Render time: " << elapsed_ns.count() << " ms\n";
+//        glReadPixels();
+
+
     }
 }
 

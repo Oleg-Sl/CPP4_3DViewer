@@ -7,10 +7,15 @@
 #include "../../controller/include/facade.h"
 #include "cmath"
 
+#include "../../lib/gif.h"
+
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QColorDialog>
 #include <QMouseEvent>
+#include <QDir>
+#include <QDateTime>
+#include <QTimer>
 
 
 QT_BEGIN_NAMESPACE
@@ -56,16 +61,32 @@ private slots:
     void SlotRotateObjectY(int);
     void SlotRotateObjectZ(int);
     void SlotScaleObjectXYZ(int);
+
+    void SlotSelectGifPath();
+    void SlotSelectScreenPath();
+    void SlotMakeGif();
+    void SlotPrintScreenBMP();
+    void SlotPrintScreenJPEG();
+
+
 //    bool eventFilter(QObject *, QEvent *);
     void wheelEvent(QWheelEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
+//    void mousePressEvent(QMouseEvent *);
+//    void mouseMoveEvent(QMouseEvent *);
+
+    void MakeScreenshot(QString );
+    void CreateFrameToGif();
 
 private:
     Facade& controller;
     Ui::MainWindow *ui;
     SceneParameters scene_params;
     QString file_path;
+    QString screen_dir = QDir("./").absolutePath();
+    QString gif_dir = QDir("./").absolutePath();
+
+    GifWriter g{};
+    int count_frames = 0;
 
     VectorCoordinates previous_offsets{};
     VectorCoordinates previous_rotation{};
