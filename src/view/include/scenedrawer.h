@@ -27,8 +27,8 @@ public:
   SceneDrawer(QWidget *parent = nullptr);
   ~SceneDrawer() {}
 
-  // void DrawScene(Scene*, SceneParameters*);
-  void DrawScene(Scene*);
+  void SetScene(Scene*);
+  void UpdateScene();
   void SetParamsScene(SceneParameters*);
   void SetParentOpenGL(QWidget *);
 

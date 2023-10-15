@@ -2,7 +2,7 @@
 #define _3DVIEWER_MODEL_SCENE_H_
 
 #include <vector>
-
+#include <ctime>
 #include <QDebug>
 
 #include "bounds.h"

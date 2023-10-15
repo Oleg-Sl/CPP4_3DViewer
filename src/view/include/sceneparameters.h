@@ -7,8 +7,8 @@
 namespace s21 {
 
 struct SceneParameters {
-    enum TypeProjection { kCentral, kParallel};
-    enum TypeEdges { kSolid, kDotted };
+    enum TypeProjection { kParallel, kCentral };
+    enum TypeEdges { kDotted, kSolid };
     enum TypeVertex { kAbsent, kCircle, kSquare };
 
     TypeProjection type_projection;

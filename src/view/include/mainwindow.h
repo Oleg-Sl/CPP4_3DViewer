@@ -8,7 +8,9 @@
 #include "cmath"
 
 #include <QMainWindow>
+#include <QFileDialog>
 #include <QColorDialog>
+#include <QMouseEvent>
 
 
 QT_BEGIN_NAMESPACE
@@ -36,6 +38,9 @@ public:
   };
 
 private slots:
+    void SlotRenderScene();
+    void SlotSelectFile();
+
     void SlotChangeTypeProjection(int);
     void SlotChangeBackground();
     void SlotChangeEdgeType(int);
@@ -51,15 +56,24 @@ private slots:
     void SlotRotateObjectY(int);
     void SlotRotateObjectZ(int);
     void SlotScaleObjectXYZ(int);
+//    bool eventFilter(QObject *, QEvent *);
+    void wheelEvent(QWheelEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
 
 private:
     Facade& controller;
     Ui::MainWindow *ui;
-    SceneParameters scene_params{};
+    SceneParameters scene_params;
+    QString file_path;
 
     VectorCoordinates previous_offsets{};
     VectorCoordinates previous_rotation{};
     VectorCoordinates previous_scales{100, 100, 100};
+
+    int mouse_event_x{};
+    int mouse_event_y{};
+    void InitSettings();
 
 };
 

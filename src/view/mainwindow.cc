@@ -5,12 +5,15 @@
 
 namespace s21 {
 
-MainWindow::MainWindow(Facade& ctrl, QWidget *parent) : QMainWindow(parent), controller(ctrl), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(Facade& ctrl, QWidget *parent) : QMainWindow(parent), controller(ctrl), ui(new Ui::MainWindow), scene_params(ctrl.GetSettings()) {
     ui->setupUi(this);
 
+    InitSettings();
     controller.SetParentForSceneDraw(ui->widgetOpenGL);
-    controller.LoadScene("/home/oleg/school21/CPP4_3DViewer_v2.0-1/src/obj_examples/Fantasy Dragon.obj");
-//    controller.LoadScene("/Users/julissam/projects/CPP4_3DViewer_v2.0-1/src/obj_examples/cube.obj");
+    controller.SetParamsScene(&scene_params);
+
+    connect(ui->buttonSelectFile, SIGNAL(clicked()), this, SLOT(SlotSelectFile()));
+    connect(ui->buttonRenderObj,  SIGNAL(clicked()), this, SLOT(SlotRenderScene()));
 
     connect(ui->typeProjection,  SIGNAL(activated(int)),    this, SLOT(SlotChangeTypeProjection(int)));
     connect(ui->backgroundColor, SIGNAL(clicked()),         this, SLOT(SlotChangeBackground()));
@@ -45,8 +48,32 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+void MainWindow::InitSettings() {
+    ui->typeProjection->setCurrentIndex(scene_params.type_projection);
+    ui->lineType->setCurrentIndex(static_cast<int>(scene_params.edge_type));
+    ui->vertexType->setCurrentIndex(static_cast<int>(scene_params.vertex_type));
+    ui->lineWidth->setValue(scene_params.edge_width);
+    ui->vertexSize->setValue(scene_params.vertex_size);
+    ui->lineColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(scene_params.edge_color.red()).arg(scene_params.edge_color.green()).arg(scene_params.edge_color.blue()));
+    ui->backgroundColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(scene_params.background_color.red()).arg(scene_params.background_color.green()).arg(scene_params.background_color.blue()));
+    ui->vertexColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(scene_params.vertex_color.red()).arg(scene_params.vertex_color.green()).arg(scene_params.vertex_color.blue()));
+}
+
+
 void MainWindow::Notify() {
-    controller.DrawScene(&scene_params);
+    controller.UpdateScene();
+    controller.UpdateSettings(scene_params);
+}
+
+void MainWindow::SlotSelectFile() {
+    file_path = QFileDialog::getOpenFileName(this, "Open File", "./", tr("*.obj"));
+    QFileInfo fileinfo(file_path);
+    ui->fileName->setText(fileinfo.fileName());
+}
+
+void MainWindow::SlotRenderScene() {
+    controller.LoadScene(file_path);
+
 }
 
 void MainWindow::SlotMoveObjectX(int offset) {
@@ -83,8 +110,8 @@ void MainWindow::SlotRotateObjectX(int angle_deg) {
     if (angle_deg == previous_rotation.x) {
         return;
     }
-    controller.RotateScene(angle_deg * M_PI / 180 - previous_rotation.x, 0, 0);
-    previous_rotation.x = angle_deg * M_PI / 180;
+    controller.RotateScene((angle_deg - previous_rotation.x) * M_PI / 180, 0, 0);
+    previous_rotation.x = angle_deg;
     ui->sliderRotateX->setSliderPosition(angle_deg);
     ui->rotateX->setValue(angle_deg);
 }
@@ -93,8 +120,8 @@ void MainWindow::SlotRotateObjectY(int angle_deg) {
     if (angle_deg == previous_rotation.y) {
         return;
     }
-    controller.RotateScene(0, angle_deg * M_PI / 180 - previous_rotation.y, 0);
-    previous_rotation.y = angle_deg * M_PI / 180;
+    controller.RotateScene(0, (angle_deg - previous_rotation.y) * M_PI / 180 , 0);
+    previous_rotation.y = angle_deg;
     ui->sliderRotateY->setSliderPosition(angle_deg);
     ui->rotateY->setValue(angle_deg);
 }
@@ -103,16 +130,17 @@ void MainWindow::SlotRotateObjectZ(int angle_deg) {
     if (angle_deg == previous_rotation.z) {
         return;
     }
-    controller.RotateScene(0, 0, angle_deg * M_PI / 180 - previous_rotation.z);
-    previous_rotation.z = angle_deg * M_PI / 180;
+    controller.RotateScene(0, 0, (angle_deg - previous_rotation.z) * M_PI / 180);
+    previous_rotation.z = angle_deg;
     ui->sliderRotateZ->setSliderPosition(angle_deg);
     ui->rotateZ->setValue(angle_deg);
 }
 
 void MainWindow::SlotScaleObjectXYZ(int scale) {
-
+    if (scale == previous_scales.x) {
+        return;
+    }
     controller.ScaleScene(scale / previous_scales.x, scale / previous_scales.y, scale / previous_scales.z);
-
     previous_scales.x = scale;
     previous_scales.y = scale;
     previous_scales.z = scale;
@@ -172,5 +200,55 @@ void MainWindow::SlotChangeVertexColor() {
     }
 }
 
+//bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
+//    qDebug() << "eventFilter";
+////   if (watched != ui->widgetOpenGL)
+////       return false;
+
+////    if (event->type() == QEvent::Wheel)  {
+////        qDebug() << "eventFilter";
+//////        QMessageBox::information(this, "", "");
+//////        histogramChart->setTitle(QString::number(sum++));
+//////        return true;
+////    }
+
+//    return false;
+//}
+
+
+void MainWindow::wheelEvent(QWheelEvent *event) {
+    if(event-> delta() > 0){
+        ui->sliderScale->setSliderPosition(previous_scales.x * 1.1);
+    } else {
+        ui->sliderScale->setSliderPosition(previous_scales.x / 1.1);
+    }
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event) {
+    if (event->button() == Qt::LeftButton) {
+        mouse_event_x = event->pos().x();
+        mouse_event_y = event->pos().y();
+    }
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event) {
+    if(event->buttons() == Qt::LeftButton) {
+        int delta_deg_y = (event->pos().x() - mouse_event_x) * 0.01;
+        int delta_deg_x = (event->pos().y() - mouse_event_y) * 0.01;
+        int angle_deg_y = previous_rotation.y - delta_deg_y;
+        int angle_deg_x = previous_rotation.x - delta_deg_x;
+        controller.RotateScene(delta_deg_x * M_PI / 180, delta_deg_y * M_PI / 180, 0);
+        previous_rotation.x = angle_deg_x;
+        previous_rotation.y = angle_deg_y;
+
+//        mouse_event_x = event->pos().x();
+//        mouse_event_y = event->pos().y();
+
+        ui->sliderRotateY->setSliderPosition((angle_deg_y  > 180) ? -180 + angle_deg_y % 180 : ((angle_deg_y < -180) ? 180 - angle_deg_y % 180 : angle_deg_y));
+        ui->sliderRotateX->setSliderPosition((angle_deg_x  > 180) ? -180 + angle_deg_x % 180 : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 : angle_deg_x));
+        ui->rotateY->setValue((angle_deg_y  > 180) ? -180 + angle_deg_y % 180 : ((angle_deg_y < -180) ? 180 - angle_deg_y % 180 : angle_deg_y));
+        ui->rotateX->setValue((angle_deg_x  > 180) ? -180 + angle_deg_x % 180 : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 : angle_deg_x));
+    }
+}
 
 } // namespace s21

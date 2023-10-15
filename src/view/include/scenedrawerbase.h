@@ -11,7 +11,8 @@ namespace s21 {
 
 class SceneDrawerBase {
 public:
-    virtual void DrawScene(Scene*) = 0;
+    virtual void UpdateScene() = 0;
+    virtual void SetScene(Scene*) = 0;
     virtual void SetParamsScene(SceneParameters*) = 0;
     virtual void SetParentOpenGL(QWidget *) = 0;
 };

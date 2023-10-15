@@ -5,6 +5,7 @@
 #include "../../model/include/objreader.h"
 #include "../../view/include/scenedrawer.h"
 #include "../../model/include/transform_matrix_builder.h"
+#include "../../model/include/settings.h"
 
 #include <QDebug>
 
@@ -14,23 +15,26 @@ namespace s21 {
 class Facade {
 
 public:
-  Facade(BaseFileReader& file_reader, SceneDrawerBase& scene_drawer);
+  Facade(BaseFileReader&, SceneDrawerBase&, MySettings&);
 
-  void DrawScene(SceneParameters *scene_params);
+  SceneParameters GetSettings();
+  void UpdateSettings(const SceneParameters&);
 
-  void LoadScene(const std::string& path);
+  void LoadScene(const QString&);
 
-  void SetParentForSceneDraw(QWidget *parent);
+  void UpdateScene();
+  void SetScene();
+  void SetParamsScene(SceneParameters *);
+  void SetParentForSceneDraw(QWidget *);
 
   void MoveScene(float x, float y, float z);
-
   void RotateScene(float x, float y, float z);
-
   void ScaleScene(float x, float y, float z);
 
 private:
   BaseFileReader& file_reader;
   SceneDrawerBase& scene_drawer;
+  MySettings& settings;
   Scene scene{};
   const NormalizationParameters params{0.5, 0.5, 0, 0};
 };

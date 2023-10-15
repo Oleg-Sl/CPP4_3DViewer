@@ -1,5 +1,6 @@
 
 #include <QApplication>
+#include <QDir>
 #include <iostream>
 
 #include "model/include/objreader.h"
@@ -9,23 +10,21 @@
 
 #include "controller/include/facade.h"
 
+const QString SETTINGS_FILE_NAME = QString("settings.conf");
+
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
+    QString settings_path = QDir::currentPath() + QString("/") + SETTINGS_FILE_NAME;
+
+    s21::MySettings settings(settings_path, QSettings::IniFormat);
     s21::SceneDrawer scene_drawer;
     s21::OBJReader reader;
-    s21::Facade controller(reader, scene_drawer);
+    s21::Facade controller(reader, scene_drawer, settings);
+//    controller.GetSettings();
 
     s21::MainWindow window(controller);
-
-    // s21::SceneDrawer* scene_drawer = new s21::SceneDrawer();
-    // s21::OBJReader* reader = new s21::OBJReader();
-    // s21::Facade* controller = new s21::Facade(*reader, *scene_drawer);
-    // s21::MainWindow window(*controller);
-    // delete controller;
-    // delete reader;
-    // delete scene_drawer;
 
     window.show();
     return app.exec();

@@ -8,11 +8,15 @@ namespace s21 {
 
 
 SceneDrawer::SceneDrawer(QWidget *parent_) : QOpenGLWidget{parent_}, parent(parent_) {
-   connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
-   timer.start(100);
+//   connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
+//   timer.start(100);
 }
 
-void SceneDrawer::DrawScene(Scene* new_scene) {
+void SceneDrawer::UpdateScene() {
+    update();
+}
+
+void SceneDrawer::SetScene(Scene* new_scene) {
     scene = new_scene;
 }
 
@@ -27,7 +31,6 @@ void SceneDrawer::SetParentOpenGL(QWidget *parent) {
     layout->setContentsMargins(0, 0, 0, 0);
 }
 
-
 // https://runebook.dev/ru/docs/qt/qopenglwidget
 void SceneDrawer::initializeGL() {
   QOpenGLWidget::initializeGL();
@@ -36,26 +39,25 @@ void SceneDrawer::initializeGL() {
 }
 
 void SceneDrawer::paintGL() {
+    SetBackgroundScene();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     if (scene != nullptr && scene_params != nullptr) {
-        SetBackgroundScene();
-
+        auto start_time = std::chrono::steady_clock::now();
         SetTypeProjection();
 
         SetEdgesColor();
         SetEdgesWidth();
         SetEdgesType();
-
         RenderEdges();
 
         SetVerticesColor();
         SetVerticesSize();
         SetVerticesType();
-
         RenderVertices();
-//       glFlush();
 
+        auto end_time = std::chrono::steady_clock::now();
+        auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Render time: " << elapsed_ns.count() << " ms\n";
     }
 }
 
@@ -69,7 +71,6 @@ void SceneDrawer::RenderVertices() {
     }
 
     if (scene_params->vertex_type != SceneParameters::TypeVertex::kAbsent) {
-//        glEnable(GL_POINTS);
         glBegin(GL_POINTS);
         for (auto figure : scene->GetFigures()) {
             for (auto vertex : figure.GetVertices()) {
@@ -77,7 +78,6 @@ void SceneDrawer::RenderVertices() {
             }
         }
         glEnd();
-//        glDisable(GL_POINTS);
     }
 }
 
@@ -86,7 +86,6 @@ void SceneDrawer::RenderEdges() {
         return;
     }
 
-//    glEnable(GL_LINES);
     glBegin(GL_LINES);
     for (auto figure : scene->GetFigures()) {
         for (auto edge: figure.GetEdges()) {
@@ -95,12 +94,11 @@ void SceneDrawer::RenderEdges() {
         }
     }
     glEnd();
-//    glDisable(GL_LINES);
 }
 
 void SceneDrawer::SetTypeProjection() {
-    float value_max = 200;
-    float value_min = -200;
+    float value_max = 2;
+    float value_min = -2;
     double ratio_x = width() > height() ? static_cast<float>(width()) / static_cast<float>(height()) : 1;
     double ratio_y = width() > height() ? 1 : static_cast<float>(height()) / static_cast<float>(width());
     if (scene_params->type_projection == SceneParameters::TypeProjection::kCentral) {
@@ -127,7 +125,9 @@ void SceneDrawer::SetTypeProjection() {
 }
 
 void SceneDrawer::SetBackgroundScene() {
-    glClearColor(scene_params->background_color.redF(), scene_params->background_color.greenF(), scene_params->background_color.blueF(), scene_params->background_color.alphaF());
+    if (scene_params != nullptr) {
+        glClearColor(scene_params->background_color.redF(), scene_params->background_color.greenF(), scene_params->background_color.blueF(), scene_params->background_color.alphaF());
+    }
 }
 
 void SceneDrawer::SetEdgesType() {
