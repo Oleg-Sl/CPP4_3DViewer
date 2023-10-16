@@ -231,28 +231,40 @@ void MainWindow::SlotSelectScreenPath() {
 }
 
 void MainWindow::SlotMakeGif() {
-    // 640x480, 10fps, 5s
-    count_frames = 0;
-    int delay = 100;
-    int width = 640;
-    int height = 480;
+    ui->buttonCreateGif->setEnabled(false);
+    gif_before_time_left = gif_before_time;
+    PreparationMakingGif();
+}
+
+void MainWindow::PreparationMakingGif() {
+    if (gif_before_time_left <= 0) {
+        StartMakingGif();
+        return;
+    }
+    ShowMessage(QString("Запись GIF начнется через %1 сек.").arg(gif_before_time_left * 0.001), QColor(30, 144, 255), 0);
+    gif_before_time_left -= 1000;
+    QTimer::singleShot(1000, this, SLOT(PreparationMakingGif()));
+}
+
+void MainWindow::StartMakingGif() {
+    ShowMessage(QString("Идет запись GIF"), QColor(39, 174, 96), 0);
+    gif_time_left = gif_time;
     QString uniq_name = QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
-    QString f_name = QString("%1/video_%2.gif").arg(gif_dir).arg(uniq_name);
-    GifBegin(&g, f_name.toStdString().c_str(), width, height, delay);
+    gif_file_path = QString("%1/video_%2.gif").arg(gif_dir).arg(uniq_name);
+    GifBegin(&g, gif_file_path.toStdString().c_str(), gif_width, gif_height, gif_delay);
     CreateFrameToGif();
 }
 
 void MainWindow::CreateFrameToGif() {
-    if (count_frames > 50) {
+    if (gif_time_left <= 0) {
         GifEnd(&g);
+        ui->buttonCreateGif->setEnabled(true);
+        ShowMessage(QString("Создана GIF: %1").arg(gif_file_path), QColor(50, 205, 50), 5000);
         return;
     }
-    int delay = 100;
-    int width = 640;
-    int height = 480;
-    GifWriteFrame(&g, controller.GetFrameBuffer().scaled(width, height).bits(), width, height, 10);
-    QTimer::singleShot(delay, this, SLOT(CreateFrameToGif()));
-    ++count_frames;
+    GifWriteFrame(&g, controller.GetFrameBuffer().scaled(gif_width, gif_height).bits(), gif_width, gif_height, gif_delay * 0.1);
+    QTimer::singleShot(gif_delay, this, SLOT(CreateFrameToGif()));
+    gif_time_left -= gif_delay;
 }
 
 void MainWindow::SlotPrintScreenBMP() {
@@ -266,7 +278,9 @@ void MainWindow::SlotPrintScreenJPEG() {
 void MainWindow::MakeScreenshot(QString extension) {
     QImage img = controller.GetFrameBuffer();
     QString uniq_name = QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
-    img.save(QString("%1/image_%2.%3").arg(screen_dir).arg(uniq_name).arg(extension));
+    QString file_name = QString("%1/image_%2.%3").arg(screen_dir).arg(uniq_name).arg(extension);
+    img.save(file_name);
+    ShowMessage(QString("Создан снимок экрана: %1").arg(file_name), QColor(0, 128, 0), 5000);
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event) {
@@ -274,6 +288,15 @@ void MainWindow::wheelEvent(QWheelEvent *event) {
         ui->sliderScale->setSliderPosition(previous_scales.x * 1.1);
     } else {
         ui->sliderScale->setSliderPosition(previous_scales.x / 1.1);
+    }
+}
+
+
+void MainWindow::ShowMessage(QString msg, QColor color, int message_timeout) {
+    ui->statusbar->setStyleSheet(QString("color: " + color.name()));
+    ui->statusbar->showMessage(msg);
+    if (message_timeout > 0) {
+        QTimer::singleShot(message_timeout, this, SLOT(ShowMessage()));
     }
 }
 
