@@ -70,6 +70,25 @@ void MainWindow::InitSettings() {
     ui->vertexColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(scene_params.vertex_color.red()).arg(scene_params.vertex_color.green()).arg(scene_params.vertex_color.blue()));
 }
 
+void MainWindow::InitSceneParameters() {
+    previous_offsets = {0, 0, 0};
+    previous_rotation = {0, 0, 0};
+    previous_scales = {100, 100, 100};
+    ui->sliderMoveX->setSliderPosition(0);
+    ui->moveX->setValue(0);
+    ui->sliderMoveY->setSliderPosition(0);
+    ui->moveY->setValue(0);
+    ui->sliderMoveZ->setSliderPosition(0);
+    ui->moveZ->setValue(0);
+    ui->sliderRotateX->setSliderPosition(0);
+    ui->rotateX->setValue(0);
+    ui->sliderRotateY->setSliderPosition(0);
+    ui->rotateY->setValue(0);
+    ui->sliderRotateZ->setSliderPosition(0);
+    ui->rotateZ->setValue(0);
+    ui->sliderScale->setSliderPosition(100);
+    ui->scale->setValue(100);
+}
 
 void MainWindow::Notify() {
     controller.UpdateScene();
@@ -84,7 +103,7 @@ void MainWindow::SlotSelectFile() {
 
 void MainWindow::SlotRenderScene() {
     controller.LoadScene(file_path);
-
+    InitSceneParameters();
 }
 
 void MainWindow::SlotMoveObjectX(int offset) {

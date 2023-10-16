@@ -105,6 +105,7 @@ private:
     int mouse_event_x{};
     int mouse_event_y{};
     void InitSettings();
+    void InitSceneParameters();
 };
 
 } // namespace s21
