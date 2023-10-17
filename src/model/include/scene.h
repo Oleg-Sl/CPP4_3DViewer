@@ -15,6 +15,7 @@ public:
   void SetNormalizationParams(NormalizationParameters params);
   void SetVertices(std::vector<float> vertices) { vertices_ = vertices; }
   void SetEdges(std::vector<size_t> edges) { edges_ = edges; }
+  void TransformFigures(const TransformMatrix &matrix);
   std::vector<float> GetVertices() { return vertices_; }
   std::vector<size_t> GetEdges() { return edges_; }
 

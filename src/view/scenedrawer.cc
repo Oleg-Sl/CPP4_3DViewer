@@ -37,23 +37,37 @@ void SceneDrawer::initializeGL() {
 }
 
 void SceneDrawer::paintGL() {
-  SetBackgroundScene();
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
   if (scene != nullptr && scene_params != nullptr) {
     auto start_time = std::chrono::steady_clock::now();
-    SetTypeProjection();
 
-    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices().data());
 
-    SetVerticesColor();
-    SetVerticesSize();
-    SetVerticesType();
-    RenderVertices();
+    for (size_t i = 0; i +3 <= scene->GetVertices().size(); i += 3) {
+        qDebug() << scene->GetVertices()[i] << ", " << scene->GetVertices()[i + 1] << ", " << scene->GetVertices()[i+2] << ", ";
+    }
+glEnableClientState(GL_VERTEX_ARRAY);
 
+SetBackgroundScene();
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    SetVerticesColor();
+//    SetVerticesSize();
+//    SetVerticesType();
+//    RenderVertices();
+SetTypeProjection();
     SetEdgesColor();
     SetEdgesWidth();
     SetEdgesType();
-    RenderEdges();
+    std::vector<uint> arr;
+    for (auto el : scene->GetEdges()) {
+        arr.push_back(el);
+    }
+    glDrawElements(GL_LINES, arr.size(), GL_UNSIGNED_INT, arr.data());
+//    RenderEdges();
+
+
+
+
 
     glDisableClientState(GL_VERTEX_ARRAY);
 
@@ -70,8 +84,11 @@ void SceneDrawer::RenderVertices() {
     return;
   }
 
-  glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices());
-  
+//  glVertexPointer()
+  glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices().data());
+  glEnableClientState(GL_VERTEX_ARRAY);
+  qDebug() << "Vertices size = " << scene->GetVertices().size();
+
   if (scene_params->vertex_type != SceneParameters::TypeVertex::kAbsent) {
     glDrawArrays(GL_POINTS, 0, scene->GetVertices().size());
   }
@@ -92,7 +109,10 @@ void SceneDrawer::RenderEdges() {
   if (scene == nullptr) {
     return;
   }
-  glDrawElements(GL_LINES, scene->GetEdges().size(), GL_UNSIGNED_INT, scene->GetEdges());
+//  for (auto & ind :  scene->GetEdges()) {
+//       qDebug() <<  ind;
+//  }
+//  glDrawElements(GL_LINES, scene->GetEdges().size(), GL_UNSIGNED_INT, scene->GetEdges().data());
 
 //   glBegin(GL_LINES);
 //   for (auto &figure : scene->GetFigures()) {
@@ -105,7 +125,7 @@ void SceneDrawer::RenderEdges() {
 //     }
 //   }
 //   glEnd();
-// }
+ }
 
 void SceneDrawer::SetTypeProjection() {
   float value_max = 2;
