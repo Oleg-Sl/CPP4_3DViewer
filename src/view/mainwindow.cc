@@ -1,21 +1,21 @@
 #include "include/mainwindow.h"
 
-#include <QFileDialog>
-
 #include "ui_mainwindow.h"
 
 namespace s21 {
 
 MainWindow::MainWindow(Facade &ctrl, QWidget *parent)
-    : QMainWindow(parent),
-      controller(ctrl),
-      ui(new Ui::MainWindow),
+    : QMainWindow(parent), controller(ctrl), ui(new Ui::MainWindow),
       scene_params(ctrl.GetSettings()) {
   ui->setupUi(this);
 
   InitSettings();
   controller.SetParentForSceneDraw(ui->widgetOpenGL);
   controller.SetParamsScene(&scene_params);
+  ui->screenPath->setText(screen_dir);
+  ui->screenPath->setToolTip(screen_dir);
+  ui->gifPath->setText(gif_dir);
+  ui->gifPath->setToolTip(gif_dir);
 
   connect(ui->buttonSelectFile, SIGNAL(clicked()), this,
           SLOT(SlotSelectFile()));
@@ -37,6 +37,7 @@ MainWindow::MainWindow(Facade &ctrl, QWidget *parent)
           SLOT(SlotChangeVertexSize(int)));
   connect(ui->vertexColor, SIGNAL(clicked()), this,
           SLOT(SlotChangeVertexColor()));
+
   connect(ui->moveX, SIGNAL(valueChanged(int)), this,
           SLOT(SlotMoveObjectX(int)));
   connect(ui->moveY, SIGNAL(valueChanged(int)), this,
@@ -67,6 +68,16 @@ MainWindow::MainWindow(Facade &ctrl, QWidget *parent)
           SLOT(SlotScaleObjectXYZ(int)));
   connect(ui->sliderScale, SIGNAL(valueChanged(int)), this,
           SLOT(SlotScaleObjectXYZ(int)));
+
+  connect(ui->screenPath, SIGNAL(clicked()), this,
+          SLOT(SlotSelectScreenPath()));
+  connect(ui->buttonPreentScreenBmp, SIGNAL(clicked()), this,
+          SLOT(SlotPrintScreenBMP()));
+  connect(ui->buttonPreentScreenJpeg, SIGNAL(clicked()), this,
+          SLOT(SlotPrintScreenJPEG()));
+
+  connect(ui->gifPath, SIGNAL(clicked()), this, SLOT(SlotSelectGifPath()));
+  connect(ui->buttonCreateGif, SIGNAL(clicked()), this, SLOT(SlotMakeGif()));
 }
 
 MainWindow::~MainWindow() {
@@ -95,6 +106,26 @@ void MainWindow::InitSettings() {
                                      .arg(scene_params.vertex_color.blue()));
 }
 
+void MainWindow::InitSceneParameters() {
+  previous_offsets = {0, 0, 0};
+  previous_rotation = {0, 0, 0};
+  previous_scales = {100, 100, 100};
+  ui->sliderMoveX->setSliderPosition(0);
+  ui->moveX->setValue(0);
+  ui->sliderMoveY->setSliderPosition(0);
+  ui->moveY->setValue(0);
+  ui->sliderMoveZ->setSliderPosition(0);
+  ui->moveZ->setValue(0);
+  ui->sliderRotateX->setSliderPosition(0);
+  ui->rotateX->setValue(0);
+  ui->sliderRotateY->setSliderPosition(0);
+  ui->rotateY->setValue(0);
+  ui->sliderRotateZ->setSliderPosition(0);
+  ui->rotateZ->setValue(0);
+  ui->sliderScale->setSliderPosition(100);
+  ui->scale->setValue(100);
+}
+
 void MainWindow::Notify() {
   controller.UpdateScene();
   controller.UpdateSettings(scene_params);
@@ -107,7 +138,10 @@ void MainWindow::SlotSelectFile() {
   ui->fileName->setText(fileinfo.fileName());
 }
 
-void MainWindow::SlotRenderScene() { controller.LoadScene(file_path); }
+void MainWindow::SlotRenderScene() {
+  controller.LoadScene(file_path);
+  InitSceneParameters();
+}
 
 void MainWindow::SlotMoveObjectX(int offset) {
   if (offset == previous_offsets.x) {
@@ -247,67 +281,127 @@ void MainWindow::SlotChangeVertexColor() {
   }
 }
 
-// bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
-//     qDebug() << "eventFilter";
-////   if (watched != ui->widgetOpenGL)
-////       return false;
+void MainWindow::SlotSelectGifPath() {
+  QString new_dir =
+      QFileDialog::getExistingDirectory(0, "Выбор директории записи gif", "./");
+  if (!new_dir.isEmpty()) {
+    gif_dir = new_dir;
+    ui->gifPath->setText(gif_dir);
+    ui->gifPath->setToolTip(gif_dir);
+  }
+}
 
-////    if (event->type() == QEvent::Wheel)  {
-////        qDebug() << "eventFilter";
-//////        QMessageBox::information(this, "", "");
-//////        histogramChart->setTitle(QString::number(sum++));
-//////        return true;
-////    }
+void MainWindow::SlotSelectScreenPath() {
+  QString new_dir = QFileDialog::getExistingDirectory(
+      0, "Выбор директории записи скринов", "./");
+  if (!new_dir.isEmpty()) {
+    screen_dir = new_dir;
+    ui->screenPath->setText(screen_dir);
+    ui->screenPath->setToolTip(screen_dir);
+  }
+}
 
-//    return false;
-//}
+void MainWindow::SlotMakeGif() {
+  ui->buttonCreateGif->setEnabled(false);
+  gif_before_time_left = gif_before_time;
+  PreparationMakingGif();
+}
+
+void MainWindow::PreparationMakingGif() {
+  if (gif_before_time_left <= 0) {
+    StartMakingGif();
+    return;
+  }
+  ShowMessage(QString("Запись GIF начнется через %1 сек.")
+                  .arg(gif_before_time_left * 0.001),
+              QColor(30, 144, 255), 0);
+  gif_before_time_left -= 1000;
+  QTimer::singleShot(1000, this, SLOT(PreparationMakingGif()));
+}
+
+void MainWindow::StartMakingGif() {
+  ShowMessage(QString("Идет запись GIF"), QColor(39, 174, 96), 0);
+  gif_time_left = gif_time;
+  QString uniq_name =
+      QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
+  gif_file_path = QString("%1/video_%2.gif").arg(gif_dir).arg(uniq_name);
+  GifBegin(&g, gif_file_path.toStdString().c_str(), gif_width, gif_height,
+           gif_delay);
+  CreateFrameToGif();
+}
+
+void MainWindow::CreateFrameToGif() {
+  if (gif_time_left <= 0) {
+    GifEnd(&g);
+    ui->buttonCreateGif->setEnabled(true);
+    ShowMessage(QString("Создана GIF: %1").arg(gif_file_path),
+                QColor(50, 205, 50), 5000);
+    return;
+  }
+  GifWriteFrame(
+      &g, controller.GetFrameBuffer().scaled(gif_width, gif_height).bits(),
+      gif_width, gif_height, gif_delay * 0.1);
+  QTimer::singleShot(gif_delay, this, SLOT(CreateFrameToGif()));
+  gif_time_left -= gif_delay;
+}
+
+void MainWindow::SlotPrintScreenBMP() { MakeScreenshot("bmp"); }
+
+void MainWindow::SlotPrintScreenJPEG() { MakeScreenshot("jpeg"); }
+
+void MainWindow::MakeScreenshot(QString extension) {
+  QImage img = controller.GetFrameBuffer();
+  QString uniq_name =
+      QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
+  QString file_name =
+      QString("%1/image_%2.%3").arg(screen_dir).arg(uniq_name).arg(extension);
+  img.save(file_name);
+  ShowMessage(QString("Создан снимок экрана: %1").arg(file_name),
+              QColor(0, 128, 0), 5000);
+}
 
 void MainWindow::wheelEvent(QWheelEvent *event) {
-  if (event->delta() > 0) {
-    ui->sliderScale->setSliderPosition(previous_scales.x * 1.1);
-  } else {
-    ui->sliderScale->setSliderPosition(previous_scales.x / 1.1);
+//  if (event->delta() > 0) {
+//    ui->sliderScale->setSliderPosition(previous_scales.x * 1.1);
+//  } else {
+//    ui->sliderScale->setSliderPosition(previous_scales.x / 1.1);
+//  }
+}
+
+void MainWindow::ShowMessage(QString msg, QColor color, int message_timeout) {
+  ui->statusbar->setStyleSheet(QString("color: " + color.name()));
+  ui->statusbar->showMessage(msg);
+  if (message_timeout > 0) {
+    QTimer::singleShot(message_timeout, this, SLOT(ShowMessage()));
   }
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *event) {
-  if (event->button() == Qt::LeftButton) {
-    mouse_event_x = event->pos().x();
-    mouse_event_y = event->pos().y();
-  }
-}
+// void MainWindow::mousePressEvent(QMouseEvent *event) {
+//     if (event->button() == Qt::LeftButton) {
+//         mouse_event_x = event->pos().x();
+//         mouse_event_y = event->pos().y();
+//     }
+// }
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event) {
-  if (event->buttons() == Qt::LeftButton) {
-    int delta_deg_y = (event->pos().x() - mouse_event_x) * 0.01;
-    int delta_deg_x = (event->pos().y() - mouse_event_y) * 0.01;
-    int angle_deg_y = previous_rotation.y - delta_deg_y;
-    int angle_deg_x = previous_rotation.x - delta_deg_x;
-    controller.RotateScene(delta_deg_x * M_PI / 180, delta_deg_y * M_PI / 180,
-                           0);
-    previous_rotation.x = angle_deg_x;
-    previous_rotation.y = angle_deg_y;
+// void MainWindow::mouseMoveEvent(QMouseEvent *event) {
+//     if(event->buttons() == Qt::LeftButton) {
+//         int delta_deg_y = (event->pos().x() - mouse_event_x) * 0.01;
+//         int delta_deg_x = (event->pos().y() - mouse_event_y) * 0.01;
+//         int angle_deg_y = previous_rotation.y - delta_deg_y;
+//         int angle_deg_x = previous_rotation.x - delta_deg_x;
+//         controller.RotateScene(delta_deg_x * M_PI / 180, delta_deg_y * M_PI /
+//         180, 0); previous_rotation.x = angle_deg_x; previous_rotation.y =
+//         angle_deg_y; ui->sliderRotateY->setSliderPosition((angle_deg_y  >
+//         180) ? -180 + angle_deg_y % 180 : ((angle_deg_y < -180) ? 180 -
+//         angle_deg_y % 180 : angle_deg_y));
+//         ui->sliderRotateX->setSliderPosition((angle_deg_x  > 180) ? -180 +
+//         angle_deg_x % 180 : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 :
+//         angle_deg_x)); ui->rotateY->setValue((angle_deg_y  > 180) ? -180 +
+//         angle_deg_y % 180 : ((angle_deg_y < -180) ? 180 - angle_deg_y % 180 :
+//         angle_deg_y)); ui->rotateX->setValue((angle_deg_x  > 180) ? -180 +
+//         angle_deg_x % 180 : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 :
+//         angle_deg_x));
+//     }
+// }
 
-    //        mouse_event_x = event->pos().x();
-    //        mouse_event_y = event->pos().y();
-
-    ui->sliderRotateY->setSliderPosition(
-        (angle_deg_y > 180)
-            ? -180 + angle_deg_y % 180
-            : ((angle_deg_y < -180) ? 180 - angle_deg_y % 180 : angle_deg_y));
-    ui->sliderRotateX->setSliderPosition(
-        (angle_deg_x > 180)
-            ? -180 + angle_deg_x % 180
-            : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 : angle_deg_x));
-    ui->rotateY->setValue(
-        (angle_deg_y > 180)
-            ? -180 + angle_deg_y % 180
-            : ((angle_deg_y < -180) ? 180 - angle_deg_y % 180 : angle_deg_y));
-    ui->rotateX->setValue(
-        (angle_deg_x > 180)
-            ? -180 + angle_deg_x % 180
-            : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 : angle_deg_x));
-  }
-}
-
-}  // namespace s21
+} // namespace s21

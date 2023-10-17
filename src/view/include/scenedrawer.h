@@ -31,6 +31,7 @@ public:
   void UpdateScene();
   void SetParamsScene(SceneParameters*);
   void SetParentOpenGL(QWidget *);
+  QImage GetFrameBuffer();
 
 protected:
   void initializeGL();

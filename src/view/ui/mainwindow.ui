@@ -144,6 +144,7 @@
          <widget class="QLabel" name="label_11">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -206,6 +207,7 @@
          <widget class="QLabel" name="label_13">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -334,6 +336,7 @@
          <widget class="QLabel" name="label_15">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -369,6 +372,7 @@
          <widget class="QLabel" name="label_10">
           <property name="font">
            <font>
+            <weight>50</weight>
             <bold>false</bold>
            </font>
           </property>
@@ -388,6 +392,7 @@
          <widget class="QLabel" name="label_9">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -431,10 +436,13 @@
         <item row="13" column="1" colspan="3">
          <widget class="QSlider" name="sliderScale">
           <property name="minimum">
-           <number>10</number>
+           <number>5</number>
           </property>
           <property name="maximum">
-           <number>1000</number>
+           <number>500</number>
+          </property>
+          <property name="pageStep">
+           <number>5</number>
           </property>
           <property name="value">
            <number>100</number>
@@ -605,6 +613,7 @@
          <widget class="QLabel" name="label">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -650,6 +659,7 @@
          <widget class="QLabel" name="label_8">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -690,10 +700,10 @@
         <item row="13" column="4">
          <widget class="QSpinBox" name="scale">
           <property name="minimum">
-           <number>10</number>
+           <number>5</number>
           </property>
           <property name="maximum">
-           <number>1000</number>
+           <number>500</number>
           </property>
           <property name="value">
            <number>100</number>

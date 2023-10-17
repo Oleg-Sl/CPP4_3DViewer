@@ -2,19 +2,22 @@
 #define MAINWINDOW_H
 
 #include <QColorDialog>
+#include <QDateTime>
+#include <QDir>
 #include <QFileDialog>
 #include <QMainWindow>
 #include <QMouseEvent>
+#include <QTimer>
 
 #include "../../controller/include/facade.h"
+#include "../../lib/gif.h"
 #include "cmath"
 #include "managerscenesubjectbase.h"
 #include "scenedrawer.h"
 #include "sceneparameters.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
+    QT_BEGIN_NAMESPACE namespace Ui {
+  class MainWindow;
 }
 QT_END_NAMESPACE
 
@@ -23,7 +26,7 @@ namespace s21 {
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
- public:
+public:
   MainWindow(Facade &cotroller, QWidget *parent = nullptr);
   ~MainWindow();
 
@@ -34,7 +37,7 @@ class MainWindow : public QMainWindow {
     float z{};
   };
 
- private slots:
+private slots:
   void SlotRenderScene();
   void SlotSelectFile();
 
@@ -53,16 +56,42 @@ class MainWindow : public QMainWindow {
   void SlotRotateObjectY(int);
   void SlotRotateObjectZ(int);
   void SlotScaleObjectXYZ(int);
+
+  void SlotSelectGifPath();
+  void SlotSelectScreenPath();
+  void SlotMakeGif();
+  void SlotPrintScreenBMP();
+  void SlotPrintScreenJPEG();
+
   //    bool eventFilter(QObject *, QEvent *);
   void wheelEvent(QWheelEvent *);
-  void mousePressEvent(QMouseEvent *);
-  void mouseMoveEvent(QMouseEvent *);
+  //    void mousePressEvent(QMouseEvent *);
+  //    void mouseMoveEvent(QMouseEvent *);
+  void PreparationMakingGif();
+  void StartMakingGif();
+  void MakeScreenshot(QString);
+  void CreateFrameToGif();
+  void ShowMessage(QString msg = "", QColor color = QColor(Qt::black),
+                   int message_timeout = 0);
 
- private:
+private:
   Facade &controller;
   Ui::MainWindow *ui;
   SceneParameters scene_params;
   QString file_path;
+  QString screen_dir = QDir("./").absolutePath();
+  QString gif_dir = QDir("./").absolutePath();
+  QString gif_file_path;
+  int gif_before_time = 5000;
+  int gif_before_time_left = 5000;
+  int gif_time = 5000;
+  int gif_time_left = 5000;
+  int gif_delay = 100;
+  int gif_width = 640;
+  int gif_height = 480;
+
+  GifWriter g{};
+  int count_frames = 0;
 
   VectorCoordinates previous_offsets{};
   VectorCoordinates previous_rotation{};
@@ -71,8 +100,9 @@ class MainWindow : public QMainWindow {
   int mouse_event_x{};
   int mouse_event_y{};
   void InitSettings();
+  void InitSceneParameters();
 };
 
-}  // namespace s21
+} // namespace s21
 
-#endif  // MAINWINDOW_H
+#endif // MAINWINDOW_H

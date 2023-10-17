@@ -6,7 +6,7 @@
 
 namespace s21 {
 
-SceneDrawer::SceneDrawer(QWidget* parent_)
+SceneDrawer::SceneDrawer(QWidget *parent_)
     : QOpenGLWidget{parent_}, parent(parent_) {
   //   connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
   //   timer.start(100);
@@ -14,18 +14,20 @@ SceneDrawer::SceneDrawer(QWidget* parent_)
 
 void SceneDrawer::UpdateScene() { update(); }
 
-void SceneDrawer::SetScene(Scene* new_scene) { scene = new_scene; }
+void SceneDrawer::SetScene(Scene *new_scene) { scene = new_scene; }
 
-void SceneDrawer::SetParamsScene(SceneParameters* new_params) {
+void SceneDrawer::SetParamsScene(SceneParameters *new_params) {
   scene_params = new_params;
 }
 
-void SceneDrawer::SetParentOpenGL(QWidget* parent) {
+void SceneDrawer::SetParentOpenGL(QWidget *parent) {
   setParent(parent);
-  QVBoxLayout* layout = new QVBoxLayout(parent);
+  QVBoxLayout *layout = new QVBoxLayout(parent);
   layout->addWidget(this);
   layout->setContentsMargins(0, 0, 0, 0);
 }
+
+QImage SceneDrawer::GetFrameBuffer() { return grabFramebuffer(); }
 
 // https://runebook.dev/ru/docs/qt/qopenglwidget
 void SceneDrawer::initializeGL() {
@@ -55,6 +57,7 @@ void SceneDrawer::paintGL() {
     auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(
         end_time - start_time);
     std::cout << "Render time: " << elapsed_ns.count() << " ms\n";
+    //        glReadPixels();
   }
 }
 
@@ -170,4 +173,4 @@ void SceneDrawer::SetVerticesColor() {
 
 void SceneDrawer::SetVerticesSize() { glPointSize(scene_params->vertex_size); }
 
-}  // namespace s21
+} // namespace s21

@@ -38,6 +38,10 @@ void Facade::SetScene() {
       scene_drawer.UpdateScene();
  }
 
+ QImage Facade::GetFrameBuffer() {
+     return scene_drawer.GetFrameBuffer();
+ }
+
 // ТРАНСФОРМАЦИИ ОБЪЕКТА
 void Facade::MoveScene(float x, float y, float z) {
     scene.TransformFigures(TransformMatrixBuilder::CreateMoveMatrix(x,y,z));
