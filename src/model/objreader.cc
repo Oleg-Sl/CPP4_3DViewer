@@ -5,17 +5,21 @@
 
 namespace s21 {
 
-Vertex OBJReader::ReadVertex(std::stringstream &tokens) {
+void OBJReader::ReadCoord(std::stringstream &tokens,
+                          std::vector<float> &vertices) {
   float x, y, z;
   tokens >> x >> y >> z;
-  return Vertex({x, y, z});
+  vertices.push_back(x);
+  vertices.push_back(y);
+  vertices.push_back(z);
 }
 
-Figure OBJReader::ReadFace(std::stringstream &tokens,
-                           const std::vector<Vertex> &vertices) {
-  Figure figure;
+std::vector<size_t> OBJReader::ReadFace(std::stringstream &tokens,
+                                        size_t count_vertices) {
   int vertex_index;
   std::string line;
+  std::vector<size_t> edges;
+  std::vector<size_t> added_vertices;
 
   while (tokens >> line) {
     std::string token;
@@ -31,24 +35,26 @@ Figure OBJReader::ReadFace(std::stringstream &tokens,
     vertex_index = std::stoi(token);
 
     if (vertex_index < 0) {
-      vertex_index = vertices.size() + vertex_index;
+      vertex_index = count_vertices + vertex_index;
     } else {
       vertex_index -= 1;
     }
-    if (vertex_index < 0 || vertex_index >= static_cast<int>(vertices.size())) {
+    if (vertex_index < 0 || vertex_index >= static_cast<int>(count_vertices)) {
       throw std::invalid_argument("Invalid face index: " +
                                   std::to_string(vertex_index));
     }
-
-    figure.AddVertex(vertices[vertex_index]);
+    added_vertices.push_back(vertex_index);
   }
 
-  for (size_t i = 0; i < figure.GetVertices().size(); ++i) {
-    size_t end = i + 1 == figure.GetVertices().size() ? 0 : i + 1;
-    figure.AddEdge(i, end);
+  for (size_t i = 0; i < added_vertices.size(); ++i) {
+    size_t start = i;
+    size_t end = i + 1 == added_vertices.size() ? 0 : i + 1;
+
+    edges.push_back(added_vertices[start]);
+    edges.push_back(added_vertices[end]);
   }
 
-  return figure;
+  return edges;
 }
 
 void OBJReader::CalculateNormalizationParams(const Vertex &vertex,
@@ -68,7 +74,8 @@ void OBJReader::CalculateNormalizationParams(const Vertex &vertex,
 
 Scene OBJReader::ReadScene(const std::string &path) {
   Scene scene;
-  std::vector<Vertex> vertices;
+  std::vector<float> vertices;
+  std::vector<size_t> edges;
   std::ifstream obj_file(path);
 
   if (obj_file.is_open()) {
@@ -80,12 +87,11 @@ Scene OBJReader::ReadScene(const std::string &path) {
       tokens >> curr_token;
 
       if (curr_token == kVertexToken) {
-        Vertex vertex = ReadVertex(tokens);
-        vertices.push_back(vertex);
-        CalculateNormalizationParams(vertex, scene);
+        ReadCoord(tokens, vertices);
+        // CalculateNormalizationParams(vertex, scene);
       } else if (curr_token == kFaceToken) {
-        Figure figure = ReadFace(tokens, vertices);
-        scene.AddFigure(std::move(figure));
+        std::vector<size_t> temp = ReadFace(tokens, vertices.size());
+        edges.insert(edges.end(), temp.begin(), temp.end());
       }
     }
 
@@ -94,7 +100,10 @@ Scene OBJReader::ReadScene(const std::string &path) {
     throw std::runtime_error("Failed to open file: " + path);
   }
 
+  scene.SetVertices(vertices);
+  scene.SetEdges(edges);
+
   return scene;
 }
 
-}  // namespace s21
+} // namespace s21

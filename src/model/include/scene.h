@@ -1,9 +1,8 @@
 #ifndef _3DVIEWER_MODEL_SCENE_H_
 #define _3DVIEWER_MODEL_SCENE_H_
 
-#include <vector>
 #include <ctime>
-#include <QDebug>
+#include <vector>
 
 #include "figure.h"
 #include "transform_matrix.h"
@@ -12,16 +11,16 @@ namespace s21 {
 
 class Scene {
 public:
-  std::vector<Figure> &GetFigures();
-  void TransformFigures(const TransformMatrix &);
-  void AddFigure(Figure &&figure);
   NormalizationParameters GetNormalizationParams();
   void SetNormalizationParams(NormalizationParameters params);
+  void SetVertices(std::vector<float> vertices) { vertices_ = vertices; }
+  void SetEdges(std::vector<size_t> edges) { edges_ = edges; }
+  std::vector<float> GetVertices() { return vertices_; }
+  std::vector<size_t> GetEdges() { return edges_; }
 
 private:
-  std::vector<Figure> figures_;
-  size_t edges_count_ = 0;
-  size_t verticies_count_ = 0;
+  std::vector<float> vertices_;
+  std::vector<size_t> edges_;
   NormalizationParameters normalization_params_;
 };
 

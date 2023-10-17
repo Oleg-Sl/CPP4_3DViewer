@@ -12,20 +12,21 @@
 namespace s21 {
 
 class OBJReader : public BaseFileReader {
- public:
+public:
   const std::string kVertexToken = "v";
   const std::string kFaceToken = "f";
 
- public:
+public:
   Scene ReadScene(const std::string &path) override;
 
- private:
-  Vertex ReadVertex(std::stringstream &tokens);
-  Figure ReadFace(std::stringstream &tokens,
-                  const std::vector<Vertex> &vertices);
+private:
+  std::vector<size_t> ReadFace(std::stringstream &tokens,
+                                          size_t count_vertices);
+  void ReadCoord(std::stringstream &tokens,
+                            std::vector<float> &vertices);
   void CalculateNormalizationParams(const Vertex &vertex, Scene &scene);
 };
 
-}  // namespace s21
+} // namespace s21
 
-#endif  // _3DVIEWER_MODEL_OBJREADER_H_
+#endif // _3DVIEWER_MODEL_OBJREADER_H_
