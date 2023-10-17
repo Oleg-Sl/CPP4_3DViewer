@@ -3,8 +3,10 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <vector>
 
 #include "point3d.h"
+
 
 namespace s21 {
 
@@ -14,6 +16,7 @@ class TransformMatrix {
   float& operator()(int row, int col);
   float operator()(int row, int col) const;
   TransformMatrix operator*(const TransformMatrix& rhs_matrix) const;
+  void TransformVertices(std::vector<float> vertices) const;
   void TransformPoint(Point3D& point) const;
 
  private:

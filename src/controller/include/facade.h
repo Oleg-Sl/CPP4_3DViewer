@@ -22,7 +22,7 @@ public:
 
   void LoadScene(const QString&);
 
-  void UpdateScene();
+  void UpdateSceneDraw();
   void SetScene();
   void SetParamsScene(SceneParameters *);
   void SetParentForSceneDraw(QWidget *);
@@ -38,7 +38,6 @@ private:
   SceneDrawerBase& scene_drawer;
   MySettings& settings;
   Scene scene{};
-  // const NormalizationParameters params{0.5, 0.5, 0, 0};
 };
 
 } // namespace s21

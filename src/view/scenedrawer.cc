@@ -43,21 +43,23 @@ void SceneDrawer::paintGL() {
     auto start_time = std::chrono::steady_clock::now();
     SetTypeProjection();
 
-    SetEdgesColor();
-    SetEdgesWidth();
-    SetEdgesType();
-    RenderEdges();
+    glEnableClientState(GL_VERTEX_ARRAY);
 
     SetVerticesColor();
     SetVerticesSize();
     SetVerticesType();
     RenderVertices();
 
+    SetEdgesColor();
+    SetEdgesWidth();
+    SetEdgesType();
+    RenderEdges();
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+
     auto end_time = std::chrono::steady_clock::now();
-    auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(
-        end_time - start_time);
+    auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
     std::cout << "Render time: " << elapsed_ns.count() << " ms\n";
-    //        glReadPixels();
   }
 }
 
@@ -68,35 +70,42 @@ void SceneDrawer::RenderVertices() {
     return;
   }
 
+  glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices());
+  
   if (scene_params->vertex_type != SceneParameters::TypeVertex::kAbsent) {
-    glBegin(GL_POINTS);
-    for (auto figure : scene->GetFigures()) {
-      for (auto vertex : figure.GetVertices()) {
-        glVertex3f(vertex.GetPosition().x, vertex.GetPosition().y,
-                   vertex.GetPosition().z);
-      }
-    }
-    glEnd();
+    glDrawArrays(GL_POINTS, 0, scene->GetVertices().size());
   }
+
+  // if (scene_params->vertex_type != SceneParameters::TypeVertex::kAbsent) {
+  //   glBegin(GL_POINTS);
+  //   for (auto &figure : scene->GetFigures()) {
+  //     for (auto &vertex : figure.GetVertices()) {
+  //       glVertex3f(vertex.GetPosition().x, vertex.GetPosition().y,
+  //                  vertex.GetPosition().z);
+  //     }
+  //   }
+  //   glEnd();
+  // }
 }
 
 void SceneDrawer::RenderEdges() {
   if (scene == nullptr) {
     return;
   }
+  glDrawElements(GL_LINES, scene->GetEdges().size(), GL_UNSIGNED_INT, scene->GetEdges());
 
-  glBegin(GL_LINES);
-  for (auto figure : scene->GetFigures()) {
-    for (auto edge : figure.GetEdges()) {
-      glVertex3f(edge.GetBegin().GetPosition().x,
-                 edge.GetBegin().GetPosition().y,
-                 edge.GetBegin().GetPosition().z);
-      glVertex3f(edge.GetEnd().GetPosition().x, edge.GetEnd().GetPosition().y,
-                 edge.GetEnd().GetPosition().z);
-    }
-  }
-  glEnd();
-}
+//   glBegin(GL_LINES);
+//   for (auto &figure : scene->GetFigures()) {
+//     for (auto &edge : figure.GetEdges()) {
+//       glVertex3f(edge.GetBegin().GetPosition().x,
+//                  edge.GetBegin().GetPosition().y,
+//                  edge.GetBegin().GetPosition().z);
+//       glVertex3f(edge.GetEnd().GetPosition().x, edge.GetEnd().GetPosition().y,
+//                  edge.GetEnd().GetPosition().z);
+//     }
+//   }
+//   glEnd();
+// }
 
 void SceneDrawer::SetTypeProjection() {
   float value_max = 2;

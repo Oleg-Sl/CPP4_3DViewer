@@ -10,10 +10,11 @@ MainWindow::MainWindow(Facade &ctrl, QWidget *parent)
   ui->setupUi(this);
 
   InitSettings();
-  controller.SetParentForSceneDraw(ui->widgetOpenGL);
-  controller.SetParamsScene(&scene_params);
+  InitSceneDraw();
+
   ui->screenPath->setText(screen_dir);
   ui->screenPath->setToolTip(screen_dir);
+
   ui->gifPath->setText(gif_dir);
   ui->gifPath->setToolTip(gif_dir);
 
@@ -106,6 +107,11 @@ void MainWindow::InitSettings() {
                                      .arg(scene_params.vertex_color.blue()));
 }
 
+void MainWindow::InitSceneDraw() {
+    controller.SetParentForSceneDraw(ui->widgetOpenGL);
+    controller.SetParamsScene(&scene_params);
+}
+
 void MainWindow::InitSceneParameters() {
   previous_offsets = {0, 0, 0};
   previous_rotation = {0, 0, 0};
@@ -127,7 +133,7 @@ void MainWindow::InitSceneParameters() {
 }
 
 void MainWindow::Notify() {
-  controller.UpdateScene();
+  controller.UpdateSceneDraw();
   controller.UpdateSettings(scene_params);
 }
 
@@ -361,11 +367,11 @@ void MainWindow::MakeScreenshot(QString extension) {
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event) {
-//  if (event->delta() > 0) {
-//    ui->sliderScale->setSliderPosition(previous_scales.x * 1.1);
-//  } else {
-//    ui->sliderScale->setSliderPosition(previous_scales.x / 1.1);
-//  }
+  if (event->angleDelta().y() > 0) {
+    ui->sliderScale->setSliderPosition(previous_scales.x * 1.1);
+  } else {
+    ui->sliderScale->setSliderPosition(previous_scales.x / 1.1);
+  }
 }
 
 void MainWindow::ShowMessage(QString msg, QColor color, int message_timeout) {

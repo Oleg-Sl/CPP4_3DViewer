@@ -45,6 +45,17 @@ TransformMatrix TransformMatrix::operator*(
   return result;
 }
 
+void TransformMatrix::TransformVertices(std::vector<float> vertices) const {
+  for (int i = 0; i + 3 < vertices.size(); i += 3) {
+    float x = vertices[i] * matrix_[0][0] + vertices[i + 1] * matrix_[0][1] + vertices[i + 2] * matrix_[0][2] + matrix_[0][3];
+    float y = vertices[i] * matrix_[1][0] + vertices[i + 1] * matrix_[1][1] + vertices[i + 2] * matrix_[1][2] + matrix_[1][3];
+    float z = vertices[i] * matrix_[2][0] + vertices[i + 1] * matrix_[2][1] + vertices[i + 2] * matrix_[2][2] + matrix_[2][3];
+    vertices[i] = std::move(x);
+    vertices[i + 1] = std::move(y);
+    vertices[i + 2] = std::move(z);
+  }
+}
+
 void TransformMatrix::TransformPoint(Point3D& point) const {
   float x = point.x * matrix_[0][0] + point.y * matrix_[0][1] + point.z * matrix_[0][2] + matrix_[0][3];
   float y = point.x * matrix_[1][0] + point.y * matrix_[1][1] + point.z * matrix_[1][2] + matrix_[1][3];

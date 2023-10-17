@@ -19,12 +19,11 @@ void Facade::LoadScene(const QString& path) {
     SetScene();
 }
 
-// ОБНОВЛЕНИЕ/УСТАНОВКА ОБЪЕКТОВ И ПАРАМЕТРОВ СЦЕНЫ
 void Facade::SetParentForSceneDraw(QWidget *parent) {
     scene_drawer.SetParentOpenGL(parent);
 }
 
-void Facade::UpdateScene() {
+void Facade::UpdateSceneDraw() {
     scene_drawer.UpdateScene();
 }
 
