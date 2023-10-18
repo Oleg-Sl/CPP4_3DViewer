@@ -37,43 +37,24 @@ void SceneDrawer::initializeGL() {
 }
 
 void SceneDrawer::paintGL() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   if (scene != nullptr && scene_params != nullptr) {
-    auto start_time = std::chrono::steady_clock::now();
+    SetBackgroundScene();
 
-    glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices().data());
+    SetTypeProjection();
 
-    for (size_t i = 0; i +3 <= scene->GetVertices().size(); i += 3) {
-        qDebug() << scene->GetVertices()[i] << ", " << scene->GetVertices()[i + 1] << ", " << scene->GetVertices()[i+2] << ", ";
-    }
-glEnableClientState(GL_VERTEX_ARRAY);
-
-SetBackgroundScene();
-glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//    SetVerticesColor();
-//    SetVerticesSize();
-//    SetVerticesType();
-//    RenderVertices();
-SetTypeProjection();
     SetEdgesColor();
     SetEdgesWidth();
     SetEdgesType();
-    std::vector<uint> arr;
-    for (auto el : scene->GetEdges()) {
-        arr.push_back(el);
-    }
-    glDrawElements(GL_LINES, arr.size(), GL_UNSIGNED_INT, arr.data());
-//    RenderEdges();
 
+    RenderEdges();
 
+    SetVerticesColor();
+    SetVerticesSize();
+    SetVerticesType();
 
-
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-
-    auto end_time = std::chrono::steady_clock::now();
-    auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Render time: " << elapsed_ns.count() << " ms\n";
+    RenderVertices();
   }
 }
 
@@ -84,48 +65,27 @@ void SceneDrawer::RenderVertices() {
     return;
   }
 
-//  glVertexPointer()
-  glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices().data());
   glEnableClientState(GL_VERTEX_ARRAY);
-  qDebug() << "Vertices size = " << scene->GetVertices().size();
+  glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices().data());
 
-  if (scene_params->vertex_type != SceneParameters::TypeVertex::kAbsent) {
-    glDrawArrays(GL_POINTS, 0, scene->GetVertices().size());
-  }
+  glDrawArrays(GL_POINTS, 0, scene->GetVertices().size() / 3);
 
-  // if (scene_params->vertex_type != SceneParameters::TypeVertex::kAbsent) {
-  //   glBegin(GL_POINTS);
-  //   for (auto &figure : scene->GetFigures()) {
-  //     for (auto &vertex : figure.GetVertices()) {
-  //       glVertex3f(vertex.GetPosition().x, vertex.GetPosition().y,
-  //                  vertex.GetPosition().z);
-  //     }
-  //   }
-  //   glEnd();
-  // }
+  glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void SceneDrawer::RenderEdges() {
   if (scene == nullptr) {
     return;
   }
-//  for (auto & ind :  scene->GetEdges()) {
-//       qDebug() <<  ind;
-//  }
-//  glDrawElements(GL_LINES, scene->GetEdges().size(), GL_UNSIGNED_INT, scene->GetEdges().data());
 
-//   glBegin(GL_LINES);
-//   for (auto &figure : scene->GetFigures()) {
-//     for (auto &edge : figure.GetEdges()) {
-//       glVertex3f(edge.GetBegin().GetPosition().x,
-//                  edge.GetBegin().GetPosition().y,
-//                  edge.GetBegin().GetPosition().z);
-//       glVertex3f(edge.GetEnd().GetPosition().x, edge.GetEnd().GetPosition().y,
-//                  edge.GetEnd().GetPosition().z);
-//     }
-//   }
-//   glEnd();
- }
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices().data());
+
+  glDrawElements(GL_LINES, scene->GetEdges().size(), GL_UNSIGNED_INT,
+                 scene->GetEdges().data());
+
+  glDisableClientState(GL_VERTEX_ARRAY);
+}
 
 void SceneDrawer::SetTypeProjection() {
   float value_max = 2;
@@ -202,4 +162,4 @@ void SceneDrawer::SetVerticesColor() {
 
 void SceneDrawer::SetVerticesSize() { glPointSize(scene_params->vertex_size); }
 
-} // namespace s21
+}  // namespace s21
