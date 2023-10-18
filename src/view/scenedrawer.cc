@@ -29,7 +29,6 @@ void SceneDrawer::SetParentOpenGL(QWidget *parent) {
 
 QImage SceneDrawer::GetFrameBuffer() { return grabFramebuffer(); }
 
-// https://runebook.dev/ru/docs/qt/qopenglwidget
 void SceneDrawer::initializeGL() {
   QOpenGLWidget::initializeGL();
   initializeOpenGLFunctions();
@@ -38,10 +37,9 @@ void SceneDrawer::initializeGL() {
 
 void SceneDrawer::paintGL() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  SetBackgroundScene();
 
   if (scene != nullptr && scene_params != nullptr) {
-    SetBackgroundScene();
-
     SetTypeProjection();
 
     SetEdgesColor();
@@ -64,13 +62,14 @@ void SceneDrawer::RenderVertices() {
   if (scene == nullptr) {
     return;
   }
+  if (scene_params->vertex_type != SceneParameters::TypeVertex::kAbsent) {
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices().data());
 
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices().data());
+    glDrawArrays(GL_POINTS, 0, scene->GetVertices().size() / 3);
 
-  glDrawArrays(GL_POINTS, 0, scene->GetVertices().size() / 3);
-
-  glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+  }
 }
 
 void SceneDrawer::RenderEdges() {

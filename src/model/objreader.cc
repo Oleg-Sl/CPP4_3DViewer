@@ -1,27 +1,29 @@
 #include "include/objreader.h"
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 namespace s21 {
 
-void OBJReader::ReadCoord(std::stringstream &tokens,
-                          std::vector<float> &vertices) {
+void OBJReader::Read3DCoords(std::stringstream &tokens,
+                             std::vector<float> &vertices) {
   float x, y, z;
   tokens >> x >> y >> z;
+
   vertices.push_back(x);
   vertices.push_back(y);
   vertices.push_back(z);
 }
 
-std::vector<size_t> OBJReader::ReadFace(std::stringstream &tokens,
-                                        size_t count_vertices) {
-  int vertex_index;
+void OBJReader::ReadFace(std::stringstream &tokens, std::vector<int> &edges,
+                         size_t count_vertices) {
   std::string line;
-  std::vector<size_t> edges;
-  std::vector<size_t> added_vertices;
+  std::vector<int> added_vertices;
 
   while (tokens >> line) {
+    int vertex_index;
     std::string token;
 
     size_t slash_pos = line.find("//");
@@ -46,28 +48,21 @@ std::vector<size_t> OBJReader::ReadFace(std::stringstream &tokens,
     added_vertices.push_back(vertex_index);
   }
 
-  for (size_t i = 0; i < added_vertices.size(); ++i) {
-    size_t start = i;
-    size_t end = i + 1 == added_vertices.size() ? 0 : i + 1;
+  for (int i = 0; i < added_vertices.size(); ++i) {
+    int start = i;
+    int end = i + 1 == added_vertices.size() ? 0 : i + 1;
 
     edges.push_back(added_vertices[start]);
     edges.push_back(added_vertices[end]);
   }
-
-  return edges;
 }
 
-void OBJReader::CalculateNormalizationParams(const Vertex &vertex,
+void OBJReader::CalculateNormalizationParams(const std::vector<float> &vertices,
                                              Scene &scene) {
   NormalizationParameters params = scene.GetNormalizationParams();
 
-  params.min = std::min(vertex.GetPosition().x, params.min);
-  params.min = std::min(vertex.GetPosition().y, params.min);
-  params.min = std::min(vertex.GetPosition().z, params.min);
-
-  params.max = std::max(vertex.GetPosition().x, params.max);
-  params.max = std::max(vertex.GetPosition().y, params.max);
-  params.max = std::max(vertex.GetPosition().z, params.max);
+  params.max = *(std::max_element(vertices.begin(), vertices.end()));
+  params.min = *(std::min_element(vertices.begin(), vertices.end()));
 
   scene.SetNormalizationParams(params);
 }
@@ -75,7 +70,7 @@ void OBJReader::CalculateNormalizationParams(const Vertex &vertex,
 Scene OBJReader::ReadScene(const std::string &path) {
   Scene scene;
   std::vector<float> vertices;
-  std::vector<size_t> edges;
+  std::vector<int> edges;
   std::ifstream obj_file(path);
 
   if (obj_file.is_open()) {
@@ -87,11 +82,9 @@ Scene OBJReader::ReadScene(const std::string &path) {
       tokens >> curr_token;
 
       if (curr_token == kVertexToken) {
-        ReadCoord(tokens, vertices);
-        // CalculateNormalizationParams(vertex, scene);
+        Read3DCoords(tokens, vertices);
       } else if (curr_token == kFaceToken) {
-        std::vector<size_t> temp = ReadFace(tokens, vertices.size());
-        edges.insert(edges.end(), temp.begin(), temp.end());
+        ReadFace(tokens, edges, vertices.size() / 3);
       }
     }
 
@@ -100,10 +93,12 @@ Scene OBJReader::ReadScene(const std::string &path) {
     throw std::runtime_error("Failed to open file: " + path);
   }
 
-  scene.SetVertices(vertices);
-  scene.SetEdges(edges);
+  CalculateNormalizationParams(vertices, scene);
+
+  scene.SetVertices(std::move(vertices));
+  scene.SetEdges(std::move(edges));
 
   return scene;
 }
 
-} // namespace s21
+}  // namespace s21

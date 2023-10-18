@@ -4,7 +4,7 @@
 #include <ctime>
 #include <vector>
 
-#include "figure.h"
+#include "normalization_parameters.h"
 #include "transform_matrix.h"
 
 namespace s21 {
@@ -13,15 +13,15 @@ class Scene {
  public:
   NormalizationParameters GetNormalizationParams();
   void SetNormalizationParams(NormalizationParameters params);
-  void SetVertices(std::vector<float> vertices) { vertices_ = vertices; }
-  void SetEdges(std::vector<size_t> edges) { edges_ = edges; }
-  void TransformFigures(const TransformMatrix &matrix);
-  std::vector<float> &GetVertices() { return vertices_; }
-  std::vector<size_t> &GetEdges() { return edges_; }
+  void SetEdges(std::vector<int> &&edges);
+  void TransformVertices(const TransformMatrix &matrix);
+  void SetVertices(std::vector<float> &&vertices);
+  const std::vector<float> &GetVertices();
+  const std::vector<int> &GetEdges();
 
  private:
   std::vector<float> vertices_;
-  std::vector<size_t> edges_;
+  std::vector<int> edges_;
   NormalizationParameters normalization_params_;
 };
 
