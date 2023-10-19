@@ -19,18 +19,18 @@ NormalizationParameters Scene::GetNormalizationParams() {
   return normalization_params_;
 }
 
-void Scene::SetNormalizationParams(NormalizationParameters params) {
-  normalization_params_ = params;
+void Scene::SetNormalizationParams(NormalizationParameters &&params) {
+  std::swap(normalization_params_, params);
 }
 
 void Scene::SetVertices(std::vector<float> &&vertices) {
-  vertices_ = std::move(vertices);
+  std::swap(vertices_, vertices);
 }
 
-void Scene::SetEdges(std::vector<int> &&edges) { edges_ = std::move(edges); }
+void Scene::SetEdges(std::vector<int> &&edges) { std::swap(edges_, edges); }
 
 const std::vector<float> &Scene::GetVertices() { return vertices_; }
 
 const std::vector<int> &Scene::GetEdges() { return edges_; }
 
-}  // namespace s21
+} // namespace s21

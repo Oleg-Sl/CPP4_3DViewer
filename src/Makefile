@@ -2,8 +2,9 @@
 CC				= g++
 CFLAGS			= -Wall -Wextra -Werror -std=c++17
 
-SOURCES			= $(wildcard model/*.cc)
-OBJECTS			= $(SOURCES:.cc=.o)
+SOURCES = $(wildcard model/*.cc)
+EXCLUDE_FILE = model/settings.cc
+OBJECTS = $(filter-out $(EXCLUDE_FILE:.cc=.o), $(SOURCES:.cc=.o))
 TARGET			= 3d_viewer
 
 

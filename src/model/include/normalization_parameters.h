@@ -1,15 +1,12 @@
 #ifndef _3DVIEWER_MODEL_NORMALIZATION_PARAMETERS_H_
 #define _3DVIEWER_MODEL_NORMALIZATION_PARAMETERS_H_
 
-#include <limits>
-
 namespace s21 {
 
 struct NormalizationParameters {
-  float min = std::numeric_limits<float>::max();
-  float max = std::numeric_limits<float>::min();
-  float dx_step;
-  float dy_step;
+  float min = 0;
+  float max = 0;
+  float step;
 };
 
 } // namespace s21

@@ -10,21 +10,21 @@
 namespace s21 {
 
 class Scene {
- public:
+public:
   NormalizationParameters GetNormalizationParams();
-  void SetNormalizationParams(NormalizationParameters params);
+  void SetNormalizationParams(NormalizationParameters &&params);
   void SetEdges(std::vector<int> &&edges);
   void TransformVertices(const TransformMatrix &matrix);
   void SetVertices(std::vector<float> &&vertices);
   const std::vector<float> &GetVertices();
   const std::vector<int> &GetEdges();
 
- private:
+private:
   std::vector<float> vertices_;
   std::vector<int> edges_;
   NormalizationParameters normalization_params_;
 };
 
-}  // namespace s21
+} // namespace s21
 
-#endif  // _3DVIEWER_MODEL_SCENE_H_
+#endif // _3DVIEWER_MODEL_SCENE_H_
