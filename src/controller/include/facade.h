@@ -26,7 +26,6 @@ public:
   void SetScene();
   void SetParamsScene(SceneParameters *);
   void SetParentForSceneDraw(QWidget *);
-
   QImage GetFrameBuffer();
 
   void MoveScene(float x, float y, float z);

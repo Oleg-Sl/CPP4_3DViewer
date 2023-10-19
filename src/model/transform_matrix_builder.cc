@@ -4,11 +4,7 @@
 namespace s21 {
 TransformMatrix TransformMatrixBuilder::CreateRotationMatrix(float x, float y, float z) {
   TransformMatrix matrix;
-  for (int row = 0; row <= 3; ++row) {
-    for (int col = 0; col <= 3; ++col) {
-      matrix(row, col) = (row == col) ? 1 : 0;
-    }
-  }
+
   float sin_x = std::sin(x);
   float sin_y = std::sin(y);
   float sin_z = std::sin(z);
@@ -24,17 +20,13 @@ TransformMatrix TransformMatrixBuilder::CreateRotationMatrix(float x, float y, f
   matrix(2, 0) = -cos_x * sin_y * cos_z + sin_x * sin_z;
   matrix(2, 1) = cos_x * sin_y * sin_z + sin_x * cos_z;
   matrix(2, 2) = cos_x * cos_y;
+
   return matrix;
 }
 
 TransformMatrix TransformMatrixBuilder::CreateMoveMatrix(float x, float y,
                                                          float z) {
   TransformMatrix matrix;
-  for (int row = 0; row <= 3; ++row) {
-    for (int col = 0; col <= 3; ++col) {
-      matrix(row, col) = (row == col) ? 1 : 0;
-    }
-  }
 
   matrix(0, 3) = x;
   matrix(1, 3) = y;
@@ -46,11 +38,7 @@ TransformMatrix TransformMatrixBuilder::CreateMoveMatrix(float x, float y,
 TransformMatrix TransformMatrixBuilder::CreateScaleMatrix(float x, float y,
                                                           float z) {
   TransformMatrix matrix;
-  for (int row = 0; row <= 3; ++row) {
-    for (int col = 0; col <= 3; ++col) {
-      matrix(row, col) = (row == col) ? 1 : 0;
-    }
-  }
+
   matrix(0, 0) = x;
   matrix(1, 1) = y;
   matrix(2, 2) = z;

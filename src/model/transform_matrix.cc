@@ -4,14 +4,6 @@
 
 namespace s21 {
 TransformMatrix::TransformMatrix() {
-  matrix_ = new float*[4];
-  for (int i = 0; i < 4; i++) {
-    matrix_[i] = new float[4];
-    for (int j = 0; j < 4; j++) {
-      matrix_[i][j] = 0.0f;
-    }
-  }
-
   for (int row = 0; row <= matrix_size_; ++row) {
     for (int col = 0; col <= matrix_size_; ++col) {
       matrix_[row][col] = (row == col) ? 1 : 0;
