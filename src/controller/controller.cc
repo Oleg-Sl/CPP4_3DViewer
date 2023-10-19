@@ -1,25 +1,32 @@
 #include "include/controller.h"
 
+#include <stdexcept>
+
 namespace s21 {
 
-Controller::Controller(BaseFileReader& file_reader_, SceneDrawerBase& scene_drawer_,
-               MySettings& settings_)
-    : file_reader(file_reader_),
-      scene_drawer(scene_drawer_),
+Controller::Controller(BaseFileReader &file_reader_,
+                       SceneDrawerBase &scene_drawer_, MySettings &settings_)
+    : file_reader(file_reader_), scene_drawer(scene_drawer_),
       settings(settings_) {}
 
 SceneParameters Controller::GetSettings() { return settings.GetSettings(); }
 
-void Controller::UpdateSettings(const SceneParameters& scene_params) {
+void Controller::UpdateSettings(const SceneParameters &scene_params) {
   return settings.UpdateSettings(scene_params);
 }
 
-void Controller::LoadScene(const QString& path) {
-  scene = file_reader.ReadScene(path.toStdString());
+OperationResult Controller::LoadScene(const QString &path) {
+  try {
+    scene = file_reader.ReadScene(path.toStdString());
+  } catch (const std::exception &e) {
+    return {e.what(), false};
+  }
   SetScene();
+
+  return {"", true};
 }
 
-void Controller::SetParentForSceneDraw(QWidget* parent) {
+void Controller::SetParentForSceneDraw(QWidget *parent) {
   scene_drawer.SetParentOpenGL(parent);
 }
 
@@ -30,7 +37,7 @@ void Controller::SetScene() {
   scene_drawer.UpdateScene();
 }
 
-void Controller::SetParamsScene(SceneParameters* params_scene) {
+void Controller::SetParamsScene(SceneParameters *params_scene) {
   scene_drawer.SetParamsScene(params_scene);
   scene_drawer.UpdateScene();
 }
@@ -43,7 +50,8 @@ void Controller::MoveScene(float x, float y, float z) {
 }
 
 void Controller::RotateScene(float x, float y, float z) {
-  scene.TransformVertices(TransformMatrixBuilder::CreateRotationMatrix(x, y, z));
+  scene.TransformVertices(
+      TransformMatrixBuilder::CreateRotationMatrix(x, y, z));
   scene_drawer.UpdateScene();
 }
 
@@ -52,4 +60,4 @@ void Controller::ScaleScene(float x, float y, float z) {
   scene_drawer.UpdateScene();
 }
 
-}  // namespace s21
+} // namespace s21

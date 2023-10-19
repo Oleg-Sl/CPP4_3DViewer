@@ -1,26 +1,26 @@
 #ifndef _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
 #define _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
 
-#include "../../model/include/scene.h"
 #include "../../model/include/objreader.h"
-#include "../../view/include/scenedrawer.h"
-#include "../../model/include/transform_matrix_builder.h"
+#include "../../model/include/scene.h"
 #include "../../model/include/settings.h"
+#include "../../model/include/transform_matrix_builder.h"
+#include "../../view/include/scenedrawer.h"
+#include "operationresult.h"
 
 #include <QDebug>
-
 
 namespace s21 {
 
 class Controller {
 
 public:
-  Controller(BaseFileReader&, SceneDrawerBase&, MySettings&);
+  Controller(BaseFileReader &, SceneDrawerBase &, MySettings &);
 
   SceneParameters GetSettings();
-  void UpdateSettings(const SceneParameters&);
+  void UpdateSettings(const SceneParameters &);
 
-  void LoadScene(const QString&);
+  OperationResult LoadScene(const QString &);
 
   void UpdateSceneDraw();
   void SetScene();
@@ -34,9 +34,9 @@ public:
   void ScaleScene(float x, float y, float z);
 
 private:
-  BaseFileReader& file_reader;
-  SceneDrawerBase& scene_drawer;
-  MySettings& settings;
+  BaseFileReader &file_reader;
+  SceneDrawerBase &scene_drawer;
+  MySettings &settings;
   Scene scene{};
 };
 

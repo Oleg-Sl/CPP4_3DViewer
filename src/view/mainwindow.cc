@@ -108,8 +108,8 @@ void MainWindow::InitSettings() {
 }
 
 void MainWindow::InitSceneDraw() {
-    controller.SetParentForSceneDraw(ui->widgetOpenGL);
-    controller.SetParamsScene(&scene_params);
+  controller.SetParentForSceneDraw(ui->widgetOpenGL);
+  controller.SetParamsScene(&scene_params);
 }
 
 void MainWindow::InitSceneParameters() {
@@ -145,7 +145,11 @@ void MainWindow::SlotSelectFile() {
 }
 
 void MainWindow::SlotRenderScene() {
-  controller.LoadScene(file_path);
+  OperationResult result = controller.LoadScene(file_path);
+  if (!result.is_success) {
+    ShowMessage(QString::fromStdString(result.error_message), QColor(Qt::red));
+    return;
+  }
   InitSceneParameters();
 }
 
