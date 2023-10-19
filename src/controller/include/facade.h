@@ -31,6 +31,7 @@ public:
   void MoveScene(float x, float y, float z);
   void RotateScene(float x, float y, float z);
   void ScaleScene(float x, float y, float z);
+  
 
 private:
   BaseFileReader& file_reader;

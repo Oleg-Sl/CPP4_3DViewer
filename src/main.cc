@@ -21,7 +21,6 @@ int main(int argc, char* argv[]) {
   s21::SceneDrawer scene_drawer;
   s21::OBJReader reader;
   s21::Facade controller(reader, scene_drawer, settings);
-  //    controller.GetSettings();
 
   s21::MainWindow window(controller);
 

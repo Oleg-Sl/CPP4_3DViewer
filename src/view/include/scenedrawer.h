@@ -51,7 +51,6 @@ protected:
 
 private:
   QWidget *parent;
-  QTimer timer{};
   Scene *scene = nullptr;
   SceneParameters *scene_params = nullptr;
 
