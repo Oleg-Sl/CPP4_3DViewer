@@ -1,5 +1,5 @@
-#ifndef _3DVIEWER_CONTROLLER_INCLUDE_FACADE_H_
-#define _3DVIEWER_CONTROLLER_INCLUDE_FACADE_H_
+#ifndef _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
+#define _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
 
 #include "../../model/include/scene.h"
 #include "../../model/include/objreader.h"
@@ -12,10 +12,10 @@
 
 namespace s21 {
 
-class Facade {
+class Controller {
 
 public:
-  Facade(BaseFileReader&, SceneDrawerBase&, MySettings&);
+  Controller(BaseFileReader&, SceneDrawerBase&, MySettings&);
 
   SceneParameters GetSettings();
   void UpdateSettings(const SceneParameters&);
@@ -42,4 +42,4 @@ private:
 
 } // namespace s21
 
-#endif // _3DVIEWER_CONTROLLER_INCLUDE_FACADE_H_
+#endif // _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_

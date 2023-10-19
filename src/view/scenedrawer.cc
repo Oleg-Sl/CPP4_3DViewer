@@ -87,18 +87,20 @@ void SceneDrawer::RenderEdges() {
 }
 
 void SceneDrawer::SetTypeProjection() {
-  float value_max = 2;
-  float value_min = -2;
+  float value_max = scene->GetNormalizationParams().max;
+  float value_min = -scene->GetNormalizationParams().max;
+
   double ratio_x = width() > height() ? static_cast<float>(width()) /
                                             static_cast<float>(height())
                                       : 1;
   double ratio_y = width() > height() ? 1
                                       : static_cast<float>(height()) /
                                             static_cast<float>(width());
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+
   if (scene_params->type_projection ==
       SceneParameters::TypeProjection::kCentral) {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
     float fov = 60.0 * M_PI / 180;
     float tg_60 = tan(fov / 2);
     float heapHeight = 1.5 * value_max / tg_60;
@@ -107,16 +109,14 @@ void SceneDrawer::SetTypeProjection() {
               1.5 * tg_60 * value_min * ratio_y,
               1.5 * tg_60 * value_max * ratio_y, heapHeight, 1);
     glTranslated(0.0f, 0.0f, -1.5 * value_max - 0.1);
-    glMatrixMode(GL_MODELVIEW);
   } else if (scene_params->type_projection ==
              SceneParameters::TypeProjection::kParallel) {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
     glOrtho(1.5 * value_min * ratio_x, 1.5 * value_max * ratio_x,
             1.5 * value_min * ratio_y, 1.5 * value_max * ratio_y, 5 * value_min,
             5 * value_max);
-    glMatrixMode(GL_MODELVIEW);
   }
+  
+  glMatrixMode(GL_MODELVIEW);
 }
 
 void SceneDrawer::SetBackgroundScene() {
@@ -161,4 +161,4 @@ void SceneDrawer::SetVerticesColor() {
 
 void SceneDrawer::SetVerticesSize() { glPointSize(scene_params->vertex_size); }
 
-}  // namespace s21
+} // namespace s21

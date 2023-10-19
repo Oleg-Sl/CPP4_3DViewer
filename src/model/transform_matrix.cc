@@ -48,7 +48,7 @@ TransformMatrix TransformMatrix::operator*(
 }
 
 void TransformMatrix::TransformVertices(std::vector<float>& vertices) const {
-  for (int i = 0; i + 3 <= vertices.size(); i += 3) {
+  for (size_t i = 0; i + 3 <= vertices.size(); i += 3) {
     float x = vertices[i] * matrix_[0][0] + vertices[i + 1] * matrix_[0][1] +
               vertices[i + 2] * matrix_[0][2] + matrix_[0][3];
     float y = vertices[i] * matrix_[1][0] + vertices[i + 1] * matrix_[1][1] +

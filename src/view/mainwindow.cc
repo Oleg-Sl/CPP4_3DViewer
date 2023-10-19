@@ -4,7 +4,7 @@
 
 namespace s21 {
 
-MainWindow::MainWindow(Facade &ctrl, QWidget *parent)
+MainWindow::MainWindow(Controller &ctrl, QWidget *parent)
     : QMainWindow(parent), controller(ctrl), ui(new Ui::MainWindow),
       scene_params(ctrl.GetSettings()) {
   ui->setupUi(this);
@@ -153,7 +153,7 @@ void MainWindow::SlotMoveObjectX(int offset) {
   if (offset == previous_offsets.x) {
     return;
   }
-  controller.MoveScene(offset - previous_offsets.x, 0, 0);
+  controller.MoveScene((offset - previous_offsets.x), 0, 0);
   previous_offsets.x = offset;
   ui->sliderMoveX->setSliderPosition(offset);
   ui->moveX->setValue(offset);

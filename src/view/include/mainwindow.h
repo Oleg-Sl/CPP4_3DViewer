@@ -9,7 +9,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 
-#include "../../controller/include/facade.h"
+#include "../../controller/include/controller.h"
 #include "../../lib/gif.h"
 #include "cmath"
 #include "managerscenesubjectbase.h"
@@ -27,7 +27,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
 public:
-  MainWindow(Facade &cotroller, QWidget *parent = nullptr);
+  MainWindow(Controller &cotroller, QWidget *parent = nullptr);
   ~MainWindow();
 
   void Notify();
@@ -75,7 +75,7 @@ private slots:
                    int message_timeout = 0);
 
 private:
-  Facade &controller;
+  Controller &controller;
   Ui::MainWindow *ui;
   SceneParameters scene_params;
   QString file_path;

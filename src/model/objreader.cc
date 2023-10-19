@@ -48,9 +48,10 @@ void OBJReader::ReadFace(std::stringstream &tokens, std::vector<int> &edges,
     added_vertices.push_back(vertex_index);
   }
 
-  for (int i = 0; i < added_vertices.size(); ++i) {
+  int size = static_cast<int>(added_vertices.size());
+  for (int i = 0; i < size; ++i) {
     int start = i;
-    int end = i + 1 == added_vertices.size() ? 0 : i + 1;
+    int end = i + 1 == size ? 0 : i + 1;
 
     edges.push_back(added_vertices[start]);
     edges.push_back(added_vertices[end]);
@@ -61,10 +62,16 @@ void OBJReader::CalculateNormalizationParams(const std::vector<float> &vertices,
                                              Scene &scene) {
   NormalizationParameters params = scene.GetNormalizationParams();
 
-  params.max = *(std::max_element(vertices.begin(), vertices.end()));
-  params.min = *(std::min_element(vertices.begin(), vertices.end()));
+  float x = abs(vertices[vertices.size() - 1]);
+  float y = abs(vertices[vertices.size() - 2]);
+  float z = abs(vertices[vertices.size() - 3]);
 
-  scene.SetNormalizationParams(params);
+  float max = std::max(x, std::max(y, z));
+  params.max = std::max(max, params.max);
+  params.min = -params.max;
+  params.step = params.max / 100.0 * 5.0;
+
+  scene.SetNormalizationParams(std::move(params));
 }
 
 Scene OBJReader::ReadScene(const std::string &path) {
@@ -83,6 +90,7 @@ Scene OBJReader::ReadScene(const std::string &path) {
 
       if (curr_token == kVertexToken) {
         Read3DCoords(tokens, vertices);
+        CalculateNormalizationParams(vertices, scene);
       } else if (curr_token == kFaceToken) {
         ReadFace(tokens, edges, vertices.size() / 3);
       }
@@ -93,12 +101,10 @@ Scene OBJReader::ReadScene(const std::string &path) {
     throw std::runtime_error("Failed to open file: " + path);
   }
 
-  CalculateNormalizationParams(vertices, scene);
-
   scene.SetVertices(std::move(vertices));
   scene.SetEdges(std::move(edges));
 
   return scene;
 }
 
-}  // namespace s21
+} // namespace s21
