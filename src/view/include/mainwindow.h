@@ -38,7 +38,6 @@ private:
     float z{};
   };
   struct ScreenParameters {
-      QString file_path;
       QString dir_path = QDir("./").absolutePath();
   };
   struct GifParameters {
@@ -95,6 +94,7 @@ private:
   SceneParameters scene_params;
   ScreenParameters screen_params;
   GifParameters gif_params;
+  QString file_path;
 
   QTimer timer{};
   GifWriter g{};

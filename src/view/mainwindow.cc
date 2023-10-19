@@ -141,9 +141,9 @@ void MainWindow::Notify() {
 }
 
 void MainWindow::SlotSelectFile() {
-  screen_params.file_path =
+  file_path =
       QFileDialog::getOpenFileName(this, "Open File", "./", tr("*.obj"));
-  QFileInfo fileinfo(screen_params.file_path);
+  QFileInfo fileinfo(file_path);
   ui->fileName->setText(fileinfo.fileName());
 }
 
