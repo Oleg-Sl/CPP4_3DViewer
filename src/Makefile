@@ -29,6 +29,10 @@ reader: $(OBJECTS)
 	cd tests && $(CC) $(CFLAGS) -o ./reader ../*.o reader_test.cc -lgtest
 	tests/reader
 
+testcalc: model/scene.o model/transform_matrix_builder.o model/transform_matrix.o
+	cd tests && $(CC) $(CFLAGS) -o ./reader ../*.o transformation_test.cc -lgtest
+	tests/reader
+
 %.o: %.cc
 	$(CC) -c $(CFLAGS) $<
 
