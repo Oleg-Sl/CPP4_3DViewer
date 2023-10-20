@@ -1,6 +1,9 @@
 #ifndef _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
 #define _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
 
+#include <QDebug>
+
+#include "../../model/include/gifgenerator.h"
 #include "../../model/include/objreader.h"
 #include "../../model/include/scene.h"
 #include "../../model/include/settings.h"
@@ -8,13 +11,10 @@
 #include "../../view/include/scenedrawer.h"
 #include "operationresult.h"
 
-#include <QDebug>
-
 namespace s21 {
 
 class Controller {
-
-public:
+ public:
   Controller(BaseFileReader &, SceneDrawerBase &, MySettings &);
 
   SceneParameters GetSettings();
@@ -33,13 +33,19 @@ public:
   void RotateScene(float x, float y, float z);
   void ScaleScene(float x, float y, float z);
 
-private:
+  void CreateGif(const std::string &filename, int gif_width, int gif_height,
+                 int fps, int duration);
+  bool AddGifFrame();
+	int GetGifDelay();
+
+ private:
   BaseFileReader &file_reader;
   SceneDrawerBase &scene_drawer;
   MySettings &settings;
   Scene scene{};
+  GifGenerator gif_generator;
 };
 
-} // namespace s21
+}  // namespace s21
 
-#endif // _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
+#endif  // _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_

@@ -1,11 +1,14 @@
 #include "include/mainwindow.h"
 
+#include "../model/include/gifgenerator.h"
 #include "ui_mainwindow.h"
 
 namespace s21 {
 
 MainWindow::MainWindow(Controller &ctrl, QWidget *parent)
-    : QMainWindow(parent), controller(ctrl), ui(new Ui::MainWindow),
+    : QMainWindow(parent),
+      controller(ctrl),
+      ui(new Ui::MainWindow),
       scene_params(ctrl.GetSettings()) {
   ui->setupUi(this);
 
@@ -331,28 +334,24 @@ void MainWindow::PreparationMakingGif() {
 
 void MainWindow::StartMakingGif() {
   ShowMessage(QString("Идет запись GIF"), QColor(39, 174, 96), 0);
-  gif_time_left = gif_time;
   QString uniq_name =
       QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
   gif_file_path = QString("%1/video_%2.gif").arg(gif_dir).arg(uniq_name);
-  GifBegin(&g, gif_file_path.toStdString().c_str(), gif_width, gif_height,
-           gif_delay);
+
+  controller.CreateGif(gif_file_path.toStdString(), gif_width, gif_height, 10,
+                       500);
   CreateFrameToGif();
 }
 
 void MainWindow::CreateFrameToGif() {
-  if (gif_time_left <= 0) {
-    GifEnd(&g);
+  if (controller.AddGifFrame()) {
     ui->buttonCreateGif->setEnabled(true);
     ShowMessage(QString("Создана GIF: %1").arg(gif_file_path),
                 QColor(50, 205, 50), 5000);
     return;
   }
-  GifWriteFrame(
-      &g, controller.GetFrameBuffer().scaled(gif_width, gif_height).bits(),
-      gif_width, gif_height, gif_delay * 0.1);
-  QTimer::singleShot(gif_delay, this, SLOT(CreateFrameToGif()));
-  gif_time_left -= gif_delay;
+
+  QTimer::singleShot(controller.GetGifDelay(), this, SLOT(CreateFrameToGif()));
 }
 
 void MainWindow::SlotPrintScreenBMP() { MakeScreenshot("bmp"); }
@@ -386,32 +385,4 @@ void MainWindow::ShowMessage(QString msg, QColor color, int message_timeout) {
   }
 }
 
-// void MainWindow::mousePressEvent(QMouseEvent *event) {
-//     if (event->button() == Qt::LeftButton) {
-//         mouse_event_x = event->pos().x();
-//         mouse_event_y = event->pos().y();
-//     }
-// }
-
-// void MainWindow::mouseMoveEvent(QMouseEvent *event) {
-//     if(event->buttons() == Qt::LeftButton) {
-//         int delta_deg_y = (event->pos().x() - mouse_event_x) * 0.01;
-//         int delta_deg_x = (event->pos().y() - mouse_event_y) * 0.01;
-//         int angle_deg_y = previous_rotation.y - delta_deg_y;
-//         int angle_deg_x = previous_rotation.x - delta_deg_x;
-//         controller.RotateScene(delta_deg_x * M_PI / 180, delta_deg_y * M_PI /
-//         180, 0); previous_rotation.x = angle_deg_x; previous_rotation.y =
-//         angle_deg_y; ui->sliderRotateY->setSliderPosition((angle_deg_y  >
-//         180) ? -180 + angle_deg_y % 180 : ((angle_deg_y < -180) ? 180 -
-//         angle_deg_y % 180 : angle_deg_y));
-//         ui->sliderRotateX->setSliderPosition((angle_deg_x  > 180) ? -180 +
-//         angle_deg_x % 180 : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 :
-//         angle_deg_x)); ui->rotateY->setValue((angle_deg_y  > 180) ? -180 +
-//         angle_deg_y % 180 : ((angle_deg_y < -180) ? 180 - angle_deg_y % 180 :
-//         angle_deg_y)); ui->rotateX->setValue((angle_deg_x  > 180) ? -180 +
-//         angle_deg_x % 180 : ((angle_deg_x < -180) ? 180 - angle_deg_x % 180 :
-//         angle_deg_x));
-//     }
-// }
-
-} // namespace s21
+}  // namespace s21
