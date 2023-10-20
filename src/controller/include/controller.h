@@ -1,8 +1,6 @@
 #ifndef _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
 #define _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
 
-#include <QDebug>
-
 #include "../../model/include/gifgenerator.h"
 #include "../../model/include/objreader.h"
 #include "../../model/include/scene.h"
@@ -26,7 +24,6 @@ class Controller {
   void SetScene();
   void SetParamsScene(SceneParameters *);
   void SetParentForSceneDraw(QWidget *);
-
   QImage GetFrameBuffer();
 
   void MoveScene(float x, float y, float z);
@@ -36,7 +33,7 @@ class Controller {
   void CreateGif(const std::string &filename, int gif_width, int gif_height,
                  int fps, int duration);
   bool AddGifFrame();
-	int GetGifDelay();
+  int GetGifDelay();
 
  private:
   BaseFileReader &file_reader;

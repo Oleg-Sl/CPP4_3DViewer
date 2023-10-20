@@ -29,12 +29,29 @@ class MainWindow : public QMainWindow {
   MainWindow(Controller &cotroller, QWidget *parent = nullptr);
   ~MainWindow();
 
-  void Notify();
+ private:
   struct VectorCoordinates {
     float x{};
     float y{};
     float z{};
   };
+
+  struct ScreenParameters {
+    QString dir_path = QDir("./").absolutePath();
+  };
+
+  struct GifParameters {
+    QString gif_dir{QDir("./").absolutePath()};
+    QString gif_file_path{};
+    int gif_before_time{5000};
+    int gif_before_time_left{};
+    int gif_width{640};
+    int gif_height{480};
+    int gif_fps{10};
+    int gif_duration{500};
+  };
+
+  void Notify();
 
  private slots:
   void SlotRenderScene();
@@ -74,15 +91,13 @@ class MainWindow : public QMainWindow {
   Controller &controller;
   Ui::MainWindow *ui;
   SceneParameters scene_params;
+  ScreenParameters screen_params;
+  GifParameters gif_params;
   QString file_path;
   QString screen_dir = QDir("./").absolutePath();
   QString gif_dir = QDir("./").absolutePath();
   QString gif_file_path;
-  int gif_before_time = 5000;
-  int gif_before_time_left = 5000;
-
-  int gif_width = 640;
-  int gif_height = 480;
+  QTimer timer{};
 
   VectorCoordinates previous_offsets{};
   VectorCoordinates previous_rotation{};
@@ -90,6 +105,7 @@ class MainWindow : public QMainWindow {
 
   int mouse_event_x{};
   int mouse_event_y{};
+
   void InitSettings();
   void InitSceneDraw();
   void InitSceneParameters();

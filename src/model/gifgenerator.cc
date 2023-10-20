@@ -1,7 +1,7 @@
 #include "include/gifgenerator.h"
 
 void GifGenerator::InitializeGenerator(const std::string& filename, int width,
-                                       int height, int fps, int duration_ms) {
+                                       int height, int fps, int duration) {
   initialized_ = true;
   finished_ = false;
   currentTime_ = 0;
@@ -10,7 +10,7 @@ void GifGenerator::InitializeGenerator(const std::string& filename, int width,
   height_ = height;
   width_ = width;
   fps_ = fps;
-  duration_ = duration_ms;
+  duration_ = duration;
 
   GifBegin(&gifWriter_, filename_.c_str(), width_, height_, delay_);
 }

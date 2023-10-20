@@ -13,7 +13,7 @@ class GifGenerator {
   GifGenerator() {}
 
   void InitializeGenerator(const std::string& filename, int width, int height,
-                           int fps, int duration_ms);
+                           int fps, int duration);
   void AddFrame(const uint8_t* image);
 
   bool GetFinished();

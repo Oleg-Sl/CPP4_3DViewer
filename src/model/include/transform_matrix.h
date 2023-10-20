@@ -14,7 +14,7 @@ class TransformMatrix {
   void TransformVertices(std::vector<float>& vertices) const;
 
  private:
-  float** matrix_ = nullptr;
+  float matrix_[4][4];
   static const int matrix_size_ = 3;
 };
 

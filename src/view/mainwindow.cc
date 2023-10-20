@@ -9,17 +9,18 @@ MainWindow::MainWindow(Controller &ctrl, QWidget *parent)
     : QMainWindow(parent),
       controller(ctrl),
       ui(new Ui::MainWindow),
+
       scene_params(ctrl.GetSettings()) {
   ui->setupUi(this);
 
   InitSettings();
   InitSceneDraw();
 
-  ui->screenPath->setText(screen_dir);
-  ui->screenPath->setToolTip(screen_dir);
+  ui->screenPath->setText(screen_params.dir_path);
+  ui->screenPath->setToolTip(screen_params.dir_path);
 
-  ui->gifPath->setText(gif_dir);
-  ui->gifPath->setToolTip(gif_dir);
+  ui->gifPath->setText(gif_params.gif_dir);
+  ui->gifPath->setToolTip(gif_params.gif_dir);
 
   connect(ui->buttonSelectFile, SIGNAL(clicked()), this,
           SLOT(SlotSelectFile()));
@@ -82,6 +83,8 @@ MainWindow::MainWindow(Controller &ctrl, QWidget *parent)
 
   connect(ui->gifPath, SIGNAL(clicked()), this, SLOT(SlotSelectGifPath()));
   connect(ui->buttonCreateGif, SIGNAL(clicked()), this, SLOT(SlotMakeGif()));
+
+  connect(&timer, SIGNAL(timeout()), this, SLOT(CreateFrameToGif()));
 }
 
 MainWindow::~MainWindow() {
@@ -298,9 +301,9 @@ void MainWindow::SlotSelectGifPath() {
   QString new_dir =
       QFileDialog::getExistingDirectory(0, "Выбор директории записи gif", "./");
   if (!new_dir.isEmpty()) {
-    gif_dir = new_dir;
-    ui->gifPath->setText(gif_dir);
-    ui->gifPath->setToolTip(gif_dir);
+    gif_params.gif_dir = new_dir;
+    ui->gifPath->setText(gif_params.gif_dir);
+    ui->gifPath->setToolTip(gif_params.gif_dir);
   }
 }
 
@@ -308,27 +311,27 @@ void MainWindow::SlotSelectScreenPath() {
   QString new_dir = QFileDialog::getExistingDirectory(
       0, "Выбор директории записи скринов", "./");
   if (!new_dir.isEmpty()) {
-    screen_dir = new_dir;
-    ui->screenPath->setText(screen_dir);
-    ui->screenPath->setToolTip(screen_dir);
+    screen_params.dir_path = new_dir;
+    ui->screenPath->setText(screen_params.dir_path);
+    ui->screenPath->setToolTip(screen_params.dir_path);
   }
 }
 
 void MainWindow::SlotMakeGif() {
   ui->buttonCreateGif->setEnabled(false);
-  gif_before_time_left = gif_before_time;
+  gif_params.gif_before_time_left = gif_params.gif_before_time;
   PreparationMakingGif();
 }
 
 void MainWindow::PreparationMakingGif() {
-  if (gif_before_time_left <= 0) {
+  if (gif_params.gif_before_time_left <= 0) {
     StartMakingGif();
     return;
   }
   ShowMessage(QString("Запись GIF начнется через %1 сек.")
-                  .arg(gif_before_time_left * 0.001),
+                  .arg(gif_params.gif_before_time_left * 0.001),
               QColor(30, 144, 255), 0);
-  gif_before_time_left -= 1000;
+  gif_params.gif_before_time_left -= 1000;
   QTimer::singleShot(1000, this, SLOT(PreparationMakingGif()));
 }
 
@@ -338,8 +341,9 @@ void MainWindow::StartMakingGif() {
       QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
   gif_file_path = QString("%1/video_%2.gif").arg(gif_dir).arg(uniq_name);
 
-  controller.CreateGif(gif_file_path.toStdString(), gif_width, gif_height, 10,
-                       500);
+  controller.CreateGif(gif_file_path.toStdString(), gif_params.gif_width,
+                       gif_params.gif_height, gif_params.gif_fps,
+                       gif_params.gif_duration);
   CreateFrameToGif();
 }
 
@@ -351,7 +355,7 @@ void MainWindow::CreateFrameToGif() {
     return;
   }
 
-  QTimer::singleShot(controller.GetGifDelay(), this, SLOT(CreateFrameToGif()));
+  QTimer::singleShot(controller.GetGifDelay() * 10, this, SLOT(CreateFrameToGif()));
 }
 
 void MainWindow::SlotPrintScreenBMP() { MakeScreenshot("bmp"); }
@@ -362,8 +366,10 @@ void MainWindow::MakeScreenshot(QString extension) {
   QImage img = controller.GetFrameBuffer();
   QString uniq_name =
       QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
-  QString file_name =
-      QString("%1/image_%2.%3").arg(screen_dir).arg(uniq_name).arg(extension);
+  QString file_name = QString("%1/image_%2.%3")
+                          .arg(screen_params.dir_path)
+                          .arg(uniq_name)
+                          .arg(extension);
   img.save(file_name);
   ShowMessage(QString("Создан снимок экрана: %1").arg(file_name),
               QColor(0, 128, 0), 5000);
@@ -371,9 +377,9 @@ void MainWindow::MakeScreenshot(QString extension) {
 
 void MainWindow::wheelEvent(QWheelEvent *event) {
   if (event->angleDelta().y() > 0) {
-    ui->sliderScale->setSliderPosition(previous_scales.x * 1.1);
+    ui->sliderScale->setSliderPosition(previous_scales.x + 5);
   } else {
-    ui->sliderScale->setSliderPosition(previous_scales.x / 1.1);
+    ui->sliderScale->setSliderPosition(previous_scales.x - 5);
   }
 }
 

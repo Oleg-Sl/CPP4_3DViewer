@@ -20,8 +20,8 @@ int main(int argc, char* argv[]) {
   s21::MySettings settings(settings_path, QSettings::IniFormat);
   s21::SceneDrawer scene_drawer;
   s21::OBJReader reader;
+
   s21::Controller controller(reader, scene_drawer, settings);
-  //    controller.GetSettings();
 
   s21::MainWindow window(controller);
 
