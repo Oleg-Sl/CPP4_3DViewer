@@ -93,24 +93,27 @@ void SceneDrawer::SetTypeProjection() {
   double ratio_y = width() > height() ? 1
                                       : static_cast<float>(height()) /
                                             static_cast<float>(width());
+
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
   if (scene_params_->type_projection ==
       SceneParameters::TypeProjection::kCentral) {
     float fov = 60.0 * M_PI / 180;
-    float tg_60 = tan(fov / 2);
-    float heapHeight = 1.5 * value_max / tg_60;
-    glFrustum(1.5 * tg_60 * value_min * ratio_x,
-              1.5 * tg_60 * value_max * ratio_x,
-              1.5 * tg_60 * value_min * ratio_y,
-              1.5 * tg_60 * value_max * ratio_y, heapHeight, 1);
-    glTranslated(0.0f, 0.0f, -2.5 * value_max - 0.1);
+    float heapHeight = value_max / 2 / (2 * tan(fov / 2));
+    float left = (value_min / 4) * ratio_x;
+    float right = (value_max / 4) * ratio_x;
+    float bottom = (value_min / 4) * ratio_y;
+    float top = (value_max / 4) * ratio_y;
+    glFrustum(left, right, bottom, top, heapHeight, value_max * 5);
+    glTranslated(0.0f, 0.0f, -heapHeight * 4);
   } else if (scene_params_->type_projection ==
              SceneParameters::TypeProjection::kParallel) {
-    glOrtho(1.5 * value_min * ratio_x, 1.5 * value_max * ratio_x,
-            1.5 * value_min * ratio_y, 1.5 * value_max * ratio_y, 5 * value_min,
-            5 * value_max);
+    float left = value_min * ratio_x;
+    float right = value_max * ratio_x;
+    float bottom = value_min * ratio_y;
+    float top = value_max * ratio_y;
+    glOrtho(left, right, bottom, top, value_min, value_max);
   }
 
   glMatrixMode(GL_MODELVIEW);
@@ -159,4 +162,4 @@ void SceneDrawer::SetVerticesColor() {
 
 void SceneDrawer::SetVerticesSize() { glPointSize(scene_params_->vertex_size); }
 
-}  // namespace s21
+} // namespace s21
