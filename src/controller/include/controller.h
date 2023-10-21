@@ -2,7 +2,7 @@
 #define _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
 
 #include "../../model/include/gifgenerator.h"
-#include "../../model/include/objreader.h"
+#include "../../model/include/objreaderfast.h"
 #include "../../model/include/scene.h"
 #include "../../model/include/settings.h"
 #include "../../model/include/transform_matrix_builder.h"

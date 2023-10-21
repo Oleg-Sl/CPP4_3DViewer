@@ -79,7 +79,7 @@ void OBJReaderFast::ReadVertices(const char* line, std::vector<float>& vertices)
 }
 
 Scene OBJReaderFast::ReadScene(const std::string& path) {
-  std::setlocale(LC_ALL, "C");
+  setlocale(LC_ALL, "C");
   Scene scene;
   std::vector<float> vertices;
   std::vector<int> edges;

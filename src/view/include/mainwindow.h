@@ -8,11 +8,11 @@
 #include <QMainWindow>
 #include <QMouseEvent>
 #include <QTimer>
+#include <cmath>
 
 #include "../../controller/include/controller.h"
 #include "../../lib/gif.h"
 #include "../../model/include/gifgenerator.h"
-#include "cmath"
 #include "managerscenesubjectbase.h"
 #include "scenedrawer.h"
 #include "sceneparameters.h"
@@ -25,11 +25,11 @@ namespace s21 {
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
- public:
+public:
   MainWindow(Controller &cotroller, QWidget *parent = nullptr);
   ~MainWindow();
 
- private:
+private:
   struct VectorCoordinates {
     float x{};
     float y{};
@@ -53,7 +53,7 @@ class MainWindow : public QMainWindow {
 
   void Notify();
 
- private slots:
+private slots:
   void SlotRenderScene();
   void SlotSelectFile();
 
@@ -87,7 +87,7 @@ class MainWindow : public QMainWindow {
   void ShowMessage(QString msg = "", QColor color = QColor(Qt::black),
                    int message_timeout = 0);
 
- private:
+private:
   Controller &controller;
   Ui::MainWindow *ui;
   SceneParameters scene_params;
@@ -111,6 +111,6 @@ class MainWindow : public QMainWindow {
   void InitSceneParameters();
 };
 
-}  // namespace s21
+} // namespace s21
 
-#endif  // MAINWINDOW_H
+#endif // MAINWINDOW_H

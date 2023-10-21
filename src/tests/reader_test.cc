@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "../model/include/objreader.h"
+#include "../model/include/objreaderfast.h"
 
 namespace s21 {
 
@@ -13,7 +13,7 @@ TEST(OBJFileReader, CorrectObjFile) {
   std::vector<int> edges = {0, 1, 1, 2, 2, 0, 1, 0, 0,
                             2, 2, 1, 2, 0, 0, 1, 1, 2};
 
-  OBJReader reader;
+  OBJReaderFast reader;
   Scene scene = reader.ReadScene("obj_examples/correct_test.obj");
   auto scene_vertices = scene.GetVertices();
   auto scene_edges = scene.GetEdges();
@@ -31,21 +31,21 @@ TEST(OBJFileReader, CorrectObjFile) {
 }
 
 TEST(OBJFileReader, IncorrectFilePath) {
-  OBJReader reader;
+  OBJReaderFast reader;
 
   ASSERT_THROW(reader.ReadScene("obj_examples/incorrect.obj"),
                std::runtime_error);
 }
 
 TEST(OBJFileReader, FileWithoutFaces) {
-  OBJReader reader;
+  OBJReaderFast reader;
   Scene scene = reader.ReadScene("obj_examples/without_faces.obj");
 
   ASSERT_EQ(scene.GetEdges().empty(), true);
 }
 
 TEST(OBJFileReaderThrow, IncorrectFaceIndex) {
-  OBJReader reader;
+  OBJReaderFast reader;
 
   ASSERT_THROW(reader.ReadScene("obj_examples/incorrect_face_index.obj"),
                std::invalid_argument);

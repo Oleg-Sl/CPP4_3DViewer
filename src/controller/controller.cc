@@ -6,8 +6,7 @@ namespace s21 {
 
 Controller::Controller(BaseFileReader &file_reader_,
                        SceneDrawerBase &scene_drawer_, MySettings &settings_)
-    : file_reader(file_reader_),
-      scene_drawer(scene_drawer_),
+    : file_reader(file_reader_), scene_drawer(scene_drawer_),
       settings(settings_) {}
 
 SceneParameters Controller::GetSettings() { return settings.GetSettings(); }
@@ -46,7 +45,9 @@ void Controller::SetParamsScene(SceneParameters *params_scene) {
 QImage Controller::GetFrameBuffer() { return scene_drawer.GetFrameBuffer(); }
 
 void Controller::MoveScene(float x, float y, float z) {
-  scene.TransformVertices(TransformMatrixBuilder::CreateMoveMatrix(x, y, z));
+  float step = scene.GetNormalizationParams().step;
+  scene.TransformVertices(
+      TransformMatrixBuilder::CreateMoveMatrix(x * step, y * step, z * step));
   scene_drawer.UpdateScene();
 }
 
@@ -78,4 +79,4 @@ bool Controller::AddGifFrame() {
 
 int Controller::GetGifDelay() { gif_generator.GetDelay(); }
 
-}  // namespace s21
+} // namespace s21

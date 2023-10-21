@@ -1,36 +1,54 @@
+BUILD_DIR = build
+VIEW_DIR = view
+MODEL_DIR = model
+CALCULATOR_EXE = calculator
+TEST_DIR = tests
+TEST_EXE = test
+TEST_SRC = test.cc
+CXX = g++
+CFLAGS = -Werror -Wextra -Wall
+LIBS =
+OS = $(shell uname -s)
+MACOS = Darwin
 
-CC				= g++
-CFLAGS			= -Wall -Wextra -Werror -std=c++17
+ifeq ($(OS), $(MACOS))
+CALCULATOR_EXE = calculator.app
+endif
 
-SOURCES = $(wildcard model/*.cc)
-EXCLUDE_FILE = model/settings.cc
-OBJECTS = $(filter-out $(EXCLUDE_FILE:.cc=.o), $(SOURCES:.cc=.o))
-TARGET			= 3d_viewer
+.PHONY: all install dvi uninstall gcov_report test clean valgrind autoformat dist
 
+all: install
 
+dvi:
+	open dvi.md
 
-build:
-	cd view && make clean && make && open 3d_viewer
-# .app
+install:
+	mkdir -p $(BUILD_DIR)
+	cd $(VIEW_DIR) && qmake && make
+	mv $(VIEW_DIR)/$(CALCULATOR_EXE) $(BUILD_DIR)
 
-run: $(OBJECTS)
-	$(CC) $(CFLAGS) -o ./$(TARGET) *.o main.cc
-	./$(TARGET)
+uninstall: clean
+	rm -rf $(BUILD_DIR)
 
-# g++ -Wall -Wextra -Werror main.cc model/*
-# ./a.out
+objreader.o:
+	$(CXX) $(CFLAGS) -c $(MODEL_DIR)/objreaderfast.cc -o $(TEST_DIR)/objreader.o
 
-clean:
-	rm -rf model/*.gch
-	rm -fr *.o
-	cd view && make clean
+test: objreader.o
+	cd $(TEST_DIR) && $(CXX) $(CFLAGS) *.cc objreader.o -o $(TEST_EXE) $(LIBS) -lgtest
+	$(TEST_DIR)/$(TEST_EXE)
 
-reader: $(OBJECTS)
-	cd tests && $(CC) $(CFLAGS) -o ./reader ../*.o reader_test.cc -lgtest
-	tests/reader
+clean_tests:
+	rm -rf $(TEST_DIR)/*.o $(TEST_DIR)/$(TEST_EXE)
 
-%.o: %.cc
-	$(CC) -c $(CFLAGS) $<
-
+clean: clean_tests
+	cd $(VIEW_DIR) && qmake && make clean
+	rm -rf $(VIEW_DIR)/.qmake.stash $(VIEW_DIR)/Makefile
+	
 autoformat:
 	find . -type f -name "*.cc" -o -name "*.h" | xargs clang-format -style=Google -i
+
+dist:
+	mkdir -p source
+	cp -r Makefile view model controller tests obj_examples main.cc source
+	tar -cf source.tar source
+	rm -rf source
