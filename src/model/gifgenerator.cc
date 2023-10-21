@@ -1,6 +1,5 @@
 #include "include/gifgenerator.h"
 
-#include <QDebug>
 namespace s21 {
 
 void GifGenerator::InitializeGenerator(const std::string &filename, int width,

@@ -13,8 +13,6 @@
 #include "scenedrawerbase.h"
 #include "sceneparameters.h"
 
-using namespace s21;
-
 namespace s21 {
 
 class SceneDrawer : public QOpenGLWidget,
