@@ -1,40 +1,41 @@
-#ifndef _3DVIEWER_VIEW_INCLUDE_SCENE_DRAWER_H_
-#define _3DVIEWER_VIEW_INCLUDE_SCENE_DRAWER_H_
-
-#include "scenedrawerbase.h"
-#include "sceneparameters.h"
-#include "../model/include/scene.h"
+#ifndef _3DVIEWER_VIEW_INCLUDE_SCENEDRAWER_H_
+#define _3DVIEWER_VIEW_INCLUDE_SCENEDRAWER_H_
 
 #include <QColor>
 #include <QOpenGLBuffer>
-#include <QOpenGLFunctions>
 #include <QOpenGLContext>
+#include <QOpenGLFunctions>
 #include <QOpenGLWidget>
-#include <cmath>
 #include <QTimer>
+#include <cmath>
+
+#include "../model/include/scene.h"
+#include "scenedrawerbase.h"
+#include "sceneparameters.h"
 
 using namespace s21;
 
-
 namespace s21 {
 
-class SceneDrawer : public QOpenGLWidget, protected QOpenGLFunctions, public SceneDrawerBase {
+class SceneDrawer : public QOpenGLWidget,
+                    protected QOpenGLFunctions,
+                    public SceneDrawerBase {
   Q_OBJECT
 
-public:
+ public:
   SceneDrawer(QWidget *parent = nullptr);
   ~SceneDrawer() {}
 
-  void SetScene(Scene*);
+  void SetScene(Scene *);
   void UpdateScene();
-  void SetParamsScene(SceneParameters*);
+  void SetParamsScene(SceneParameters *);
   void SetParentOpenGL(QWidget *);
   QImage GetFrameBuffer();
 
-protected:
+ protected:
   void initializeGL();
   void paintGL();
-  void resizeGL(int w, int h);
+  void resizeGL(int, int);
 
   void SetTypeProjection();
   void SetBackgroundScene();
@@ -47,13 +48,12 @@ protected:
   void SetVerticesSize();
   void RenderVertices();
 
-private:
-  QWidget *parent;
-  Scene *scene = nullptr;
-  SceneParameters *scene_params = nullptr;
-
+ private:
+  QWidget *parent_;
+  Scene *scene_ = nullptr;
+  SceneParameters *scene_params_ = nullptr;
 };
 
-}
+}  // namespace s21
 
-#endif  // _3DVIEWER_VIEW_INCLUDE_SCENE_BASE_H_
+#endif  // _3DVIEWER_VIEW_INCLUDE_SCENEDRAWER_H_

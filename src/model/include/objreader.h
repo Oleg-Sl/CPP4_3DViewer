@@ -1,5 +1,5 @@
-#ifndef _3DVIEWER_MODEL_OBJREADER_H_
-#define _3DVIEWER_MODEL_OBJREADER_H_
+#ifndef _3DVIEWER_MODEL_INCLUDE_OBJREADER_H_
+#define _3DVIEWER_MODEL_INCLUDE_OBJREADER_H_
 
 #include <sstream>
 #include <string>
@@ -17,15 +17,14 @@ class OBJReader : public BaseFileReader {
   const std::string kFaceToken = "f";
 
  public:
-  Scene ReadScene(const std::string &path) override;
+  Scene ReadScene(const std::string &) override;
 
  private:
-  void ReadFace(std::stringstream &tokens, std::vector<int> &edges,
-                size_t count_vertices);
-  void Read3DCoords(std::stringstream &tokens, std::vector<float> &vertices);
-  void CalculateNormalizationParams(const std::vector<float> &vertices, Scene &scene);
+  void ReadFace(std::stringstream &, std::vector<int> &, size_t);
+  void Read3DCoords(std::stringstream &, std::vector<float> &);
+  void CalculateNormalizationParams(const std::vector<float> &, Scene &);
 };
 
 }  // namespace s21
 
-#endif  // _3DVIEWER_MODEL_OBJREADER_H_
+#endif  // _3DVIEWER_MODEL_INCLUDE_OBJREADER_H_

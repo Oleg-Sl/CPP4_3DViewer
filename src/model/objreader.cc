@@ -107,4 +107,4 @@ Scene OBJReader::ReadScene(const std::string &path) {
   return scene;
 }
 
-} // namespace s21
+}  // namespace s21

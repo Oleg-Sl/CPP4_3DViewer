@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef _3DVIEWER_VIEW_INCLUDE_MAINWINDOW_H_
+#define _3DVIEWER_VIEW_INCLUDE_MAINWINDOW_H_
 
 #include <QColorDialog>
 #include <QDateTime>
@@ -24,11 +24,11 @@ namespace s21 {
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
-public:
-  MainWindow(Controller &cotroller, QWidget *parent = nullptr);
+ public:
+  MainWindow(Controller &, QWidget *parent = nullptr);
   ~MainWindow();
 
-private:
+ private:
   struct VectorCoordinates {
     float x{};
     float y{};
@@ -50,9 +50,7 @@ private:
     int gif_duration{5000};
   };
 
-  void Notify();
-
-private slots:
+ private slots:
   void SlotRenderScene();
   void SlotSelectFile();
 
@@ -86,29 +84,28 @@ private slots:
   void ShowMessage(QString msg = "", QColor color = QColor(Qt::black),
                    int message_timeout = 0);
 
-private:
-  Controller &controller;
-  Ui::MainWindow *ui;
-  SceneParameters scene_params;
-  ScreenParameters screen_params;
-  GifParameters gif_params;
-  QString file_path;
-  QString screen_dir = QDir("./").absolutePath();
-  QString gif_dir = QDir("./").absolutePath();
-  QString gif_file_path;
-
-  VectorCoordinates previous_offsets{};
-  VectorCoordinates previous_rotation{};
-  VectorCoordinates previous_scales{100, 100, 100};
-
-  int mouse_event_x{};
-  int mouse_event_y{};
-
+ private:
   void InitSettings();
   void InitSceneDraw();
   void InitSceneParameters();
+  void Notify();
+
+ private:
+  Controller &controller_;
+  Ui::MainWindow *ui_;
+  SceneParameters scene_params_;
+  ScreenParameters screen_params_;
+  GifParameters gif_params_;
+  QString file_path_;
+  QString screen_dir_ = QDir("./").absolutePath();
+  QString gif_dir_ = QDir("./").absolutePath();
+  QString gif_file_path_;
+
+  VectorCoordinates previous_offsets_{};
+  VectorCoordinates previous_rotation_{};
+  VectorCoordinates previous_scales_{100, 100, 100};
 };
 
-} // namespace s21
+}  // namespace s21
 
-#endif // MAINWINDOW_H
+#endif  // _3DVIEWER_VIEW_INCLUDE_MAINWINDOW_H_

@@ -15,13 +15,9 @@ void Scene::TransformVertices(const TransformMatrix &matrix) {
   // std::cout << "Calc time: " << elapsed_ns.count() << " ms\n";
 }
 
-size_t Scene::GetCountVertices() {
-  return vertices_.size() / 3;
-}
+size_t Scene::GetCountVertices() { return vertices_.size() / 3; }
 
-size_t Scene::GetCountEdges() {
-  return edges_.size() * 0.5;
-}
+size_t Scene::GetCountEdges() { return edges_.size() * 0.5; }
 
 NormalizationParameters Scene::GetNormalizationParams() {
   return normalization_params_;
@@ -41,4 +37,4 @@ const std::vector<float> &Scene::GetVertices() { return vertices_; }
 
 const std::vector<int> &Scene::GetEdges() { return edges_; }
 
-} // namespace s21
+}  // namespace s21

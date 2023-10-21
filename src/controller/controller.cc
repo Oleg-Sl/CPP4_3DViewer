@@ -6,18 +6,19 @@ namespace s21 {
 
 Controller::Controller(BaseFileReader &file_reader_,
                        SceneDrawerBase &scene_drawer_, MySettings &settings_)
-    : file_reader(file_reader_), scene_drawer(scene_drawer_),
-      settings(settings_) {}
+    : file_reader_(file_reader_),
+      scene_drawer_(scene_drawer_),
+      settings_(settings_) {}
 
-SceneParameters Controller::GetSettings() { return settings.GetSettings(); }
+SceneParameters Controller::GetSettings() { return settings_.GetSettings(); }
 
 void Controller::UpdateSettings(const SceneParameters &scene_params) {
-  return settings.UpdateSettings(scene_params);
+  return settings_.UpdateSettings(scene_params);
 }
 
 OperationResult Controller::LoadScene(const QString &path) {
   try {
-    scene = file_reader.ReadScene(path.toStdString());
+    scene_ = file_reader_.ReadScene(path.toStdString());
   } catch (const std::exception &e) {
     return {e.what(), false};
   }
@@ -27,50 +28,49 @@ OperationResult Controller::LoadScene(const QString &path) {
 }
 
 void Controller::SetParentForSceneDraw(QWidget *parent) {
-  scene_drawer.SetParentOpenGL(parent);
+  scene_drawer_.SetParentOpenGL(parent);
 }
 
-void Controller::UpdateSceneDraw() { scene_drawer.UpdateScene(); }
+void Controller::UpdateSceneDraw() { scene_drawer_.UpdateScene(); }
 
 void Controller::SetScene() {
-  scene_drawer.SetScene(&scene);
-  scene_drawer.UpdateScene();
+  scene_drawer_.SetScene(&scene_);
+  scene_drawer_.UpdateScene();
 }
 
 void Controller::SetParamsScene(SceneParameters *params_scene) {
-  scene_drawer.SetParamsScene(params_scene);
-  scene_drawer.UpdateScene();
+  scene_drawer_.SetParamsScene(params_scene);
+  scene_drawer_.UpdateScene();
 }
 
-QImage Controller::GetFrameBuffer() { return scene_drawer.GetFrameBuffer(); }
+QImage Controller::GetFrameBuffer() { return scene_drawer_.GetFrameBuffer(); }
 
-size_t Controller::GetCountVertices() { return scene.GetCountVertices(); }
+size_t Controller::GetCountVertices() { return scene_.GetCountVertices(); }
 
-size_t Controller::GetCountEdges() { return scene.GetCountEdges(); }
+size_t Controller::GetCountEdges() { return scene_.GetCountEdges(); }
 
 void Controller::MoveScene(float x, float y, float z) {
-  float step = scene.GetNormalizationParams().step;
-  scene.TransformVertices(
+  float step = scene_.GetNormalizationParams().step;
+  scene_.TransformVertices(
       TransformMatrixBuilder::CreateMoveMatrix(x * step, y * step, z * step));
-  scene_drawer.UpdateScene();
+  scene_drawer_.UpdateScene();
 }
 
 void Controller::RotateScene(float x, float y, float z) {
-  scene.TransformVertices(
+  scene_.TransformVertices(
       TransformMatrixBuilder::CreateRotationMatrix(x, y, z));
-  scene_drawer.UpdateScene();
+  scene_drawer_.UpdateScene();
 }
 
 void Controller::ScaleScene(float x, float y, float z) {
-  scene.TransformVertices(TransformMatrixBuilder::CreateScaleMatrix(x, y, z));
-  scene_drawer.UpdateScene();
+  scene_.TransformVertices(TransformMatrixBuilder::CreateScaleMatrix(x, y, z));
+  scene_drawer_.UpdateScene();
 }
 
 void Controller::CreateGif(const std::string &filename, int gif_width,
                            int gif_height, int fps, int duration) {
   gif_generator_.InitializeGenerator(filename, gif_width, gif_height, fps,
-                                    duration);
-
+                                     duration);
 }
 
 bool Controller::AddGifFrame() {
@@ -84,4 +84,4 @@ bool Controller::AddGifFrame() {
 
 int Controller::GetGifDelay() { return gif_generator_.GetDelay(); }
 
-} // namespace s21
+}  // namespace s21

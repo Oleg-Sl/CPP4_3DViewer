@@ -5,8 +5,8 @@
 
 namespace s21 {
 
-void OBJReaderFast::CalculateNormalizationParams(const std::vector<float>& vertices,
-                                             Scene& scene) {
+void OBJReaderFast::CalculateNormalizationParams(
+    const std::vector<float>& vertices, Scene& scene) {
   NormalizationParameters params = scene.GetNormalizationParams();
 
   float x = abs(vertices[vertices.size() - 1]);
@@ -22,7 +22,7 @@ void OBJReaderFast::CalculateNormalizationParams(const std::vector<float>& verti
 }
 
 void OBJReaderFast::ReadFace(const char* str, std::vector<int>& edges,
-                         size_t count_vertices) {
+                             size_t count_vertices) {
   char* cstr = strdup(str);
   char* token = strtok(cstr, " ");
   std::vector<int> added_vertices;
@@ -69,7 +69,8 @@ void OBJReaderFast::ReadFace(const char* str, std::vector<int>& edges,
   free(cstr);
 }
 
-void OBJReaderFast::ReadVertices(const char* line, std::vector<float>& vertices) {
+void OBJReaderFast::ReadVertices(const char* line,
+                                 std::vector<float>& vertices) {
   float x, y, z;
   if (std::sscanf(line, "v %f %f %f", &x, &y, &z) == 3) {
     vertices.push_back(x);

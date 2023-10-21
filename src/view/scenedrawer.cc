@@ -7,15 +7,14 @@
 namespace s21 {
 
 SceneDrawer::SceneDrawer(QWidget *parent_)
-    : QOpenGLWidget{parent_}, parent(parent_) {
-}
+    : QOpenGLWidget{parent_}, parent_(parent_) {}
 
 void SceneDrawer::UpdateScene() { update(); }
 
-void SceneDrawer::SetScene(Scene *new_scene) { scene = new_scene; }
+void SceneDrawer::SetScene(Scene *new_scene) { scene_ = new_scene; }
 
 void SceneDrawer::SetParamsScene(SceneParameters *new_params) {
-  scene_params = new_params;
+  scene_params_ = new_params;
 }
 
 void SceneDrawer::SetParentOpenGL(QWidget *parent) {
@@ -37,7 +36,7 @@ void SceneDrawer::paintGL() {
   SetBackgroundScene();
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  if (scene != nullptr && scene_params != nullptr) {
+  if (scene_ != nullptr && scene_params_ != nullptr) {
     SetTypeProjection();
 
     SetEdgesColor();
@@ -57,36 +56,36 @@ void SceneDrawer::paintGL() {
 void SceneDrawer::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
 
 void SceneDrawer::RenderVertices() {
-  if (scene == nullptr) {
+  if (scene_ == nullptr) {
     return;
   }
-  if (scene_params->vertex_type != SceneParameters::TypeVertex::kAbsent) {
+  if (scene_params_->vertex_type != SceneParameters::TypeVertex::kAbsent) {
     glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices().data());
+    glVertexPointer(3, GL_FLOAT, 0, scene_->GetVertices().data());
 
-    glDrawArrays(GL_POINTS, 0, scene->GetVertices().size() / 3);
+    glDrawArrays(GL_POINTS, 0, scene_->GetVertices().size() / 3);
 
     glDisableClientState(GL_VERTEX_ARRAY);
   }
 }
 
 void SceneDrawer::RenderEdges() {
-  if (scene == nullptr) {
+  if (scene_ == nullptr) {
     return;
   }
 
   glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(3, GL_FLOAT, 0, scene->GetVertices().data());
+  glVertexPointer(3, GL_FLOAT, 0, scene_->GetVertices().data());
 
-  glDrawElements(GL_LINES, scene->GetEdges().size(), GL_UNSIGNED_INT,
-                 scene->GetEdges().data());
+  glDrawElements(GL_LINES, scene_->GetEdges().size(), GL_UNSIGNED_INT,
+                 scene_->GetEdges().data());
 
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void SceneDrawer::SetTypeProjection() {
-  float value_max = scene->GetNormalizationParams().max;
-  float value_min = scene->GetNormalizationParams().min;
+  float value_max = scene_->GetNormalizationParams().max;
+  float value_min = scene_->GetNormalizationParams().min;
 
   double ratio_x = width() > height() ? static_cast<float>(width()) /
                                             static_cast<float>(height())
@@ -97,7 +96,7 @@ void SceneDrawer::SetTypeProjection() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  if (scene_params->type_projection ==
+  if (scene_params_->type_projection ==
       SceneParameters::TypeProjection::kCentral) {
     float fov = 60.0 * M_PI / 180;
     float tg_60 = tan(fov / 2);
@@ -106,8 +105,8 @@ void SceneDrawer::SetTypeProjection() {
               1.5 * tg_60 * value_max * ratio_x,
               1.5 * tg_60 * value_min * ratio_y,
               1.5 * tg_60 * value_max * ratio_y, heapHeight, 1);
-    glTranslated(0.0f, 0.0f, -12.5 * value_max - 0.1);
-  } else if (scene_params->type_projection ==
+    glTranslated(0.0f, 0.0f, -2.5 * value_max - 0.1);
+  } else if (scene_params_->type_projection ==
              SceneParameters::TypeProjection::kParallel) {
     glOrtho(1.5 * value_min * ratio_x, 1.5 * value_max * ratio_x,
             1.5 * value_min * ratio_y, 1.5 * value_max * ratio_y, 5 * value_min,
@@ -118,45 +117,46 @@ void SceneDrawer::SetTypeProjection() {
 }
 
 void SceneDrawer::SetBackgroundScene() {
-  if (scene_params != nullptr) {
-    glClearColor(scene_params->background_color.redF(),
-                 scene_params->background_color.greenF(),
-                 scene_params->background_color.blueF(),
-                 scene_params->background_color.alphaF());
+  if (scene_params_ != nullptr) {
+    glClearColor(scene_params_->background_color.redF(),
+                 scene_params_->background_color.greenF(),
+                 scene_params_->background_color.blueF(),
+                 scene_params_->background_color.alphaF());
   }
 }
 
 void SceneDrawer::SetEdgesType() {
-  if (scene_params->edge_type == SceneParameters::TypeEdges::kSolid) {
+  if (scene_params_->edge_type == SceneParameters::TypeEdges::kSolid) {
     glEnable(GL_LINE_STIPPLE);
     glLineStipple(1, 0x00F0);
-  } else if (scene_params->edge_type == SceneParameters::TypeEdges::kDotted) {
+  } else if (scene_params_->edge_type == SceneParameters::TypeEdges::kDotted) {
     glDisable(GL_LINE_STIPPLE);
   }
 }
 
 void SceneDrawer::SetEdgesColor() {
-  glColor3f(scene_params->edge_color.redF(), scene_params->edge_color.greenF(),
-            scene_params->edge_color.blueF());
+  glColor3f(scene_params_->edge_color.redF(),
+            scene_params_->edge_color.greenF(),
+            scene_params_->edge_color.blueF());
 }
 
-void SceneDrawer::SetEdgesWidth() { glLineWidth(scene_params->edge_width); }
+void SceneDrawer::SetEdgesWidth() { glLineWidth(scene_params_->edge_width); }
 
 void SceneDrawer::SetVerticesType() {
-  if (scene_params->vertex_type == SceneParameters::TypeVertex::kCircle) {
+  if (scene_params_->vertex_type == SceneParameters::TypeVertex::kCircle) {
     glEnable(GL_POINT_SMOOTH);
-  } else if (scene_params->vertex_type ==
+  } else if (scene_params_->vertex_type ==
              SceneParameters::TypeVertex::kSquare) {
     glDisable(GL_POINT_SMOOTH);
   }
 }
 
 void SceneDrawer::SetVerticesColor() {
-  glColor3f(scene_params->vertex_color.redF(),
-            scene_params->vertex_color.greenF(),
-            scene_params->vertex_color.blueF());
+  glColor3f(scene_params_->vertex_color.redF(),
+            scene_params_->vertex_color.greenF(),
+            scene_params_->vertex_color.blueF());
 }
 
-void SceneDrawer::SetVerticesSize() { glPointSize(scene_params->vertex_size); }
+void SceneDrawer::SetVerticesSize() { glPointSize(scene_params_->vertex_size); }
 
-} // namespace s21
+}  // namespace s21

@@ -20,8 +20,6 @@ class Controller {
 
   OperationResult LoadScene(const QString &);
 
-  // const std::vector<float> GetVertices() { return scene.GetVertices(); }
-
   void UpdateSceneDraw();
   void SetScene();
   void SetParamsScene(SceneParameters *);
@@ -31,20 +29,19 @@ class Controller {
   size_t GetCountVertices();
   size_t GetCountEdges();
 
-  void MoveScene(float x, float y, float z);
-  void RotateScene(float x, float y, float z);
-  void ScaleScene(float x, float y, float z);
+  void MoveScene(float, float, float);
+  void RotateScene(float, float, float);
+  void ScaleScene(float, float, float);
 
-  void CreateGif(const std::string &filename, int gif_width, int gif_height,
-                 int fps, int duration);
+  void CreateGif(const std::string &, int, int, int, int);
   bool AddGifFrame();
   int GetGifDelay();
 
  private:
-  BaseFileReader &file_reader;
-  SceneDrawerBase &scene_drawer;
-  MySettings &settings;
-  Scene scene{};
+  BaseFileReader &file_reader_;
+  SceneDrawerBase &scene_drawer_;
+  MySettings &settings_;
+  Scene scene_{};
   GifGenerator gif_generator_{};
 };
 

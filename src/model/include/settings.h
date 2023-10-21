@@ -10,11 +10,11 @@ namespace s21 {
 
 class MySettings {
  public:
-  MySettings(const QString& path_file, QSettings::Format format_file);
+  MySettings(const QString &path_file, QSettings::Format format_file);
 
   SceneParameters GetSettings();
 
-  void UpdateSettings(const SceneParameters& scene_params);
+  void UpdateSettings(const SceneParameters &scene_params);
 
  private:
   QSettings settings;

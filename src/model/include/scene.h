@@ -1,7 +1,6 @@
-#ifndef _3DVIEWER_MODEL_SCENE_H_
-#define _3DVIEWER_MODEL_SCENE_H_
+#ifndef _3DVIEWER_MODEL_INCLUDE_SCENE_H_
+#define _3DVIEWER_MODEL_INCLUDE_SCENE_H_
 
-#include <ctime>
 #include <vector>
 
 #include "normalization_parameters.h"
@@ -10,23 +9,23 @@
 namespace s21 {
 
 class Scene {
-public:
+ public:
   NormalizationParameters GetNormalizationParams();
   size_t GetCountVertices();
   size_t GetCountEdges();
-  void SetNormalizationParams(NormalizationParameters &&params);
-  void SetEdges(std::vector<int> &&edges);
-  void TransformVertices(const TransformMatrix &matrix);
-  void SetVertices(std::vector<float> &&vertices);
+  void SetNormalizationParams(NormalizationParameters &&);
+  void SetEdges(std::vector<int> &&);
+  void TransformVertices(const TransformMatrix &);
+  void SetVertices(std::vector<float> &&);
   const std::vector<float> &GetVertices();
   const std::vector<int> &GetEdges();
 
-private:
+ private:
   std::vector<float> vertices_;
   std::vector<int> edges_;
   NormalizationParameters normalization_params_;
 };
 
-} // namespace s21
+}  // namespace s21
 
-#endif // _3DVIEWER_MODEL_SCENE_H_
+#endif  // _3DVIEWER_MODEL_INCLUDE_SCENE_H_

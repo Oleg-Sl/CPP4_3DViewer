@@ -16,15 +16,14 @@ class OBJReaderFast : public BaseFileReader {
   const char kFaceToken = 'f';
 
  public:
-  Scene ReadScene(const std::string &path) override;
+  Scene ReadScene(const std::string &) override;
 
  private:
-  void ReadFace(const char *str, std::vector<int> &edges,
-                size_t count_vertices);
-  void ReadVertices(const char *line, std::vector<float> &vertices);
-  void CalculateNormalizationParams(const std::vector<float> &vertices,
-                                    Scene &scene);
+  void ReadFace(const char *, std::vector<int> &, size_t);
+  void ReadVertices(const char *, std::vector<float> &);
+  void CalculateNormalizationParams(const std::vector<float> &, Scene &);
 
+ private:
   const int kMaxLineLength = 256;
 };
 
