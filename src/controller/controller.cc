@@ -45,6 +45,14 @@ void Controller::SetParamsScene(SceneParameters *params_scene) {
 
 QImage Controller::GetFrameBuffer() { return scene_drawer.GetFrameBuffer(); }
 
+size_t Controller::GetCountVertices() {
+  return scene.GetCountVertices();
+}
+
+size_t Controller::GetCountEdges() {
+  return scene.GetCountEdges();
+}
+
 void Controller::MoveScene(float x, float y, float z) {
   scene.TransformVertices(TransformMatrixBuilder::CreateMoveMatrix(x, y, z));
   scene_drawer.UpdateScene();

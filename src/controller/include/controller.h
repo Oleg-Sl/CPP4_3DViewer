@@ -20,11 +20,16 @@ class Controller {
 
   OperationResult LoadScene(const QString &);
 
+  // const std::vector<float> GetVertices() { return scene.GetVertices(); }
+
   void UpdateSceneDraw();
   void SetScene();
   void SetParamsScene(SceneParameters *);
   void SetParentForSceneDraw(QWidget *);
   QImage GetFrameBuffer();
+
+  size_t GetCountVertices();
+  size_t GetCountEdges();
 
   void MoveScene(float x, float y, float z);
   void RotateScene(float x, float y, float z);

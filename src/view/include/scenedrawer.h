@@ -2,8 +2,6 @@
 #define _3DVIEWER_VIEW_INCLUDE_SCENE_DRAWER_H_
 
 #include "scenedrawerbase.h"
-#include "managersceneobserverbase.h"
-#include "managerscenesubjectbase.h"
 #include "sceneparameters.h"
 #include "../model/include/scene.h"
 

@@ -26,8 +26,6 @@ HEADERS += \
     include/mainwindow.h \
     include/scenedrawer.h \
     include/scenedrawerbase.h \
-    include/managersceneobserverbase.h \
-    include/managerscenesubjectbase.h \
     include/sceneparameters.h \
     ../lib/gif.h
 

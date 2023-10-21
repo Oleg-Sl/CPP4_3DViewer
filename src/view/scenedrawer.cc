@@ -34,8 +34,8 @@ void SceneDrawer::initializeGL() {
 }
 
 void SceneDrawer::paintGL() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   SetBackgroundScene();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   if (scene != nullptr && scene_params != nullptr) {
     SetTypeProjection();
@@ -86,7 +86,7 @@ void SceneDrawer::RenderEdges() {
 
 void SceneDrawer::SetTypeProjection() {
   float value_max = scene->GetNormalizationParams().max;
-  float value_min = -scene->GetNormalizationParams().max;
+  float value_min = scene->GetNormalizationParams().min;
 
   double ratio_x = width() > height() ? static_cast<float>(width()) /
                                             static_cast<float>(height())
@@ -106,14 +106,14 @@ void SceneDrawer::SetTypeProjection() {
               1.5 * tg_60 * value_max * ratio_x,
               1.5 * tg_60 * value_min * ratio_y,
               1.5 * tg_60 * value_max * ratio_y, heapHeight, 1);
-    glTranslated(0.0f, 0.0f, -1.5 * value_max - 0.1);
+    glTranslated(0.0f, 0.0f, -12.5 * value_max - 0.1);
   } else if (scene_params->type_projection ==
              SceneParameters::TypeProjection::kParallel) {
     glOrtho(1.5 * value_min * ratio_x, 1.5 * value_max * ratio_x,
             1.5 * value_min * ratio_y, 1.5 * value_max * ratio_y, 5 * value_min,
             5 * value_max);
   }
-  
+
   glMatrixMode(GL_MODELVIEW);
 }
 

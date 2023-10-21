@@ -13,7 +13,6 @@
 #include "../../lib/gif.h"
 #include "../../model/include/gifgenerator.h"
 #include "cmath"
-#include "managerscenesubjectbase.h"
 #include "scenedrawer.h"
 #include "sceneparameters.h"
 

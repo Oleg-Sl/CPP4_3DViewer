@@ -156,6 +156,8 @@ void MainWindow::SlotRenderScene() {
     ShowMessage(QString::fromStdString(result.error_message), QColor(Qt::red));
     return;
   }
+  ui->countVertexes->setText(QString::number(controller.GetCountVertices()));
+  ui->countEdges->setText(QString::number(controller.GetCountEdges()));
   InitSceneParameters();
 }
 
