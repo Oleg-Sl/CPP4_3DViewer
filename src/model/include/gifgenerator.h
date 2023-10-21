@@ -8,13 +8,15 @@
 
 #include "../lib/gif.h"
 
+namespace s21 {
+
 class GifGenerator {
- public:
+public:
   GifGenerator() {}
 
-  void InitializeGenerator(const std::string& filename, int width, int height,
+  void InitializeGenerator(const std::string &filename, int width, int height,
                            int fps, int duration);
-  void AddFrame(const uint8_t* image);
+  void AddFrame(const uint8_t *image);
 
   bool GetFinished();
   bool GetInitialized();
@@ -24,17 +26,19 @@ class GifGenerator {
 
   ~GifGenerator();
 
- private:
-  GifWriter gifWriter_;
-  std::string filename_;
-  int width_;
-  int height_;
-  int fps_;
-  int delay_;
-  int duration_;
+private:
+  GifWriter gifWriter_{};
+  std::string filename_{};
+  int width_{};
+  int height_{};
+  int fps_{};
+  int delay_{};
+  int duration_{};
   int currentTime_ = 0;
   bool finished_ = false;
   bool initialized_ = false;
 };
 
-#endif  // _3DVIEWER_MODEL_INCLUDE_GIFGENERATOR_H_
+} // namespace s21
+
+#endif // _3DVIEWER_MODEL_INCLUDE_GIFGENERATOR_H_

@@ -1,8 +1,5 @@
-#include <gtest/gtest.h>
 
-#include <vector>
-
-#include "../model/include/objreaderfast.h"
+#include "test.h"
 
 namespace s21 {
 
@@ -30,7 +27,7 @@ TEST(OBJFileReader, CorrectObjFile) {
   }
 }
 
-TEST(OBJFileReader, IncorrectFilePath) {
+TEST(OBJFileReaderThrow, IncorrectFilePath) {
   OBJReaderFast reader;
 
   ASSERT_THROW(reader.ReadScene("obj_examples/incorrect.obj"),

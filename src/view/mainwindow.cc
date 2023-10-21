@@ -6,9 +6,7 @@
 namespace s21 {
 
 MainWindow::MainWindow(Controller &ctrl, QWidget *parent)
-    : QMainWindow(parent),
-      controller(ctrl),
-      ui(new Ui::MainWindow),
+    : QMainWindow(parent), controller(ctrl), ui(new Ui::MainWindow),
 
       scene_params(ctrl.GetSettings()) {
   ui->setupUi(this);
@@ -83,8 +81,6 @@ MainWindow::MainWindow(Controller &ctrl, QWidget *parent)
 
   connect(ui->gifPath, SIGNAL(clicked()), this, SLOT(SlotSelectGifPath()));
   connect(ui->buttonCreateGif, SIGNAL(clicked()), this, SLOT(SlotMakeGif()));
-
-  connect(&timer, SIGNAL(timeout()), this, SLOT(CreateFrameToGif()));
 }
 
 MainWindow::~MainWindow() {
@@ -156,6 +152,8 @@ void MainWindow::SlotRenderScene() {
     ShowMessage(QString::fromStdString(result.error_message), QColor(Qt::red));
     return;
   }
+  ui->countVertexes->setText(QString::number(controller.GetCountVertices()));
+  ui->countEdges->setText(QString::number(controller.GetCountEdges()));
   InitSceneParameters();
 }
 
@@ -343,11 +341,12 @@ void MainWindow::StartMakingGif() {
 
   controller.CreateGif(gif_file_path.toStdString(), gif_params.gif_width,
                        gif_params.gif_height, gif_params.gif_fps,
-                       gif_params.gif_duration);
+                       gif_params.gif_duration / 10);
   CreateFrameToGif();
 }
 
 void MainWindow::CreateFrameToGif() {
+
   if (controller.AddGifFrame()) {
     ui->buttonCreateGif->setEnabled(true);
     ShowMessage(QString("Создана GIF: %1").arg(gif_file_path),
@@ -355,7 +354,8 @@ void MainWindow::CreateFrameToGif() {
     return;
   }
 
-  QTimer::singleShot(controller.GetGifDelay() * 10, this, SLOT(CreateFrameToGif()));
+  QTimer::singleShot(controller.GetGifDelay() * 10, this,
+                     SLOT(CreateFrameToGif()));
 }
 
 void MainWindow::SlotPrintScreenBMP() { MakeScreenshot("bmp"); }
@@ -391,4 +391,4 @@ void MainWindow::ShowMessage(QString msg, QColor color, int message_timeout) {
   }
 }
 
-}  // namespace s21
+} // namespace s21

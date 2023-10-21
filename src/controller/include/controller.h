@@ -20,11 +20,16 @@ class Controller {
 
   OperationResult LoadScene(const QString &);
 
+  // const std::vector<float> GetVertices() { return scene.GetVertices(); }
+
   void UpdateSceneDraw();
   void SetScene();
   void SetParamsScene(SceneParameters *);
   void SetParentForSceneDraw(QWidget *);
   QImage GetFrameBuffer();
+
+  size_t GetCountVertices();
+  size_t GetCountEdges();
 
   void MoveScene(float x, float y, float z);
   void RotateScene(float x, float y, float z);
@@ -40,7 +45,7 @@ class Controller {
   SceneDrawerBase &scene_drawer;
   MySettings &settings;
   Scene scene{};
-  GifGenerator gif_generator;
+  GifGenerator gif_generator_{};
 };
 
 }  // namespace s21

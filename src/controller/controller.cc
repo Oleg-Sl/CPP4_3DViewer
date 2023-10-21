@@ -44,6 +44,10 @@ void Controller::SetParamsScene(SceneParameters *params_scene) {
 
 QImage Controller::GetFrameBuffer() { return scene_drawer.GetFrameBuffer(); }
 
+size_t Controller::GetCountVertices() { return scene.GetCountVertices(); }
+
+size_t Controller::GetCountEdges() { return scene.GetCountEdges(); }
+
 void Controller::MoveScene(float x, float y, float z) {
   float step = scene.GetNormalizationParams().step;
   scene.TransformVertices(
@@ -64,19 +68,20 @@ void Controller::ScaleScene(float x, float y, float z) {
 
 void Controller::CreateGif(const std::string &filename, int gif_width,
                            int gif_height, int fps, int duration) {
-  gif_generator.InitializeGenerator(filename, gif_width, gif_height, fps,
+  gif_generator_.InitializeGenerator(filename, gif_width, gif_height, fps,
                                     duration);
+
 }
 
 bool Controller::AddGifFrame() {
-  gif_generator.AddFrame(
+  gif_generator_.AddFrame(
       GetFrameBuffer()
-          .scaled(gif_generator.GetWidth(), gif_generator.GetHeight())
+          .scaled(gif_generator_.GetWidth(), gif_generator_.GetHeight())
           .bits());
 
-  return gif_generator.GetFinished();
+  return gif_generator_.GetFinished();
 }
 
-int Controller::GetGifDelay() { gif_generator.GetDelay(); }
+int Controller::GetGifDelay() { return gif_generator_.GetDelay(); }
 
 } // namespace s21

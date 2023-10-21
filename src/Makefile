@@ -30,11 +30,9 @@ install:
 uninstall: clean
 	rm -rf $(BUILD_DIR)
 
-objreader.o:
-	$(CXX) $(CFLAGS) -c $(MODEL_DIR)/objreaderfast.cc -o $(TEST_DIR)/objreader.o
-
-test: objreader.o
-	cd $(TEST_DIR) && $(CXX) $(CFLAGS) *.cc objreader.o -o $(TEST_EXE) $(LIBS) -lgtest
+tests: model/objreaderfast.o model/scene.o model/transform_matrix.o  model/transform_matrix_builder.o
+	mv *.o $(TEST_DIR)
+	cd $(TEST_DIR) && $(CXX) $(CFLAGS) *.cc *.o -o $(TEST_EXE) $(LIBS) -lgtest
 	$(TEST_DIR)/$(TEST_EXE)
 
 clean_tests:
@@ -52,3 +50,6 @@ dist:
 	cp -r Makefile view model controller tests obj_examples main.cc source
 	tar -cf source.tar source
 	rm -rf source
+
+%.o: %.cc
+	$(CXX) -c $(CFLAGS) $<

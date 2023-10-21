@@ -1,6 +1,8 @@
 #include "include/gifgenerator.h"
+#include <QDebug>
+namespace s21 {
 
-void GifGenerator::InitializeGenerator(const std::string& filename, int width,
+void GifGenerator::InitializeGenerator(const std::string &filename, int width,
                                        int height, int fps, int duration) {
   initialized_ = true;
   finished_ = false;
@@ -15,8 +17,9 @@ void GifGenerator::InitializeGenerator(const std::string& filename, int width,
   GifBegin(&gifWriter_, filename_.c_str(), width_, height_, delay_);
 }
 
-void GifGenerator::AddFrame(const uint8_t* image) {
-  if (!initialized_) return;
+void GifGenerator::AddFrame(const uint8_t *image) {
+  if (!initialized_)
+    return;
 
   GifWriteFrame(&gifWriter_, image, width_, height_, delay_);
   currentTime_ += delay_;
@@ -42,3 +45,4 @@ GifGenerator::~GifGenerator() {
     GifEnd(&gifWriter_);
   }
 }
+} // namespace s21

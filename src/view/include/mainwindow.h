@@ -13,7 +13,6 @@
 #include "../../controller/include/controller.h"
 #include "../../lib/gif.h"
 #include "../../model/include/gifgenerator.h"
-#include "managerscenesubjectbase.h"
 #include "scenedrawer.h"
 #include "sceneparameters.h"
 
@@ -48,7 +47,7 @@ private:
     int gif_width{640};
     int gif_height{480};
     int gif_fps{10};
-    int gif_duration{500};
+    int gif_duration{5000};
   };
 
   void Notify();
@@ -97,7 +96,6 @@ private:
   QString screen_dir = QDir("./").absolutePath();
   QString gif_dir = QDir("./").absolutePath();
   QString gif_file_path;
-  QTimer timer{};
 
   VectorCoordinates previous_offsets{};
   VectorCoordinates previous_rotation{};
