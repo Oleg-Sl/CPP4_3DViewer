@@ -357,7 +357,7 @@ void MainWindow::CreateFrameToGif() {
     return;
   }
 
-  QTimer::singleShot(controller.GetGifDelay() * 10, this, SLOT(CreateFrameToGif()));
+//  QTimer::singleShot(controller.GetGifDelay() * 10, this, SLOT(CreateFrameToGif()));
 }
 
 void MainWindow::SlotPrintScreenBMP() { MakeScreenshot("bmp"); }
