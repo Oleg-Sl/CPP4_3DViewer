@@ -6,7 +6,8 @@ namespace s21 {
 
 Controller::Controller(BaseFileReader &file_reader_,
                        SceneDrawerBase &scene_drawer_, MySettings &settings_)
-    : file_reader(file_reader_), scene_drawer(scene_drawer_),
+    : file_reader(file_reader_),
+      scene_drawer(scene_drawer_),
       settings(settings_) {}
 
 SceneParameters Controller::GetSettings() { return settings.GetSettings(); }
@@ -60,4 +61,21 @@ void Controller::ScaleScene(float x, float y, float z) {
   scene_drawer.UpdateScene();
 }
 
-} // namespace s21
+void Controller::CreateGif(const std::string &filename, int gif_width,
+                           int gif_height, int fps, int duration) {
+  gif_generator.InitializeGenerator(filename, gif_width, gif_height, fps,
+                                    duration);
+}
+
+bool Controller::AddGifFrame() {
+  gif_generator.AddFrame(
+      GetFrameBuffer()
+          .scaled(gif_generator.GetWidth(), gif_generator.GetHeight())
+          .bits());
+
+  return gif_generator.GetFinished();
+}
+
+int Controller::GetGifDelay() { gif_generator.GetDelay(); }
+
+}  // namespace s21

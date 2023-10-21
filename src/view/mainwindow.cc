@@ -1,11 +1,15 @@
 #include "include/mainwindow.h"
 
+#include "../model/include/gifgenerator.h"
 #include "ui_mainwindow.h"
 
 namespace s21 {
 
 MainWindow::MainWindow(Controller &ctrl, QWidget *parent)
-    : QMainWindow(parent), controller(ctrl), ui(new Ui::MainWindow),
+    : QMainWindow(parent),
+      controller(ctrl),
+      ui(new Ui::MainWindow),
+
       scene_params(ctrl.GetSettings()) {
   ui->setupUi(this);
 
@@ -81,7 +85,6 @@ MainWindow::MainWindow(Controller &ctrl, QWidget *parent)
   connect(ui->buttonCreateGif, SIGNAL(clicked()), this, SLOT(SlotMakeGif()));
 
   connect(&timer, SIGNAL(timeout()), this, SLOT(CreateFrameToGif()));
-
 }
 
 MainWindow::~MainWindow() {
@@ -317,7 +320,6 @@ void MainWindow::SlotSelectScreenPath() {
 void MainWindow::SlotMakeGif() {
   ui->buttonCreateGif->setEnabled(false);
   gif_params.gif_before_time_left = gif_params.gif_before_time;
-  timer.start(gif_params.gif_delay);
   PreparationMakingGif();
 }
 
@@ -335,33 +337,25 @@ void MainWindow::PreparationMakingGif() {
 
 void MainWindow::StartMakingGif() {
   ShowMessage(QString("Идет запись GIF"), QColor(39, 174, 96), 0);
-  gif_params.gif_time_left = gif_params.gif_time;
   QString uniq_name =
       QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
-  gif_params.gif_file_path = QString("%1/video_%2.gif").arg(gif_params.gif_dir).arg(uniq_name);
-  GifBegin(&g, gif_params.gif_file_path.toStdString().c_str(), gif_params.gif_width, gif_params.gif_height,
-           gif_params.gif_delay);
-  gif_params.is_record = true;
+  gif_file_path = QString("%1/video_%2.gif").arg(gif_dir).arg(uniq_name);
+
+  controller.CreateGif(gif_file_path.toStdString(), gif_params.gif_width,
+                       gif_params.gif_height, gif_params.gif_fps,
+                       gif_params.gif_duration);
   CreateFrameToGif();
 }
 
 void MainWindow::CreateFrameToGif() {
-  if (!gif_params.is_record) {
-    return;
-  }
-  if (gif_params.gif_time_left <= 0) {
-    GifEnd(&g);
+  if (controller.AddGifFrame()) {
     ui->buttonCreateGif->setEnabled(true);
-    ShowMessage(QString("Создана GIF: %1").arg(gif_params.gif_file_path),
+    ShowMessage(QString("Создана GIF: %1").arg(gif_file_path),
                 QColor(50, 205, 50), 5000);
-    gif_params.is_record = false;
     return;
   }
-  GifWriteFrame(
-      &g, controller.GetFrameBuffer().scaled(gif_params.gif_width, gif_params.gif_height).bits(),
-      gif_params.gif_width, gif_params.gif_height, gif_params.gif_delay * 0.1);
-//  QTimer::singleShot(gif_params.gif_delay, this, SLOT(CreateFrameToGif()));
-  gif_params.gif_time_left -= gif_params.gif_delay;
+
+  QTimer::singleShot(controller.GetGifDelay() * 10, this, SLOT(CreateFrameToGif()));
 }
 
 void MainWindow::SlotPrintScreenBMP() { MakeScreenshot("bmp"); }
@@ -372,8 +366,10 @@ void MainWindow::MakeScreenshot(QString extension) {
   QImage img = controller.GetFrameBuffer();
   QString uniq_name =
       QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
-  QString file_name =
-      QString("%1/image_%2.%3").arg(screen_params.dir_path).arg(uniq_name).arg(extension);
+  QString file_name = QString("%1/image_%2.%3")
+                          .arg(screen_params.dir_path)
+                          .arg(uniq_name)
+                          .arg(extension);
   img.save(file_name);
   ShowMessage(QString("Создан снимок экрана: %1").arg(file_name),
               QColor(0, 128, 0), 5000);
@@ -395,4 +391,4 @@ void MainWindow::ShowMessage(QString msg, QColor color, int message_timeout) {
   }
 }
 
-} // namespace s21
+}  // namespace s21

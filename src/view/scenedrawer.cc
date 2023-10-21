@@ -8,8 +8,6 @@ namespace s21 {
 
 SceneDrawer::SceneDrawer(QWidget *parent_)
     : QOpenGLWidget{parent_}, parent(parent_) {
-  //   connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
-  //   timer.start(100);
 }
 
 void SceneDrawer::UpdateScene() { update(); }
