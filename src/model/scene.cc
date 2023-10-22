@@ -13,6 +13,7 @@ size_t Scene::GetCountVertices() const { return vertices_.size() / 3; }
 
 size_t Scene::GetCountEdges() const { return edges_.size() * 0.5; }
 
+
 NormalizationParameters Scene::GetNormalizationParams() {
   return normalization_params_;
 }

@@ -6,13 +6,14 @@ namespace s21 {
 
 Controller::Controller(BaseFileReader &file_reader_,
                        SceneDrawerBase &scene_drawer_, MySettings &settings_)
-    : file_reader_(file_reader_),
-      scene_drawer_(scene_drawer_),
+    : file_reader_(file_reader_), scene_drawer_(scene_drawer_),
       settings_(settings_) {}
 
-SceneParameters Controller::GetSettings() { return settings_.GetSettings(); }
+SceneParameters Controller::GetSettings() const {
+  return settings_.GetSettings();
+}
 
-void Controller::UpdateSettings(const SceneParameters &scene_params) {
+void Controller::UpdateSettings(const SceneParameters &scene_params) const {
   return settings_.UpdateSettings(scene_params);
 }
 
@@ -27,27 +28,31 @@ OperationResult Controller::LoadScene(const QString &path) {
   return {"", true};
 }
 
-void Controller::SetParentForSceneDraw(QWidget *parent) {
+void Controller::SetParentForSceneDraw(QWidget *parent) const {
   scene_drawer_.SetParentOpenGL(parent);
 }
 
-void Controller::UpdateSceneDraw() { scene_drawer_.UpdateScene(); }
+void Controller::UpdateSceneDraw() const { scene_drawer_.UpdateScene(); }
 
 void Controller::SetScene() {
   scene_drawer_.SetScene(&scene_);
   scene_drawer_.UpdateScene();
 }
 
-void Controller::SetParamsScene(SceneParameters *params_scene) {
+void Controller::SetParamsScene(SceneParameters *params_scene) const {
   scene_drawer_.SetParamsScene(params_scene);
   scene_drawer_.UpdateScene();
 }
 
-QImage Controller::GetFrameBuffer() { return scene_drawer_.GetFrameBuffer(); }
+QImage Controller::GetFrameBuffer() const {
+  return scene_drawer_.GetFrameBuffer();
+}
 
-size_t Controller::GetCountVertices() { return scene_.GetCountVertices(); }
+size_t Controller::GetCountVertices() const {
+  return scene_.GetCountVertices();
+}
 
-size_t Controller::GetCountEdges() { return scene_.GetCountEdges(); }
+size_t Controller::GetCountEdges() const { return scene_.GetCountEdges(); }
 
 void Controller::MoveScene(float x, float y, float z) {
   float step = scene_.GetNormalizationParams().step;
@@ -82,6 +87,6 @@ bool Controller::AddGifFrame() {
   return gif_generator_.GetFinished();
 }
 
-int Controller::GetGifDelay() { return gif_generator_.GetDelay(); }
+int Controller::GetGifDelay() const { return gif_generator_.GetDelay(); }
 
-}  // namespace s21
+} // namespace s21

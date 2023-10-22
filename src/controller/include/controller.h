@@ -12,22 +12,22 @@
 namespace s21 {
 
 class Controller {
- public:
+public:
   Controller(BaseFileReader &, SceneDrawerBase &, MySettings &);
 
-  SceneParameters GetSettings();
-  void UpdateSettings(const SceneParameters &);
+  SceneParameters GetSettings() const;
+  void UpdateSettings(const SceneParameters &) const;
 
   OperationResult LoadScene(const QString &);
 
-  void UpdateSceneDraw();
+  void UpdateSceneDraw() const;
   void SetScene();
-  void SetParamsScene(SceneParameters *);
-  void SetParentForSceneDraw(QWidget *);
-  QImage GetFrameBuffer();
+  void SetParamsScene(SceneParameters *) const;
+  void SetParentForSceneDraw(QWidget *) const;
+  QImage GetFrameBuffer() const;
 
-  size_t GetCountVertices();
-  size_t GetCountEdges();
+  size_t GetCountVertices() const;
+  size_t GetCountEdges() const;
 
   void MoveScene(float, float, float);
   void RotateScene(float, float, float);
@@ -35,9 +35,9 @@ class Controller {
 
   void CreateGif(const std::string &, int, int, int, int);
   bool AddGifFrame();
-  int GetGifDelay();
+  int GetGifDelay() const;
 
- private:
+private:
   BaseFileReader &file_reader_;
   SceneDrawerBase &scene_drawer_;
   MySettings &settings_;
@@ -45,6 +45,6 @@ class Controller {
   GifGenerator gif_generator_{};
 };
 
-}  // namespace s21
+} // namespace s21
 
-#endif  // _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
+#endif // _3DVIEWER_CONTROLLER_INCLUDE_CONTROLLER_H_
