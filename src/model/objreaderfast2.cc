@@ -6,7 +6,7 @@
 namespace s21 {
 
 void OBJReaderFast2::CalculateNormalizationParams(
-    const std::vector<float>& vertices, Scene& scene) {
+    const std::vector<float> &vertices, Scene &scene) const {
   NormalizationParameters params = scene.GetNormalizationParams();
 
   float x = abs(vertices[vertices.size() - 1]);
@@ -21,8 +21,8 @@ void OBJReaderFast2::CalculateNormalizationParams(
   scene.SetNormalizationParams(std::move(params));
 }
 
-void OBJReaderFast2::ReadFace(char* str, std::vector<int>& edges,
-                              size_t count_vertices) {
+void OBJReaderFast2::ReadFace(char *str, std::vector<int> &edges,
+                              size_t count_vertices) const {
   str += 1;
   int ind_vertex = 0;
   int ind_texture = 0;
@@ -62,8 +62,8 @@ void OBJReaderFast2::ReadFace(char* str, std::vector<int>& edges,
   }
 }
 
-void OBJReaderFast2::ReadVertices(const Line* line,
-                                  std::vector<float>& vertices) {
+void OBJReaderFast2::ReadVertices(const Line *line,
+                                  std::vector<float> &vertices) const {
   float x, y, z;
   if (std::sscanf(line->buf, "v %f %f %f", &x, &y, &z) == 3) {
     vertices.push_back(x);
@@ -74,13 +74,13 @@ void OBJReaderFast2::ReadVertices(const Line* line,
   }
 }
 
-Scene OBJReaderFast2::ReadScene(const std::string& path) {
+Scene OBJReaderFast2::ReadScene(const std::string &path) const {
   setlocale(LC_ALL, "C");
   Scene scene;
   std::vector<float> vertices;
   std::vector<int> edges;
 
-  FILE* obj_file = fopen(path.c_str(), "r");
+  FILE *obj_file = fopen(path.c_str(), "r");
 
   if (obj_file) {
     Line line(kMaxLineLength);
@@ -107,8 +107,8 @@ Scene OBJReaderFast2::ReadScene(const std::string& path) {
   return scene;
 }
 
-bool OBJReaderFast2::ReadLine(FILE* obj_file, Line* line) {
-  char* ptr = line->buf;
+bool OBJReaderFast2::ReadLine(FILE *obj_file, Line *line) const {
+  char *ptr = line->buf;
   while (true) {
     if (!fgets(ptr, kMaxLineLength - 1, obj_file)) {
       return false;
@@ -125,33 +125,11 @@ bool OBJReaderFast2::ReadLine(FILE* obj_file, Line* line) {
   return true;
 }
 
-void OBJReaderFast2::ResizeLine(Line* line) {
-  char* new_str = new char[line->size_buf * 2];
+void OBJReaderFast2::ResizeLine(Line *line) const {
+  char *new_str = new char[line->size_buf * 2];
   delete[] line->buf;
   line->size_buf *= 2;
   line->buf = new_str;
 }
 
-// int OBJReaderFast::ReadLine(FILE &obj_file, std::string &line) {
-//     char str[kMaxLineLength];
-//     line.clear();
-//     while (true) {
-//         if (!fgets(str, kMaxLineLength - 1, &obj_file)) {
-//             line += QString(str);
-//             return 0;
-//         }
-//         line += QString(str);
-//         // size_t len = strlen(line->str);
-//         if (line.back == '\n' || feof(&obj_file)) {
-//             return 1;
-//         }
-
-//         // if (line->size_buf < len + SIZE_BUF_STR_START + 5) {
-//         //     status = resizeStr(line);
-//         // }
-//         // ptr = line->str + len;
-//     }
-//     return status;
-// }
-
-}  // namespace s21
+} // namespace s21

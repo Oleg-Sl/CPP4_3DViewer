@@ -8,7 +8,7 @@
 namespace s21 {
 
 void OBJReader::Read3DCoords(std::stringstream &tokens,
-                             std::vector<float> &vertices) {
+                             std::vector<float> &vertices) const {
   float x, y, z;
   tokens >> x >> y >> z;
 
@@ -18,7 +18,7 @@ void OBJReader::Read3DCoords(std::stringstream &tokens,
 }
 
 void OBJReader::ReadFace(std::stringstream &tokens, std::vector<int> &edges,
-                         size_t count_vertices) {
+                         size_t count_vertices) const {
   std::string line;
   std::vector<int> added_vertices;
 
@@ -59,7 +59,7 @@ void OBJReader::ReadFace(std::stringstream &tokens, std::vector<int> &edges,
 }
 
 void OBJReader::CalculateNormalizationParams(const std::vector<float> &vertices,
-                                             Scene &scene) {
+                                             Scene &scene) const {
   NormalizationParameters params = scene.GetNormalizationParams();
 
   float x = abs(vertices[vertices.size() - 1]);
@@ -74,7 +74,7 @@ void OBJReader::CalculateNormalizationParams(const std::vector<float> &vertices,
   scene.SetNormalizationParams(std::move(params));
 }
 
-Scene OBJReader::ReadScene(const std::string &path) {
+Scene OBJReader::ReadScene(const std::string &path) const {
   Scene scene;
   std::vector<float> vertices;
   std::vector<int> edges;
@@ -107,4 +107,4 @@ Scene OBJReader::ReadScene(const std::string &path) {
   return scene;
 }
 
-}  // namespace s21
+} // namespace s21

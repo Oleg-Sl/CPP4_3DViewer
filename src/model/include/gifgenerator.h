@@ -11,21 +11,21 @@
 namespace s21 {
 
 class GifGenerator {
- public:
+public:
   GifGenerator() {}
 
   void InitializeGenerator(const std::string &, int, int, int, int);
   void AddFrame(const uint8_t *);
 
-  bool GetFinished();
-  bool GetInitialized();
-  int GetWidth();
-  int GetHeight();
-  int GetDelay();
+  bool GetFinished() const;
+  bool GetInitialized() const;
+  int GetWidth() const;
+  int GetHeight() const;
+  int GetDelay() const;
 
   ~GifGenerator();
 
- private:
+private:
   GifWriter gifWriter_{};
   std::string filename_{};
   int width_{};
@@ -38,6 +38,6 @@ class GifGenerator {
   bool initialized_ = false;
 };
 
-}  // namespace s21
+} // namespace s21
 
-#endif  // _3DVIEWER_MODEL_INCLUDE_GIFGENERATOR_H_
+#endif // _3DVIEWER_MODEL_INCLUDE_GIFGENERATOR_H_

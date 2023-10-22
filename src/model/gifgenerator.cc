@@ -18,7 +18,8 @@ void GifGenerator::InitializeGenerator(const std::string &filename, int width,
 }
 
 void GifGenerator::AddFrame(const uint8_t *image) {
-  if (!initialized_) return;
+  if (!initialized_)
+    return;
 
   GifWriteFrame(&gifWriter_, image, width_, height_, delay_);
   currentTime_ += delay_;
@@ -29,19 +30,19 @@ void GifGenerator::AddFrame(const uint8_t *image) {
   }
 }
 
-bool GifGenerator::GetFinished() { return finished_; }
+bool GifGenerator::GetFinished() const { return finished_; }
 
-bool GifGenerator::GetInitialized() { return initialized_; }
+bool GifGenerator::GetInitialized() const { return initialized_; }
 
-int GifGenerator::GetDelay() { return delay_; }
+int GifGenerator::GetDelay() const { return delay_; }
 
-int GifGenerator::GetWidth() { return width_; }
+int GifGenerator::GetWidth() const { return width_; }
 
-int GifGenerator::GetHeight() { return height_; }
+int GifGenerator::GetHeight() const { return height_; }
 
 GifGenerator::~GifGenerator() {
   if (!finished_ && initialized_) {
     GifEnd(&gifWriter_);
   }
 }
-}  // namespace s21
+} // namespace s21

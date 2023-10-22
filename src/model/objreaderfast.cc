@@ -6,7 +6,7 @@
 namespace s21 {
 
 void OBJReaderFast::CalculateNormalizationParams(
-    const std::vector<float>& vertices, Scene& scene) {
+    const std::vector<float> &vertices, Scene &scene) const {
   NormalizationParameters params = scene.GetNormalizationParams();
 
   float x = abs(vertices[vertices.size() - 1]);
@@ -21,10 +21,10 @@ void OBJReaderFast::CalculateNormalizationParams(
   scene.SetNormalizationParams(std::move(params));
 }
 
-void OBJReaderFast::ReadFace(const char* str, std::vector<int>& edges,
-                             size_t count_vertices) {
-  char* cstr = strdup(str);
-  char* token = strtok(cstr, " ");
+void OBJReaderFast::ReadFace(const char *str, std::vector<int> &edges,
+                             size_t count_vertices) const {
+  char *cstr = strdup(str);
+  char *token = strtok(cstr, " ");
   std::vector<int> added_vertices;
 
   while (token != NULL) {
@@ -69,8 +69,8 @@ void OBJReaderFast::ReadFace(const char* str, std::vector<int>& edges,
   free(cstr);
 }
 
-void OBJReaderFast::ReadVertices(const char* line,
-                                 std::vector<float>& vertices) {
+void OBJReaderFast::ReadVertices(const char *line,
+                                 std::vector<float> &vertices) const {
   float x, y, z;
   if (std::sscanf(line, "v %f %f %f", &x, &y, &z) == 3) {
     vertices.push_back(x);
@@ -79,13 +79,13 @@ void OBJReaderFast::ReadVertices(const char* line,
   }
 }
 
-Scene OBJReaderFast::ReadScene(const std::string& path) {
+Scene OBJReaderFast::ReadScene(const std::string &path) const {
   setlocale(LC_ALL, "C");
   Scene scene;
   std::vector<float> vertices;
   std::vector<int> edges;
 
-  FILE* obj_file = fopen(path.c_str(), "r");
+  FILE *obj_file = fopen(path.c_str(), "r");
   if (obj_file) {
     char line[kMaxLineLength];
     while (fgets(line, sizeof(line), obj_file)) {
@@ -110,4 +110,4 @@ Scene OBJReaderFast::ReadScene(const std::string& path) {
   return scene;
 }
 
-}  // namespace s21
+} // namespace s21

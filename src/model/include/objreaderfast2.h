@@ -11,11 +11,11 @@
 namespace s21 {
 
 class OBJReaderFast2 : public BaseFileReader {
- public:
+public:
   const int kMaxLineLength = 256;
-  Scene ReadScene(const std::string &path) override;
+  Scene ReadScene(const std::string &path) const override;
 
- private:
+private:
   const char kVertexToken = 'v';
   const char kFaceToken = 'f';
   struct Line {
@@ -24,15 +24,16 @@ class OBJReaderFast2 : public BaseFileReader {
     Line(size_t sz) : size_buf(sz), buf(new char[sz]) {}
     ~Line() { delete[] buf; }
   };
-  bool ReadLine(FILE *obj_file, Line *line);
-  void ResizeLine(Line *line);
+  bool ReadLine(FILE *obj_file, Line *line) const;
+  void ResizeLine(Line *line) const;
 
-  void ReadFace(char *str, std::vector<int> &edges, size_t count_vertices);
-  void ReadVertices(const Line *line, std::vector<float> &vertices);
+  void ReadFace(char *str, std::vector<int> &edges,
+                size_t count_vertices) const;
+  void ReadVertices(const Line *line, std::vector<float> &vertices) const;
   void CalculateNormalizationParams(const std::vector<float> &vertices,
-                                    Scene &scene);
+                                    Scene &scene) const;
 };
 
-}  // namespace s21
+} // namespace s21
 
-#endif  // _3DVIEWER_MODEL_INCLUDE_OBJREADERFAST2_H_
+#endif // _3DVIEWER_MODEL_INCLUDE_OBJREADERFAST2_H_

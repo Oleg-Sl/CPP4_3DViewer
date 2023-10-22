@@ -8,7 +8,7 @@ namespace s21 {
 
 class BaseFileReader {
  public:
-  virtual Scene ReadScene(const std::string &) = 0;
+  virtual Scene ReadScene(const std::string &) const = 0;
 };
 
 }  // namespace s21
