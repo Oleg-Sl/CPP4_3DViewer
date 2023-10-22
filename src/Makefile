@@ -38,7 +38,7 @@ clean_tests:
 
 clean: clean_tests
 	cd $(VIEW_DIR) && qmake && make clean
-	rm -rf $(VIEW_DIR)/.qmake.stash $(VIEW_DIR)/Makefile $(BUILD_DIR)
+	rm -rf $(VIEW_DIR)/.qmake.stash $(VIEW_DIR)/Makefile
 	
 autoformat:
 	find . -type f -name "*.cc" -o -name "*.h" | xargs clang-format -style=Google -i
