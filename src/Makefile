@@ -1,10 +1,9 @@
 BUILD_DIR = build
 VIEW_DIR = view
 MODEL_DIR = model
-CALCULATOR_EXE = calculator
+PROJECT_EXE = 3d_viewer
 TEST_DIR = tests
 TEST_EXE = test
-TEST_SRC = test.cc
 CXX = g++
 CFLAGS = -Werror -Wextra -Wall
 LIBS =
@@ -12,10 +11,10 @@ OS = $(shell uname -s)
 MACOS = Darwin
 
 ifeq ($(OS), $(MACOS))
-CALCULATOR_EXE = calculator.app
+PROJECT_EXE = 3d_viewer.app
 endif
 
-.PHONY: all install dvi uninstall gcov_report test clean valgrind autoformat dist
+.PHONY: all install dvi uninstall tests clean autoformat dist clean_tests
 
 all: install
 
@@ -25,12 +24,12 @@ dvi:
 install:
 	mkdir -p $(BUILD_DIR)
 	cd $(VIEW_DIR) && qmake && make
-	mv $(VIEW_DIR)/$(CALCULATOR_EXE) $(BUILD_DIR)
+	mv $(VIEW_DIR)/$(PROJECT_EXE) $(BUILD_DIR)
 
 uninstall: clean
 	rm -rf $(BUILD_DIR)
 
-tests: model/objreaderfast.o model/scene.o model/transform_matrix.o  model/transform_matrix_builder.o
+tests: $(MODEL_DIR)/objreaderfast.o $(MODEL_DIR)/scene.o $(MODEL_DIR)/transform_matrix.o $(MODEL_DIR)/transform_matrix_builder.o
 	mv *.o $(TEST_DIR)
 	cd $(TEST_DIR) && $(CXX) $(CFLAGS) *.cc *.o -o $(TEST_EXE) $(LIBS) -lgtest
 	$(TEST_DIR)/$(TEST_EXE)
@@ -40,7 +39,7 @@ clean_tests:
 
 clean: clean_tests
 	cd $(VIEW_DIR) && qmake && make clean
-	rm -rf $(VIEW_DIR)/.qmake.stash $(VIEW_DIR)/Makefile
+	rm -rf $(VIEW_DIR)/.qmake.stash $(VIEW_DIR)/Makefile 
 	
 autoformat:
 	find . -type f -name "*.cc" -o -name "*.h" | xargs clang-format -style=Google -i
