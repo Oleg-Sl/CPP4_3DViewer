@@ -24,7 +24,7 @@ endif
 all: install
 
 dvi:
-	open dvi.md
+	open README.md
 
 install: $(BUILD_DIR)
 	cd $(VIEW_DIR) && qmake && make
