@@ -97,9 +97,6 @@ class MainWindow : public QMainWindow {
   ScreenParameters screen_params_;
   GifParameters gif_params_;
   QString file_path_;
-  QString screen_dir_ = QDir("./").absolutePath();
-  QString gif_dir_ = QDir("./").absolutePath();
-  QString gif_file_path_;
 
   VectorCoordinates previous_offsets_{};
   VectorCoordinates previous_rotation_{};

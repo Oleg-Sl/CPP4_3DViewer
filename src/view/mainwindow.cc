@@ -342,9 +342,9 @@ void MainWindow::StartMakingGif() {
   ShowMessage(QString("Идет запись GIF"), QColor(39, 174, 96), 0);
   QString uniq_name =
       QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss-z");
-  gif_file_path_ = QString("%1/video_%2.gif").arg(gif_dir_).arg(uniq_name);
+  gif_params_.gif_file_path = QString("%1/video_%2.gif").arg(gif_params_.gif_dir).arg(uniq_name);
 
-  controller_.CreateGif(gif_file_path_.toStdString(), gif_params_.gif_width,
+  controller_.CreateGif(gif_params_.gif_file_path.toStdString(), gif_params_.gif_width,
                         gif_params_.gif_height, gif_params_.gif_fps,
                         gif_params_.gif_duration / 10);
   CreateFrameToGif();
@@ -353,7 +353,7 @@ void MainWindow::StartMakingGif() {
 void MainWindow::CreateFrameToGif() {
   if (controller_.AddGifFrame()) {
     ui_->buttonCreateGif->setEnabled(true);
-    ShowMessage(QString("Создана GIF: %1").arg(gif_file_path_),
+    ShowMessage(QString("Создана GIF: %1").arg(gif_params_.gif_file_path),
                 QColor(50, 205, 50), 5000);
     return;
   }
