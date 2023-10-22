@@ -82,6 +82,7 @@ bool Controller::AddGifFrame() {
   gif_generator_.AddFrame(
       GetFrameBuffer()
           .scaled(gif_generator_.GetWidth(), gif_generator_.GetHeight())
+          .convertedTo(QImage::Format_RGBA8888)
           .bits());
 
   return gif_generator_.GetFinished();
