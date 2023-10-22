@@ -21,8 +21,6 @@ int main(int argc, char* argv[]) {
 
   s21::MySettings settings(settings_path, QSettings::IniFormat);
   s21::SceneDrawer scene_drawer;
-//  s21::OBJReader reader;
-//  3338634
   s21::OBJReaderFast2 reader;
 
   s21::Controller controller(reader, scene_drawer, settings);

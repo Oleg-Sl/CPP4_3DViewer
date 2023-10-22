@@ -2,8 +2,6 @@
 
 #include <cstring>
 #include <locale>
-#include <QDebug>
-
 
 namespace s21 {
 
@@ -43,25 +41,22 @@ void OBJReaderFast2::ReadFace(char* str, std::vector<int>& edges, size_t count_v
             } else {
                 ind_vertex -= 1;
             }
+            if (ind_vertex < 0 || ind_vertex >= static_cast<int>(count_vertices)) {
+                throw std::invalid_argument("Invalid face index: " + std::to_string(ind_vertex));
+            }
             if (is_first) {
                 first_ind_vertex = ind_vertex;
                 is_first = false;
-            }
-            if (ind_vertex < 0 ||
-                ind_vertex >= static_cast<int>(count_vertices)) {
-                throw std::invalid_argument("Invalid face index: " + std::to_string(ind_vertex));
+            } else {
+                edges.push_back(ind_vertex);
             }
             edges.push_back(ind_vertex);
         } else {
-//            qDebug() << str ;
             break;
         }
     }
   if (!is_first) {
-    edges.push_back(edges.back());
     edges.push_back(first_ind_vertex);
-  } else {
-      qDebug() << str ;
   }
 }
 
@@ -89,15 +84,15 @@ Scene OBJReaderFast2::ReadScene(const std::string& path) {
     int i = 0;
     while (!feof(obj_file) && ReadLine(obj_file, &line)) {
         char first_ch = line.buf[0];
-        if (first_ch == kVertexToken) {
+        char second_ch = line.buf[1];
+        if (first_ch == kVertexToken && second_ch == ' ') {
             ReadVertices(&line, vertices);
             CalculateNormalizationParams(vertices, scene);
-        } else if (first_ch == kFaceToken) {
+        } else if (first_ch == kFaceToken && second_ch == ' ') {
             ++i;
             ReadFace(line.buf, edges, vertices.size() / 3);
         }
     }
-    qDebug() << i ;
     fclose(obj_file);
   } else {
     throw std::runtime_error("Failed to open file: " + path);
