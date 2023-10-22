@@ -6,14 +6,17 @@ TEST_DIR = tests
 TEST_EXE = test
 CXX = g++
 CFLAGS = -Werror -Wextra -Wall
-LIBS =
+LIBS = -lgtest
+MEMORY_TEST = 
 OS = $(shell uname -s)
 MACOS = Darwin
-MEMORY_TEST = valgrind --trace-children=yes --leak-check=yes --track-origins=yes
 
 ifeq ($(OS), $(MACOS))
 PROJECT_EXE = 3d_viewer.app
 MEMORY_TEST = leaks -atExit --
+else 
+MEMORY_TEST = valgrind --trace-children=yes --leak-check=yes --track-origins=yes
+LIBS += -lsubunit -lrt -lm -lpthread
 endif
 
 .PHONY: all install dvi uninstall tests clean autoformat dist clean_tests
@@ -32,7 +35,7 @@ uninstall: clean
 
 tests: $(MODEL_DIR)/objreaderfast.o $(MODEL_DIR)/scene.o $(MODEL_DIR)/transform_matrix.o $(MODEL_DIR)/transform_matrix_builder.o
 	mv *.o $(TEST_DIR)
-	cd $(TEST_DIR) && $(CXX) $(CFLAGS) *.cc *.o -o $(TEST_EXE) $(LIBS) -lgtest
+	cd $(TEST_DIR) && $(CXX) $(CFLAGS) *.cc *.o -o $(TEST_EXE) $(LIBS)
 	$(TEST_DIR)/$(TEST_EXE)
 
 clean_tests:
