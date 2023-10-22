@@ -12,8 +12,8 @@ namespace s21 {
 class Scene {
 public:
   NormalizationParameters GetNormalizationParams();
-  size_t GetCountVertices();
-  size_t GetCountEdges();
+  size_t GetCountVertices() const;
+  size_t GetCountEdges() const;
   void SetNormalizationParams(NormalizationParameters &&params);
   void SetEdges(std::vector<int> &&edges);
   void TransformVertices(const TransformMatrix &matrix);

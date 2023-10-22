@@ -16,11 +16,11 @@ class GifGenerator {
                            int fps, int duration);
   void AddFrame(const uint8_t* image);
 
-  bool GetFinished();
-  bool GetInitialized();
-  int GetWidth();
-  int GetHeight();
-  int GetDelay();
+  bool GetFinished() const;
+  bool GetInitialized() const;
+  int GetWidth() const;
+  int GetHeight() const;
+  int GetDelay() const;
 
   ~GifGenerator();
 

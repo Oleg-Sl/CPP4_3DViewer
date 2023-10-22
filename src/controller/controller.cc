@@ -10,9 +10,9 @@ Controller::Controller(BaseFileReader &file_reader_,
       scene_drawer(scene_drawer_),
       settings(settings_) {}
 
-SceneParameters Controller::GetSettings() { return settings.GetSettings(); }
+SceneParameters Controller::GetSettings() const { return settings.GetSettings(); }
 
-void Controller::UpdateSettings(const SceneParameters &scene_params) {
+void Controller::UpdateSettings(const SceneParameters &scene_params) const {
   return settings.UpdateSettings(scene_params);
 }
 
@@ -27,29 +27,29 @@ OperationResult Controller::LoadScene(const QString &path) {
   return {"", true};
 }
 
-void Controller::SetParentForSceneDraw(QWidget *parent) {
+void Controller::SetParentForSceneDraw(QWidget *parent) const {
   scene_drawer.SetParentOpenGL(parent);
 }
 
-void Controller::UpdateSceneDraw() { scene_drawer.UpdateScene(); }
+void Controller::UpdateSceneDraw() const { scene_drawer.UpdateScene(); }
 
 void Controller::SetScene() {
   scene_drawer.SetScene(&scene);
   scene_drawer.UpdateScene();
 }
 
-void Controller::SetParamsScene(SceneParameters *params_scene) {
+void Controller::SetParamsScene(SceneParameters *params_scene) const {
   scene_drawer.SetParamsScene(params_scene);
   scene_drawer.UpdateScene();
 }
 
-QImage Controller::GetFrameBuffer() { return scene_drawer.GetFrameBuffer(); }
+QImage Controller::GetFrameBuffer() const { return scene_drawer.GetFrameBuffer(); }
 
-size_t Controller::GetCountVertices() {
+size_t Controller::GetCountVertices() const {
   return scene.GetCountVertices();
 }
 
-size_t Controller::GetCountEdges() {
+size_t Controller::GetCountEdges() const {
   return scene.GetCountEdges();
 }
 
@@ -84,6 +84,6 @@ bool Controller::AddGifFrame() {
   return gif_generator.GetFinished();
 }
 
-int Controller::GetGifDelay() { gif_generator.GetDelay(); }
+int Controller::GetGifDelay() const { gif_generator.GetDelay(); }
 
 }  // namespace s21

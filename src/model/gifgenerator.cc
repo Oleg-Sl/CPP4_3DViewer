@@ -27,15 +27,15 @@ void GifGenerator::AddFrame(const uint8_t* image) {
   }
 }
 
-bool GifGenerator::GetFinished() { return finished_; }
+bool GifGenerator::GetFinished() const { return finished_; }
 
-bool GifGenerator::GetInitialized() { return initialized_; }
+bool GifGenerator::GetInitialized() const { return initialized_; }
 
-int GifGenerator::GetDelay() { return delay_; }
+int GifGenerator::GetDelay() const { return delay_; }
 
-int GifGenerator::GetWidth() { return width_; }
+int GifGenerator::GetWidth() const { return width_; }
 
-int GifGenerator::GetHeight() { return height_; }
+int GifGenerator::GetHeight() const { return height_; }
 
 GifGenerator::~GifGenerator() {
   if (!finished_ && initialized_) {

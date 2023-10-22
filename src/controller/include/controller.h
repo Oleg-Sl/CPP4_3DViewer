@@ -15,21 +15,19 @@ class Controller {
  public:
   Controller(BaseFileReader &, SceneDrawerBase &, MySettings &);
 
-  SceneParameters GetSettings();
-  void UpdateSettings(const SceneParameters &);
+  SceneParameters GetSettings() const;
+  void UpdateSettings(const SceneParameters &) const;
 
   OperationResult LoadScene(const QString &);
 
-  // const std::vector<float> GetVertices() { return scene.GetVertices(); }
-
-  void UpdateSceneDraw();
+  void UpdateSceneDraw() const;
   void SetScene();
-  void SetParamsScene(SceneParameters *);
-  void SetParentForSceneDraw(QWidget *);
-  QImage GetFrameBuffer();
+  void SetParamsScene(SceneParameters *) const;
+  void SetParentForSceneDraw(QWidget *) const;
+  QImage GetFrameBuffer() const;
 
-  size_t GetCountVertices();
-  size_t GetCountEdges();
+  size_t GetCountVertices() const;
+  size_t GetCountEdges() const;
 
   void MoveScene(float x, float y, float z);
   void RotateScene(float x, float y, float z);
@@ -38,7 +36,7 @@ class Controller {
   void CreateGif(const std::string &filename, int gif_width, int gif_height,
                  int fps, int duration);
   bool AddGifFrame();
-  int GetGifDelay();
+  int GetGifDelay() const;
 
  private:
   BaseFileReader &file_reader;

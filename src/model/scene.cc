@@ -6,20 +6,14 @@
 namespace s21 {
 
 void Scene::TransformVertices(const TransformMatrix &matrix) {
-  // auto start_time = std::chrono::steady_clock::now();
   matrix.TransformVertices(vertices_);
-
-  // auto end_time = std::chrono::steady_clock::now();
-  // auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(
-  //     end_time - start_time);
-  // std::cout << "Calc time: " << elapsed_ns.count() << " ms\n";
 }
 
-size_t Scene::GetCountVertices() {
+size_t Scene::GetCountVertices() const {
   return vertices_.size() / 3;
 }
 
-size_t Scene::GetCountEdges() {
+size_t Scene::GetCountEdges() const {
   return edges_.size() * 0.5;
 }
 
