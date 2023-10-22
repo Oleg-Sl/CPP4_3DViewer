@@ -24,19 +24,18 @@ void OBJReaderFast2::CalculateNormalizationParams(const std::vector<float>& vert
 }
 
 void OBJReaderFast2::ReadFace(char* str, std::vector<int>& edges, size_t count_vertices) {
-    str += 2;
-    setlocale(LC_ALL, "C");
+    str += 1;
     int ind_vertex = 0;
     int ind_texture = 0;
     int ind_normal = 0;
     int first_ind_vertex = 0;
     bool is_first = true;
     while (*str) {
-        if (sscanf(str, "%d/%d/%d ", &ind_vertex, &ind_texture, &ind_normal)) {
+        while (*str && *str == ' ') {
+            str += 1;
+        }
+        if (sscanf(str, "%d/%d/%d", &ind_vertex, &ind_texture, &ind_normal) > 0) {
             while (*str && *str != ' ') {
-                str += 1;
-            }
-            while (*str && *str == ' ') {
                 str += 1;
             }
             if (ind_vertex < 0) {
@@ -54,11 +53,15 @@ void OBJReaderFast2::ReadFace(char* str, std::vector<int>& edges, size_t count_v
             }
             edges.push_back(ind_vertex);
         } else {
+//            qDebug() << str ;
             break;
         }
     }
   if (!is_first) {
+    edges.push_back(edges.back());
     edges.push_back(first_ind_vertex);
+  } else {
+      qDebug() << str ;
   }
 }
 
@@ -68,6 +71,8 @@ void OBJReaderFast2::ReadVertices(const Line* line, std::vector<float>& vertices
     vertices.push_back(x);
     vertices.push_back(y);
     vertices.push_back(z);
+  } else {
+      throw std::invalid_argument("Invalid vertex: " + std::string(line->buf));
   }
 }
 
@@ -81,15 +86,18 @@ Scene OBJReaderFast2::ReadScene(const std::string& path) {
 
   if (obj_file) {
     Line line(kMaxLineLength);
+    int i = 0;
     while (!feof(obj_file) && ReadLine(obj_file, &line)) {
         char first_ch = line.buf[0];
         if (first_ch == kVertexToken) {
             ReadVertices(&line, vertices);
             CalculateNormalizationParams(vertices, scene);
         } else if (first_ch == kFaceToken) {
+            ++i;
             ReadFace(line.buf, edges, vertices.size() / 3);
         }
     }
+    qDebug() << i ;
     fclose(obj_file);
   } else {
     throw std::runtime_error("Failed to open file: " + path);
