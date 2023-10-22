@@ -105,15 +105,15 @@ void SceneDrawer::SetTypeProjection() {
     float right = (value_max / 4) * ratio_x;
     float bottom = (value_min / 4) * ratio_y;
     float top = (value_max / 4) * ratio_y;
-    glFrustum(left, right, bottom, top, heapHeight, value_max * 5);
+    glFrustum(left, right, bottom, top, heapHeight, value_max * 100);
     glTranslated(0.0f, 0.0f, -heapHeight * 4);
   } else if (scene_params_->type_projection ==
              SceneParameters::TypeProjection::kParallel) {
-    float left = value_min * ratio_x;
-    float right = value_max * ratio_x;
-    float bottom = value_min * ratio_y;
-    float top = value_max * ratio_y;
-    glOrtho(left, right, bottom, top, value_min, value_max);
+    float left = value_min * ratio_x * 2;
+    float right = value_max * ratio_x * 2;
+    float bottom = value_min * ratio_y * 2;
+    float top = value_max * ratio_y * 2;
+    glOrtho(left, right, bottom, top, value_min * 10,  value_max * 50);
   }
 
   glMatrixMode(GL_MODELVIEW);

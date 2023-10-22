@@ -50,7 +50,7 @@ dist:
 	rm -rf source
 
 %.o: %.cc
-	$(CXX) -c $(CFLAGS) $<
+	$(CXX) $(CFLAGS) -c $<
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
