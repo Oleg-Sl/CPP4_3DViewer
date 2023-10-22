@@ -13,5 +13,5 @@ struct OperationResult {
   bool is_success;
 };
 
-}  // namespace s21
-#endif  // _3DVIEWER_CONTROLLER_INCLUDE_OPERATIONRESULT_H_
+} // namespace s21
+#endif // _3DVIEWER_CONTROLLER_INCLUDE_OPERATIONRESULT_H_

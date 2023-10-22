@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>3DViewer_v1.0</string>
+   <string>3DViewer_v2.0</string>
   </property>
   <property name="documentMode">
    <bool>false</bool>
@@ -144,7 +144,6 @@
          <widget class="QLabel" name="label_11">
           <property name="font">
            <font>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -207,7 +206,6 @@
          <widget class="QLabel" name="label_13">
           <property name="font">
            <font>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -336,7 +334,6 @@
          <widget class="QLabel" name="label_15">
           <property name="font">
            <font>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -372,7 +369,6 @@
          <widget class="QLabel" name="label_10">
           <property name="font">
            <font>
-            <weight>50</weight>
             <bold>false</bold>
            </font>
           </property>
@@ -392,7 +388,6 @@
          <widget class="QLabel" name="label_9">
           <property name="font">
            <font>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -613,7 +608,6 @@
          <widget class="QLabel" name="label">
           <property name="font">
            <font>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -659,7 +653,6 @@
          <widget class="QLabel" name="label_8">
           <property name="font">
            <font>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>

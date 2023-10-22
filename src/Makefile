@@ -21,8 +21,7 @@ all: install
 dvi:
 	open dvi.md
 
-install:
-	mkdir -p $(BUILD_DIR)
+install: $(BUILD_DIR)
 	cd $(VIEW_DIR) && qmake && make
 	mv $(VIEW_DIR)/$(PROJECT_EXE) $(BUILD_DIR)
 
@@ -39,7 +38,7 @@ clean_tests:
 
 clean: clean_tests
 	cd $(VIEW_DIR) && qmake && make clean
-	rm -rf $(VIEW_DIR)/.qmake.stash $(VIEW_DIR)/Makefile 
+	rm -rf $(VIEW_DIR)/.qmake.stash $(VIEW_DIR)/Makefile $(BUILD_DIR)
 	
 autoformat:
 	find . -type f -name "*.cc" -o -name "*.h" | xargs clang-format -style=Google -i
@@ -52,3 +51,6 @@ dist:
 
 %.o: %.cc
 	$(CXX) -c $(CFLAGS) $<
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
