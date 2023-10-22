@@ -6,7 +6,9 @@
 namespace s21 {
 
 MainWindow::MainWindow(Controller &ctrl, QWidget *parent)
-    : QMainWindow(parent), controller_(ctrl), ui_(new Ui::MainWindow),
+    : QMainWindow(parent),
+      controller_(ctrl),
+      ui_(new Ui::MainWindow),
 
       scene_params_(ctrl.GetSettings()) {
   ui_->setupUi(this);
@@ -393,4 +395,4 @@ void MainWindow::ShowMessage(QString msg, QColor color, int message_timeout) {
   }
 }
 
-} // namespace s21
+}  // namespace s21

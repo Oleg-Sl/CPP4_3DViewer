@@ -9,9 +9,11 @@ CFLAGS = -Werror -Wextra -Wall
 LIBS =
 OS = $(shell uname -s)
 MACOS = Darwin
+MEMORY_TEST = valgrind --trace-children=yes --leak-check=yes --track-origins=yes
 
 ifeq ($(OS), $(MACOS))
 PROJECT_EXE = 3d_viewer.app
+MEMORY_TEST = leaks -atExit --
 endif
 
 .PHONY: all install dvi uninstall tests clean autoformat dist clean_tests
@@ -54,3 +56,6 @@ dist:
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
+
+leaks: tests
+	$(MEMORY_TEST) $(TEST_DIR)/$(TEST_EXE) --gtest_filter=-*Throw.*

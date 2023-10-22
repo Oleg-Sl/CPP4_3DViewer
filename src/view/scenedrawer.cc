@@ -113,7 +113,7 @@ void SceneDrawer::SetTypeProjection() {
     float right = value_max * ratio_x * 2;
     float bottom = value_min * ratio_y * 2;
     float top = value_max * ratio_y * 2;
-    glOrtho(left, right, bottom, top, value_min * 10,  value_max * 50);
+    glOrtho(left, right, bottom, top, value_min * 10, value_max * 50);
   }
 
   glMatrixMode(GL_MODELVIEW);
@@ -162,4 +162,4 @@ void SceneDrawer::SetVerticesColor() {
 
 void SceneDrawer::SetVerticesSize() { glPointSize(scene_params_->vertex_size); }
 
-} // namespace s21
+}  // namespace s21

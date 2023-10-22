@@ -4,7 +4,6 @@
 #include <iostream>
 
 #include "controller/include/controller.h"
-
 #include "model/include/objreader.h"
 #include "model/include/objreaderfast.h"
 #include "model/include/objreaderfast2.h"
