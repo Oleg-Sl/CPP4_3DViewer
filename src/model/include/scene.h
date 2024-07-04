@@ -2,6 +2,7 @@
 #define _3DVIEWER_MODEL_INCLUDE_SCENE_H_
 
 #include <vector>
+#include <cstddef>
 
 #include "normalization_parameters.h"
 #include "transform_matrix.h"
